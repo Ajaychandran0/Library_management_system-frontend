@@ -9,6 +9,7 @@ import UserSignin from "./pages/UserSignin";
 import ListMembers from "./features/admin/members/ListMembers";
 import AddMember from "./features/admin/members/AddMember";
 // import StudentRegistrationForm from "./features/admin/members/test";
+import ListCategories from "./features/admin/category/ListCategories";
 
 function App() {
   return (
@@ -21,6 +22,10 @@ function App() {
           <Route index element={<ListMembers />} />
           <Route path="add-member" element={<AddMember />} />
           {/* <Route path="requests" element={<StudentRegistrationForm />} /> */}
+        </Route>
+
+        <Route path="categories">
+          <Route index element={<ListCategories />} />
         </Route>
       </Route>
 

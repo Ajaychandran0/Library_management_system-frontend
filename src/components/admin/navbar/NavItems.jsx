@@ -21,19 +21,19 @@ const navMainItems = [
     id: 2,
     icon: <CategoryIcon />,
     label: "Categories",
-    route: "/categories",
+    route: "/admin/categories",
   },
   {
     id: 3,
     icon: <BookIcon />,
     label: "Books",
-    route: "/books",
+    route: "/admin/books",
   },
   {
     id: 4,
     icon: <LibraryBooksIcon />,
     label: "Book Transactions",
-    route: "/book-transactions",
+    route: "/admin/book-transactions",
   },
 ];
 export default navMainItems;

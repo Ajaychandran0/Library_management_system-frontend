@@ -1,20 +1,20 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import memberService from "./memberService";
+import categoryService from "./categoryService";
 
 const initialState = {
-  members: [],
+  categories: [],
   isError: false,
   isLoading: false,
   isSuccess: false,
   message: "",
 };
 
-// Add new member (give new memberships)
-export const addNewMember = createAsyncThunk(
-  "members/add",
-  async (member, thunkAPI) => {
+// Add new category
+export const addNewCategory = createAsyncThunk(
+  "category/add",
+  async (category, thunkAPI) => {
     try {
-      return await memberService.addNewMember(member);
+      return await categoryService.addNewCategory(category);
     } catch (error) {
       const message =
         (error.response && error.reponse.data && error.response.data.message) ||
@@ -25,12 +25,12 @@ export const addNewMember = createAsyncThunk(
   }
 );
 
-export const getMembers = createAsyncThunk(
-  "members/getAll",
+export const getAllCategories = createAsyncThunk(
+  "category/getAll",
   async (_, thunkAPI) => {
     try {
       const token = thunkAPI.getState().admin.admin.token;
-      return await memberService.getMembers(token);
+      return await categoryService.getAllCategories(token);
     } catch (error) {
       const message =
         (error.response && error.reponse.data && error.response.data.message) ||
@@ -41,12 +41,12 @@ export const getMembers = createAsyncThunk(
   }
 );
 
-export const deleteMember = createAsyncThunk(
-  "members/delete",
-  async (memberId, thunkAPI) => {
+export const deleteCategory = createAsyncThunk(
+  "category/delete",
+  async (categoryId, thunkAPI) => {
     try {
       const token = thunkAPI.getState().admin.admin.token;
-      return await memberService.deleteMember(memberId, token);
+      return await categoryService.deleteCategory(categoryId, token);
     } catch (error) {
       const message =
         (error.response && error.reponse.data && error.response.data.message) ||
@@ -57,12 +57,12 @@ export const deleteMember = createAsyncThunk(
   }
 );
 
-export const blockMember = createAsyncThunk(
-  "members/block",
-  async (memberId, thunkAPI) => {
+export const blockCategory = createAsyncThunk(
+  "category/block",
+  async (categoryId, thunkAPI) => {
     try {
       const token = thunkAPI.getState().admin.admin.token;
-      return await memberService.blockMember(memberId, token);
+      return await categoryService.blockCategory(categoryId, token);
     } catch (error) {
       const message =
         (error.response && error.reponse.data && error.response.data.message) ||
@@ -73,12 +73,12 @@ export const blockMember = createAsyncThunk(
   }
 );
 
-export const filterMember = createAsyncThunk(
-  "members/filter",
+export const filterCategory = createAsyncThunk(
+  "category/filter",
   async (search, thunkAPI) => {
     try {
       const token = thunkAPI.getState().admin.admin.token;
-      return await memberService.filterMember(search, token);
+      return await categoryService.filterCategory(search, token);
     } catch (error) {
       const message =
         (error.response && error.reponse.data && error.response.data.message) ||
@@ -89,80 +89,79 @@ export const filterMember = createAsyncThunk(
   }
 );
 
-export const membersSlice = createSlice({
-  name: "members",
+export const categorySlice = createSlice({
+  name: "category",
   initialState,
   reducers: {
     reset: () => initialState,
   },
   extraReducers: builder => {
     builder
-      .addCase(addNewMember.pending, state => {
+      .addCase(addNewCategory.pending, state => {
         state.isLoading = true;
       })
-      .addCase(addNewMember.fulfilled, (state, action) => {
+      .addCase(addNewCategory.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        console.log(action.payload, "in add member successful state");
-        state.members.push(action.payload);
+        state.category.push(action.payload);
       })
-      .addCase(addNewMember.rejected, (state, action) => {
+      .addCase(addNewCategory.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
       })
-      .addCase(getMembers.pending, state => {
+      .addCase(getAllCategories.pending, state => {
         state.isLoading = true;
       })
-      .addCase(getMembers.fulfilled, (state, action) => {
+      .addCase(getAllCategories.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.members = action.payload.members;
+        state.category = action.payload.categorys;
       })
-      .addCase(getMembers.rejected, (state, action) => {
+      .addCase(getAllCategories.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
       })
-      .addCase(deleteMember.pending, state => {
+      .addCase(deleteCategory.pending, state => {
         state.isLoading = true;
       })
-      .addCase(deleteMember.fulfilled, (state, action) => {
+      .addCase(deleteCategory.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.members = state.members.filter(
-          member => member._id !== action.payload.id
+        state.categorys = state.categorys.filter(
+          category => category._id !== action.payload.id
         );
       })
-      .addCase(deleteMember.rejected, (state, action) => {
+      .addCase(deleteCategory.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
       })
-      .addCase(blockMember.pending, state => {
+      .addCase(blockCategory.pending, state => {
         state.isLoading = true;
       })
-      .addCase(blockMember.fulfilled, (state, action) => {
+      .addCase(blockCategory.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.members = state.members.map(member => {
-          if (member._id !== action.payload._id) return member;
+        state.categorys = state.categorys.map(category => {
+          if (category._id !== action.payload._id) return category;
           return action.payload;
         });
       })
-      .addCase(blockMember.rejected, (state, action) => {
+      .addCase(blockCategory.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
       })
-      .addCase(filterMember.pending, state => {
+      .addCase(filterCategory.pending, state => {
         state.isLoading = true;
       })
-      .addCase(filterMember.fulfilled, (state, action) => {
+      .addCase(filterCategory.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.members = action.payload;
+        state.categorys = action.payload;
       })
-      .addCase(filterMember.rejected, (state, action) => {
+      .addCase(filterCategory.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
@@ -170,5 +169,5 @@ export const membersSlice = createSlice({
   },
 });
 
-export const { reset } = membersSlice.actions;
-export default membersSlice.reducer;
+export const { reset } = categorySlice.actions;
+export default categorySlice.reducer;

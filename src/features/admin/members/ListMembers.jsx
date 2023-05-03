@@ -7,7 +7,7 @@ import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
-import { getMembers, reset, notSuccess } from "./memberSlice";
+import { getMembers, reset } from "./memberSlice";
 
 const columns = [
   { field: "id", headerName: "No.", width: 60 },
@@ -49,7 +49,6 @@ const ListMembers = () => {
     dispatch(getMembers());
     if (isSuccess) {
       console.log("again stupid idea");
-      dispatch(notSuccess);
     }
 
     return () => {

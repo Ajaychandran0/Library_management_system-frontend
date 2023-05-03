@@ -32,6 +32,7 @@ const Layout = () => {
                 margin: "3rem",
                 marginTop: "6rem",
                 paddingLeft: () => (open ? "15rem" : "10rem"),
+                marginRight: () => (open ? "" : "8rem"),
               }}
             >
               <Outlet />

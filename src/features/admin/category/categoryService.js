@@ -1,12 +1,11 @@
 import axios from "axios";
 
-const API_URL = `${import.meta.env.VITE_SERVER_API_URL}/admin/members`;
+const API_URL = `${import.meta.env.VITE_SERVER_API_URL}/admin/categories`;
 
-// Register a member
-const addNewMember = async userData => {
+// add new category
+const addNewcategory = async userData => {
   try {
     const response = await axios.post(API_URL, userData);
-    console.log(response.data);
     return response.data;
   } catch (error) {
     console.log(error);
@@ -14,8 +13,8 @@ const addNewMember = async userData => {
   }
 };
 
-// get all members
-const getMembers = async token => {
+// get all categories
+const getAllCategories = async token => {
   try {
     const config = {
       headers: {
@@ -29,9 +28,9 @@ const getMembers = async token => {
   }
 };
 
-const memberService = {
-  addNewMember,
-  getMembers,
+const categoryService = {
+  addNewcategory,
+  getAllCategories,
 };
 
-export default memberService;
+export default categoryService;
