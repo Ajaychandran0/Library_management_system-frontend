@@ -10,6 +10,7 @@ import ListItemText from "@mui/material/ListItemText";
 import Drawer from "./style";
 import PropTypes from "prop-types";
 import navItems from "./NavItems";
+import { Link } from "react-router-dom";
 
 const Navbar = ({ open, setOpen }) => {
   const toggleDrawer = () => {
@@ -17,7 +18,11 @@ const Navbar = ({ open, setOpen }) => {
   };
 
   return (
-    <Drawer variant="permanent" open={open} sx={{ height: "100vh" }}>
+    <Drawer
+      variant="permanent"
+      open={open}
+      sx={{ height: "100vh", position: "fixed" }}
+    >
       <Toolbar
         sx={{
           display: "flex",
@@ -33,10 +38,13 @@ const Navbar = ({ open, setOpen }) => {
       <Divider />
       <List component="nav">
         {navItems.map(item => (
-          <ListItemButton key={item.id}>
-            <ListItemIcon>{item.icon}</ListItemIcon>
-            <ListItemText primary={item.label} />
-          </ListItemButton>
+          <Link to={item.route} key={item.id}>
+            <ListItemButton>
+              <ListItemIcon>{item.icon}</ListItemIcon>
+
+              <ListItemText primary={item.label} />
+            </ListItemButton>
+          </Link>
         ))}
       </List>
     </Drawer>

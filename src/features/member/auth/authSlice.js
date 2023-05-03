@@ -1,22 +1,23 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import adminService from "./adminService";
+import authService from "./authService";
 
-const admin = JSON.parse(localStorage.getItem("admin"));
+// Get member from localStorage
+const member = JSON.parse(localStorage.getItem("member"));
 
 const initialState = {
-  admin: admin ? admin : null,
+  member: member ? member : null,
   isError: false,
   isSuccess: false,
   isLoading: false,
   message: "",
 };
 
-// Login Admin
+// Login member
 export const login = createAsyncThunk(
-  "admin/login",
-  async (admin, thunkAPI) => {
+  "auth/login",
+  async (member, thunkAPI) => {
     try {
-      return await adminService.login(admin);
+      return await authService.login(member);
     } catch (error) {
       const message =
         (error.response && error.reponse.data && error.response.data.message) ||
@@ -27,13 +28,13 @@ export const login = createAsyncThunk(
   }
 );
 
-// Logout admin
-export const logout = createAsyncThunk("admin/logout", () => {
-  adminService.logout();
+// Logout member
+export const logout = createAsyncThunk("auth/logout", async () => {
+  await authService.logout();
 });
 
-export const adminSlice = createSlice({
-  name: "admin",
+export const authSlice = createSlice({
+  name: "auth",
   initialState,
 
   reducers: {
@@ -52,19 +53,19 @@ export const adminSlice = createSlice({
       .addCase(login.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.admin = action.payload;
+        state.member = action.payload;
       })
       .addCase(login.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
-        state.admin = null;
+        state.member = null;
       })
       .addCase(logout.fulfilled, state => {
-        state.admin = null;
+        state.member = null;
       });
   },
 });
 
-export const { reset } = adminSlice.actions;
-export default adminSlice.reducer;
+export const { reset } = authSlice.actions;
+export default authSlice.reducer;

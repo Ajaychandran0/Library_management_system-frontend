@@ -9,13 +9,13 @@ const navMainItems = [
     id: 0,
     icon: <DashboardIcon />,
     label: "Dashboard",
-    route: "/dashboard",
+    route: "/admin",
   },
   {
     id: 1,
     icon: <PeopleIcon />,
     label: "Members",
-    route: "/members",
+    route: "/admin/members",
   },
   {
     id: 2,

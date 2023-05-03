@@ -16,6 +16,7 @@ const BasicSnackbar = ({ open, onClose, severity, message }) => {
         autoHideDuration={6000}
         onClose={onClose}
         anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        sx={{ mt: 10 }}
       >
         <Alert onClose={onClose} severity={severity} sx={{ width: "100%" }}>
           {message}

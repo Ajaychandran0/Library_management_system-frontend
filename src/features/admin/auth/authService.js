@@ -1,7 +1,6 @@
 import axios from "axios";
 
 const API_URL = `${import.meta.env.VITE_SERVER_API_URL}/admin/`;
-console.log(API_URL, "hey this is api");
 
 // Login Admin
 const login = async adminData => {

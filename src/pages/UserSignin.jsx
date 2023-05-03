@@ -13,18 +13,54 @@ import LinkedInIcon from "@mui/icons-material/LinkedIn";
 
 import image from "../assets/images/signinPage.jpg";
 import { Link } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+
+// import { toast } from "react-toastify";
+import { login, reset } from "../features/member/auth/authSlice";
+import BasicSnackbar from "../components/common/BasicSnackbar/BasicSnackbar";
 
 const theme = createTheme();
 
 export default function UserSignin() {
+  const [toastOpen, setToastOpen] = useState(false);
+  const [toastMsg, setToastMsg] = useState("");
+  const handleToastClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setToastOpen(false);
+  };
+  const { member, isError, isSuccess, message } = useSelector(
+    state => state.auth
+  );
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const handleSubmit = event => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
+    const memberData = {
       email: data.get("email"),
       password: data.get("password"),
-    });
+    };
+    console.log(memberData);
+    dispatch(login(memberData));
   };
+
+  useEffect(() => {
+    if (isError) {
+      setToastMsg(message);
+      setToastOpen(true);
+    }
+    if (isSuccess || member) {
+      navigate("/");
+    }
+
+    dispatch(reset());
+  }, [member, isError, isSuccess, message, navigate, dispatch]);
 
   return (
     <ThemeProvider theme={theme}>
@@ -39,6 +75,12 @@ export default function UserSignin() {
         }}
       >
         <CssBaseline />
+        <BasicSnackbar
+          open={toastOpen}
+          onClose={handleToastClose}
+          severity="error"
+          message={toastMsg ? toastMsg : "login Failed"}
+        />
         <Grid
           item
           xs={false}
@@ -80,12 +122,7 @@ export default function UserSignin() {
             <Typography component="h1" variant="h5">
               Log in
             </Typography>
-            <Box
-              component="form"
-              noValidate
-              onSubmit={handleSubmit}
-              sx={{ mt: 1 }}
-            >
+            <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
               <TextField
                 margin="normal"
                 required

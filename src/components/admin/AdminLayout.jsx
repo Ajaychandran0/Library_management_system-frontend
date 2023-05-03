@@ -20,7 +20,22 @@ const Layout = () => {
           <AdminHeader open={open} setOpen={setOpen} />
           <Navbar open={open} setOpen={setOpen} />
           <main className="App">
-            <Outlet />
+            <Box
+              component="main"
+              sx={{
+                // backgroundColor: theme =>
+                //   theme.palette.mode === "light"
+                //     ? theme.palette.grey[100]
+                //     : theme.palette.grey[900],
+                flexGrow: 1,
+                overflow: "auto",
+                margin: "3rem",
+                marginTop: "6rem",
+                paddingLeft: () => (open ? "15rem" : "10rem"),
+              }}
+            >
+              <Outlet />
+            </Box>
           </main>
         </Box>
       </ThemeProvider>

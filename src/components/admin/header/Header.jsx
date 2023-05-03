@@ -11,7 +11,7 @@ import PropTypes from "prop-types";
 import AppBar from "./style";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { logout, reset } from "../../../features/admin/adminSlice";
+import { logout, reset } from "../../../features/admin/auth/authSlice";
 
 const AdminHeader = ({ open, setOpen }) => {
   const navigate = useNavigate();
@@ -30,7 +30,7 @@ const AdminHeader = ({ open, setOpen }) => {
     setOpen(!open);
   };
   return (
-    <AppBar position="absolute" open={open}>
+    <AppBar position="fixed" open={open}>
       <Toolbar
         sx={{
           pr: "24px", // keep right padding when drawer closed

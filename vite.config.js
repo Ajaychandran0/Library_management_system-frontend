@@ -16,7 +16,7 @@ export default defineConfig({
   },
   build: {
     optimizeDeps: {
-      exclude: ["@mui/icons-material"],
+      exclude: ["@mui/icons-material", "@mui/x-data-grid"],
     },
   },
 });

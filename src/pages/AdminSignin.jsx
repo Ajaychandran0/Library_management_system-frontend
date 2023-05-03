@@ -1,21 +1,25 @@
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-import Paper from "@mui/material/Paper";
-import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import Typography from "@mui/material/Typography";
+import {
+  Avatar,
+  Button,
+  CssBaseline,
+  TextField,
+  Paper,
+  Box,
+  Grid,
+  Typography,
+  CircularProgress,
+} from "@mui/material";
+
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import GoogleIcon from "@mui/icons-material/Google";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
-import CircularProgress from "@mui/material/CircularProgress";
 
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { login, reset } from "../features/admin/adminSlice";
+import { login, reset } from "../features/admin/auth/authSlice";
 import image from "../assets/images/adminLogin.avif";
 import BasicSnackbar from "../components/common/BasicSnackbar/BasicSnackbar";
 
@@ -82,7 +86,7 @@ export default function AdminSignin() {
           height: "80%",
           width: "80%",
           margin: "auto",
-          paddingTop: "40px",
+          paddingTop: "2.5rem",
         }}
       >
         <CssBaseline />
@@ -133,7 +137,7 @@ export default function AdminSignin() {
             <Typography component="h1" variant="h5">
               Admin LogIn
             </Typography>
-            <Box component="form" noValidate onSubmit={onSubmit} sx={{ mt: 1 }}>
+            <Box component="form" onSubmit={onSubmit} sx={{ mt: 1 }}>
               <TextField
                 margin="normal"
                 required
@@ -157,6 +161,7 @@ export default function AdminSignin() {
                 autoComplete="current-password"
                 onChange={onChange}
               />
+
               {isLoading ? (
                 <Button variant="contained" sx={{ mt: 3, mb: 2 }} fullWidth>
                   <CircularProgress size="1.5rem" color="inherit" />
