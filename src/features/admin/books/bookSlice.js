@@ -1,21 +1,21 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import categoryService from "./categoryService";
+import bookService from "./bookService";
 
 const initialState = {
-  categories: [],
+  books: [],
   isError: false,
   isLoading: false,
   isSuccess: false,
   message: "",
 };
 
-// Add new category
-export const addNewCategory = createAsyncThunk(
-  "category/add",
-  async (category, thunkAPI) => {
+// Add new book
+export const addNewBook = createAsyncThunk(
+  "books/add",
+  async (book, thunkAPI) => {
     try {
       const token = thunkAPI.getState().admin.admin.token;
-      return await categoryService.addNewCategory(category, token);
+      return await bookService.addNewBook(book, token);
     } catch (error) {
       const message =
         (error.response && error.reponse.data && error.response.data.message) ||
@@ -26,12 +26,12 @@ export const addNewCategory = createAsyncThunk(
   }
 );
 
-export const getAllCategories = createAsyncThunk(
-  "category/getAll",
+export const getBooks = createAsyncThunk(
+  "books/getAll",
   async (_, thunkAPI) => {
     try {
       const token = thunkAPI.getState().admin.admin.token;
-      return await categoryService.getAllCategories(token);
+      return await bookService.getBooks(token);
     } catch (error) {
       const message =
         (error.response && error.reponse.data && error.response.data.message) ||
@@ -42,12 +42,12 @@ export const getAllCategories = createAsyncThunk(
   }
 );
 
-export const deleteCategory = createAsyncThunk(
-  "category/delete",
-  async (categoryId, thunkAPI) => {
+export const deleteBook = createAsyncThunk(
+  "books/delete",
+  async (bookId, thunkAPI) => {
     try {
       const token = thunkAPI.getState().admin.admin.token;
-      return await categoryService.deleteCategory(categoryId, token);
+      return await bookService.deleteBook(bookId, token);
     } catch (error) {
       const message =
         (error.response && error.reponse.data && error.response.data.message) ||
@@ -58,12 +58,12 @@ export const deleteCategory = createAsyncThunk(
   }
 );
 
-export const blockCategory = createAsyncThunk(
-  "category/block",
-  async (categoryId, thunkAPI) => {
+export const blockBook = createAsyncThunk(
+  "books/block",
+  async (bookId, thunkAPI) => {
     try {
       const token = thunkAPI.getState().admin.admin.token;
-      return await categoryService.blockCategory(categoryId, token);
+      return await bookService.blockBook(bookId, token);
     } catch (error) {
       const message =
         (error.response && error.reponse.data && error.response.data.message) ||
@@ -74,12 +74,12 @@ export const blockCategory = createAsyncThunk(
   }
 );
 
-export const filterCategory = createAsyncThunk(
-  "category/filter",
+export const filterBook = createAsyncThunk(
+  "books/filter",
   async (search, thunkAPI) => {
     try {
       const token = thunkAPI.getState().admin.admin.token;
-      return await categoryService.filterCategory(search, token);
+      return await bookService.filterBook(search, token);
     } catch (error) {
       const message =
         (error.response && error.reponse.data && error.response.data.message) ||
@@ -90,79 +90,80 @@ export const filterCategory = createAsyncThunk(
   }
 );
 
-export const categorySlice = createSlice({
-  name: "category",
+export const booksSlice = createSlice({
+  name: "books",
   initialState,
   reducers: {
     reset: () => initialState,
   },
   extraReducers: builder => {
     builder
-      .addCase(addNewCategory.pending, state => {
+      .addCase(addNewBook.pending, state => {
         state.isLoading = true;
       })
-      .addCase(addNewCategory.fulfilled, (state, action) => {
+      .addCase(addNewBook.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.categories.push(action.payload);
+        console.log(action.payload, "in add book successful state");
+        state.books.push(action.payload);
       })
-      .addCase(addNewCategory.rejected, (state, action) => {
+      .addCase(addNewBook.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
       })
-      .addCase(getAllCategories.pending, state => {
+      .addCase(getBooks.pending, state => {
         state.isLoading = true;
       })
-      .addCase(getAllCategories.fulfilled, (state, action) => {
+      .addCase(getBooks.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.categories = action.payload.categories;
+        state.books = action.payload.books;
       })
-      .addCase(getAllCategories.rejected, (state, action) => {
+      .addCase(getBooks.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
       })
-      .addCase(deleteCategory.pending, state => {
+      .addCase(deleteBook.pending, state => {
         state.isLoading = true;
       })
-      .addCase(deleteCategory.fulfilled, (state, action) => {
+      .addCase(deleteBook.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.categorys = state.categorys.filter(
-          category => category._id !== action.payload.id
+        state.books = state.books.filter(
+          book => book._id !== action.payload.id
         );
       })
-      .addCase(deleteCategory.rejected, (state, action) => {
+      .addCase(deleteBook.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
       })
-      .addCase(blockCategory.pending, state => {
+      .addCase(blockBook.pending, state => {
         state.isLoading = true;
       })
-      .addCase(blockCategory.fulfilled, (state, action) => {
+      .addCase(blockBook.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.categorys = state.categorys.map(category => {
-          if (category._id !== action.payload._id) return category;
+        state.books = state.books.map(book => {
+          if (book._id !== action.payload._id) return book;
           return action.payload;
         });
       })
-      .addCase(blockCategory.rejected, (state, action) => {
+      .addCase(blockBook.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
       })
-      .addCase(filterCategory.pending, state => {
+      .addCase(filterBook.pending, state => {
         state.isLoading = true;
       })
-      .addCase(filterCategory.fulfilled, (state, action) => {
+      .addCase(filterBook.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.categorys = action.payload;
+        state.books = action.payload;
       })
-      .addCase(filterCategory.rejected, (state, action) => {
+      .addCase(filterBook.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
@@ -170,5 +171,5 @@ export const categorySlice = createSlice({
   },
 });
 
-export const { reset } = categorySlice.actions;
-export default categorySlice.reducer;
+export const { reset } = booksSlice.actions;
+export default booksSlice.reducer;

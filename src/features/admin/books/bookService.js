@@ -1,16 +1,17 @@
 import axios from "axios";
 
-const API_URL = `${import.meta.env.VITE_SERVER_API_URL}/admin/categories`;
+const API_URL = `${import.meta.env.VITE_SERVER_API_URL}/admin/books`;
 
-// add new category
-const addNewCategory = async (categoryData, token) => {
+// add a new book
+const addNewBook = async (userData, token) => {
   try {
     const config = {
       headers: {
         Authorization: `Bearer ${token} admin`,
       },
     };
-    const response = await axios.post(API_URL, categoryData, config);
+    const response = await axios.post(API_URL, userData, config);
+    console.log(response.data);
     return response.data;
   } catch (error) {
     console.log(error);
@@ -18,8 +19,8 @@ const addNewCategory = async (categoryData, token) => {
   }
 };
 
-// get all categories
-const getAllCategories = async token => {
+// get all books
+const getBooks = async token => {
   try {
     const config = {
       headers: {
@@ -27,16 +28,15 @@ const getAllCategories = async token => {
       },
     };
     const response = await axios.get(API_URL, config);
-    console.log(response.data);
     return response.data;
   } catch (error) {
     throw new Error(error.response.data.message);
   }
 };
 
-const categoryService = {
-  addNewCategory,
-  getAllCategories,
+const bookService = {
+  addNewBook,
+  getBooks,
 };
 
-export default categoryService;
+export default bookService;

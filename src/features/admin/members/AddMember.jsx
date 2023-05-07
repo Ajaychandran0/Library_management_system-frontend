@@ -16,6 +16,7 @@ import BasicSnackbar from "../../../components/common/BasicSnackbar/BasicSnackba
 import { addNewMember, reset } from "./memberSlice";
 
 const AddMember = () => {
+  // toast message
   const [toastOpen, setToastOpen] = useState(false);
   const [toastMsg, setToastMsg] = useState("");
   const handleToastClose = (event, reason) => {
@@ -37,10 +38,6 @@ const AddMember = () => {
     state => state.members
   );
 
-  const handleProfilePicChange = event => {
-    setProfilePic(event.target.files[0]);
-  };
-
   const [formData, setFormData] = useState({
     name: "",
     collegeId: "",
@@ -60,6 +57,10 @@ const AddMember = () => {
     });
   };
 
+  const handleProfilePicChange = event => {
+    setProfilePic(event.target.files[0]);
+  };
+
   const handleSubmit = event => {
     event.preventDefault();
     console.log(formData);
@@ -73,9 +74,7 @@ const AddMember = () => {
       setToastOpen(true);
     }
     if (isSuccess) {
-      // dispatch(notSuccess());
       setSeverity("success");
-      // navigate("/admin/members");
       formRef.current.reset();
       setFormData({ address: "" });
       setToastMsg("Member added successfully");
@@ -89,19 +88,12 @@ const AddMember = () => {
 
   return (
     <>
-      <Box
-        borderRadius={5}
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-        }}
-      >
-        <Link to="add-member">
-          <Button variant="outlined" sx={{ m: 3 }}>
-            View Membership Requests
-          </Button>
-        </Link>
-      </Box>
+      <Link to="add-member">
+        <Button variant="outlined" sx={{ m: 3 }}>
+          View Membership Requests
+        </Button>
+      </Link>
+
       <BasicSnackbar
         open={toastOpen}
         onClose={handleToastClose}

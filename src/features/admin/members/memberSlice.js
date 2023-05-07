@@ -14,7 +14,8 @@ export const addNewMember = createAsyncThunk(
   "members/add",
   async (member, thunkAPI) => {
     try {
-      return await memberService.addNewMember(member);
+      const token = thunkAPI.getState().admin.admin.token;
+      return await memberService.addNewMember(member, token);
     } catch (error) {
       const message =
         (error.response && error.reponse.data && error.response.data.message) ||

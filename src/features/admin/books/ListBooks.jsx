@@ -7,20 +7,21 @@ import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
-import { getMembers, reset } from "./memberSlice";
-import { columns, membersTableStyles } from "./TableColums";
+import { getBooks, reset } from "./bookSlice";
+import { columns, booksTableStyles } from "./TableColums";
 
-const ListMembers = () => {
-  const { admin } = useSelector(state => state.admin);
-
-  const { members, isLoading, isError, message } = useSelector(
-    state => state.members
+const ListBooks = () => {
+  const { books, isLoading, isError, message } = useSelector(
+    state => state.books
   );
+
   let x = 0;
-  const row = members.map(member => {
+  const row = books.map(book => {
     x += 1;
-    return { ...member, id: x };
+    return { ...book, id: x };
   });
+
+  const { admin } = useSelector(state => state.admin);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -32,8 +33,7 @@ const ListMembers = () => {
     if (isError) {
       console.log(message);
     }
-
-    dispatch(getMembers());
+    dispatch(getBooks());
 
     return () => {
       dispatch(reset());
@@ -43,24 +43,24 @@ const ListMembers = () => {
   return (
     <>
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-        <Link to="add">
+        <Link to="add-book">
           <Button variant="outlined" sx={{ m: 3 }}>
-            Add Members
+            Add books
           </Button>
         </Link>
-        <SearchBar placeholder="Search a member..." searchBarWidth="30rem" />
+        <SearchBar placeholder="Search a book..." searchBarWidth="30rem" />
       </Box>
       <DataTable
         rows={row}
         columns={columns}
         loading={isLoading}
         sx={{
-          ...membersTableStyles,
-          height: () => (members.length === 0 ? "400px" : "auto"),
+          ...booksTableStyles,
+          height: () => (books.length === 0 ? "400px" : "auto"),
         }}
       />
     </>
   );
 };
 
-export default ListMembers;
+export default ListBooks;
