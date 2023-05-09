@@ -1,18 +1,17 @@
 import { Delete, Edit } from "@mui/icons-material";
 import { GridActionsCellItem, gridClasses } from "@mui/x-data-grid";
+// import { deleteBook } from "./bookSlice";
+// import { useSelector, useDispatch } from "react-redux";
 
-// const handleDelete = params => {
-//   const id = params.row.id;
-//   console.log(id, "delete called");
-// };
+const handleDelete = id => {
+  console.log(id, "delete called");
+};
 
-// const handleEdit = params => {
-//   const id = params.row.id;
-//   console.log(id, "edit called");
-// };
+const handleEdit = id => {
+  console.log(id, "edit called");
+};
 
 export const columns = [
-  { field: "id", headerName: "No.", flex: 1 },
   { field: "bookTitle", headerName: "Book Title", flex: 5 },
   { field: "ISBN", headerName: "ISBN", flex: 4 },
   { field: "author", headerName: "Author", flex: 4 },
@@ -37,22 +36,23 @@ export const columns = [
     },
   },
   {
-    headerName: "actions",
+    field: "actions",
+    headerName: "Actions",
     type: "actions",
     flex: 3,
-    getActions: () => [
+    getActions: params => [
       <GridActionsCellItem
         key="edit"
         icon={<Edit color="info" />}
         label="Edit"
-        // onClick={() => handleEdit(params)}
+        onClick={() => handleEdit(params.row._id)}
       />,
       <GridActionsCellItem
         key="delete"
         icon={<Delete color="inherit" />}
         label="Delete"
         sx={{ color: "#D11A2A" }}
-        // onClick={() => handleDelete(params)}
+        onClick={() => handleDelete(params.row._id)}
       />,
     ],
   },

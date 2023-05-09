@@ -215,7 +215,7 @@ const AddMember = () => {
           </Grid>
 
           <Grid item xs={12} sm={6}>
-            <TextField
+            {/* <TextField
               required
               id="department"
               name="department"
@@ -223,7 +223,15 @@ const AddMember = () => {
               fullWidth
               value={formData.department}
               onChange={handleChange}
-            />
+            /> */}
+            {/* <TextField></TextField> */}
+            <label>Department</label>
+            <select name="department" id="department">
+              <option value="apple">Mechanical</option>
+              <option value="banana">Electronics</option>
+              <option value="orange">Electrical</option>
+              <option value="pear">Civil</option>
+            </select>
           </Grid>
 
           <Grid item xs={12} display="flex" justifyContent="center">

@@ -4,14 +4,12 @@ import SearchBar from "../../../components/common/SearchBar/SearchBar";
 
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import { getAllCategories, reset } from "./categorySlice";
 import { columns, categoryTableStyles } from "./TableColums";
 
 const ListCategories = () => {
-  const { admin } = useSelector(state => state.admin);
-
   const { categories, isLoading, isError, message } = useSelector(
     state => state.categories
   );
@@ -22,13 +20,9 @@ const ListCategories = () => {
     return { ...category, id: x };
   });
 
-  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!admin) {
-      navigate("/admin/login");
-    }
     if (isError) {
       console.log(message);
     }
@@ -38,7 +32,7 @@ const ListCategories = () => {
     return () => {
       dispatch(reset());
     };
-  }, [admin, navigate]);
+  }, []);
 
   return (
     <>

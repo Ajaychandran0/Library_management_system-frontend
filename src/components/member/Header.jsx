@@ -1,5 +1,5 @@
 import { FaSignInAlt, FaSignOutAlt, FaUser } from "react-icons/fa";
-import { Button } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logout, reset } from "../../features/member/auth/authSlice";
@@ -13,10 +13,10 @@ function Header() {
   const onLogOut = () => {
     dispatch(logout());
     dispatch(reset());
-    navigate("/");
+    navigate("/home");
   };
   return (
-    <header className="header">
+    <Box className="header" sx={{ mb: 0 }}>
       <ul>
         {" "}
         <div className="logo">
@@ -24,7 +24,7 @@ function Header() {
         </div>
         <>
           <li>
-            <Link to="/">Home</Link>
+            <Link to="/home">Home</Link>
           </li>
           <li>
             <Link to="/about">about</Link>
@@ -49,13 +49,21 @@ function Header() {
             )}
           </li>
           <li>
-            <Link to="/signup">
-              <FaUser /> Register
-            </Link>
+            {member ? (
+              <Box sx={{ mr: 5 }}>
+                <FaUser /> Account
+              </Box>
+            ) : (
+              <Box sx={{ mr: 5 }}>
+                <Link to="/signup">
+                  <FaUser /> Register
+                </Link>
+              </Box>
+            )}
           </li>
         </>
       </ul>
-    </header>
+    </Box>
   );
 }
 

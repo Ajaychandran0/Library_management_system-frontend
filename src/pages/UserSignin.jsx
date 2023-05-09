@@ -56,7 +56,7 @@ export default function UserSignin() {
       setToastOpen(true);
     }
     if (isSuccess || member) {
-      navigate("/");
+      navigate("/home");
     }
 
     dispatch(reset());

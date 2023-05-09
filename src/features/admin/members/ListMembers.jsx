@@ -4,15 +4,13 @@ import DataTable from "../../../components/common/DataTable/DataTable";
 import SearchBar from "../../../components/common/SearchBar/SearchBar";
 
 import { useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
 import { getMembers, reset } from "./memberSlice";
 import { columns, membersTableStyles } from "./TableColums";
 
 const ListMembers = () => {
-  const { admin } = useSelector(state => state.admin);
-
   const { members, isLoading, isError, message } = useSelector(
     state => state.members
   );
@@ -22,13 +20,9 @@ const ListMembers = () => {
     return { ...member, id: x };
   });
 
-  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!admin) {
-      navigate("/admin/login");
-    }
     if (isError) {
       console.log(message);
     }
@@ -38,7 +32,7 @@ const ListMembers = () => {
     return () => {
       dispatch(reset());
     };
-  }, [admin, navigate]);
+  }, []);
 
   return (
     <>

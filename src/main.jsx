@@ -1,7 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
-import App from "./App";
+import UserApp from "./UserApp";
+import AdminApp from "./AdminApp";
 
 import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
@@ -22,7 +23,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     <Provider store={store}>
       <Router>
         <Routes>
-          <Route path="/*" element={<App />} />
+          <Route path="/admin/*" element={<AdminApp />} />
+          <Route path="/*" element={<UserApp />} />
         </Routes>
       </Router>
     </Provider>

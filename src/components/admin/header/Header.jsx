@@ -17,8 +17,6 @@ const AdminHeader = ({ open, setOpen }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  // const { admin } = useSelector(state => state.admin);
-
   const onAdminLogout = () => {
     console.log("Admin log");
     dispatch(logout());
