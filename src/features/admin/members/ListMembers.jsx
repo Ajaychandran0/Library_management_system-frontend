@@ -11,22 +11,16 @@ import { getMembers, reset } from "./memberSlice";
 import { columns, membersTableStyles } from "./TableColums";
 
 const ListMembers = () => {
-  const { members, isLoading, isError, message } = useSelector(
-    state => state.members
-  );
+  const { members, isLoading } = useSelector(state => state.members);
   let x = 0;
   const row = members.map(member => {
     x += 1;
-    return { ...member, id: x };
+    return { ...member, sNo: x };
   });
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (isError) {
-      console.log(message);
-    }
-
     dispatch(getMembers());
 
     return () => {
@@ -48,6 +42,7 @@ const ListMembers = () => {
         rows={row}
         columns={columns}
         loading={isLoading}
+        getRowId={row => row._id}
         sx={{
           ...membersTableStyles,
           height: () => (members.length === 0 ? "400px" : "auto"),

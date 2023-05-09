@@ -17,7 +17,7 @@ const ListCategories = () => {
   let x = 0;
   const row = categories.map(category => {
     x += 1;
-    return { ...category, id: x };
+    return { ...category, sNo: x };
   });
 
   const dispatch = useDispatch();
@@ -48,10 +48,10 @@ const ListCategories = () => {
         rows={row}
         columns={columns}
         loading={isLoading}
+        getRowId={row => row._id}
         sx={{
           ...categoryTableStyles,
           height: () => (categories.length === 0 ? "400px" : "auto"),
-          mt: 5,
         }}
       />
     </>

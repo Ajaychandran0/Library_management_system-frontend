@@ -4,14 +4,13 @@ import UserHome from "./pages/UserHome";
 import PageNotFound from "./pages/PageNotFound";
 import UserSignin from "./pages/UserSignin";
 // import StudentRegistrationForm from "./features/admin/members/test";
-import ListAllBooks from "./features/member/books/ListAllBooks/ListAllBooks";
+import ListAllBooks from "./features/member/books/ListAllBooks";
 import ListAllCategories from "./features/member/category/ListAllCategories";
 
 import { useSelector } from "react-redux";
 
 function UserApp() {
   const { member } = useSelector(state => state.auth);
-  console.log(member);
 
   return (
     <Routes>

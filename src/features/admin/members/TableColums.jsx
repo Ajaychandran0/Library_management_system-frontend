@@ -9,37 +9,13 @@ const handleEdit = id => {
   console.log(id, "edit called");
 };
 
-export const categoryTableStyles = {
-  backgroundColor: theme => theme.palette.grey[200],
-  boxShadow: 2,
-  [`& .${gridClasses.cell}`]: {
-    py: 2,
-  },
-};
-
 export const columns = [
   { field: "sNo", headerName: "No.", flex: 1 },
-  { field: "name", headerName: "Category name", flex: 3 },
-  { field: "status", headerName: "Status" },
-  { field: "description", headerName: "Description", flex: 5 },
-  { field: "createdAt", headerName: "Creation Date", width: 120, flex: 3 },
-  { field: "updatedAt", headerName: "Updation Date", width: 120, flex: 3 },
-  {
-    field: "imageUrl",
-    headerName: "Image",
-    width: 200,
-    flex: 4,
-    editable: true,
-    renderCell: params => {
-      return (
-        <img
-          src={params.value}
-          alt="category image"
-          style={{ width: "100%" }}
-        />
-      );
-    },
-  },
+  { field: "name", headerName: "Name", flex: 3 },
+  { field: "collegeId", headerName: "College ID", flex: 3 },
+  { field: "email", headerName: "E-mail", flex: 4 },
+  { field: "phone", headerName: "Phone No.", flex: 3 },
+  { field: "department", headerName: "Department", flex: 3 },
   {
     field: "actions",
     headerName: "Actions",
@@ -61,3 +37,10 @@ export const columns = [
     ],
   },
 ];
+
+export const membersTableStyles = {
+  backgroundColor: theme => theme.palette.grey[200],
+  [`& .${gridClasses.cell}`]: {
+    py: 2,
+  },
+};

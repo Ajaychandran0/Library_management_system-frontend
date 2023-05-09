@@ -1,4 +1,4 @@
-import image from "../../../../assets/images/images.jpeg";
+import image from "../../../assets/images/images.jpeg";
 
 export const styles = {
   root: {

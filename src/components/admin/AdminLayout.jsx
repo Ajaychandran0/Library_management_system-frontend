@@ -7,7 +7,16 @@ import Navbar from "./navbar/Navbar";
 import { Outlet } from "react-router-dom";
 import { useState } from "react";
 
-const mdTheme = createTheme();
+const mdTheme = createTheme({
+  palette: {
+    primary: {
+      main: "#162051",
+    },
+    danger: {
+      main: "#D11A2A",
+    },
+  },
+});
 
 const Layout = () => {
   const [open, setOpen] = useState(true);
@@ -15,29 +24,30 @@ const Layout = () => {
   return (
     <>
       <ThemeProvider theme={mdTheme}>
-        <Box sx={{ display: "flex" }}>
+        <Box
+          sx={{
+            display: "flex",
+            overflow: "hidden",
+            height: "100vh",
+          }}
+        >
           <CssBaseline />
           <AdminHeader open={open} setOpen={setOpen} />
           <Navbar open={open} setOpen={setOpen} />
-          <main className="App">
-            <Box
-              component="main"
-              sx={{
-                // backgroundColor: theme =>
-                //   theme.palette.mode === "light"
-                //     ? theme.palette.grey[100]
-                //     : theme.palette.grey[900],
-                flexGrow: 1,
-                overflow: "auto",
-                margin: "3rem",
-                marginTop: "6rem",
-                paddingLeft: () => (open ? "15rem" : "10rem"),
-                marginRight: () => (open ? "" : "8rem"),
-              }}
-            >
-              <Outlet />
-            </Box>
-          </main>
+
+          <Box
+            component="main"
+            sx={{
+              marginLeft: () => (open ? "15rem" : "4.5rem"),
+              flexGrow: 1,
+              overflow: "scroll",
+              marginTop: "4rem",
+              marginBottom: "-1rem",
+              padding: "2.5rem",
+            }}
+          >
+            <Outlet />
+          </Box>
         </Box>
       </ThemeProvider>
     </>

@@ -1,11 +1,14 @@
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
-import IconButton from "@mui/material/IconButton";
-import Badge from "@mui/material/Badge";
-import Avatar from "@mui/material/Avatar";
 import MenuIcon from "@mui/icons-material/Menu";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-import { Button } from "@mui/material";
+import LogoutIcon from "@mui/icons-material/Logout";
+import {
+  Button,
+  Toolbar,
+  Typography,
+  IconButton,
+  Badge,
+  Avatar,
+} from "@mui/material";
 
 import PropTypes from "prop-types";
 import AppBar from "./style";
@@ -18,14 +21,13 @@ const AdminHeader = ({ open, setOpen }) => {
   const dispatch = useDispatch();
 
   const onAdminLogout = () => {
-    console.log("Admin log");
     dispatch(logout());
     dispatch(reset());
     navigate("/admin");
   };
 
   const toggleDrawer = () => {
-    setOpen(!open);
+    setOpen(prevState => !prevState);
   };
   return (
     <AppBar position="fixed" open={open}>
@@ -53,13 +55,14 @@ const AdminHeader = ({ open, setOpen }) => {
           noWrap
           sx={{ flexGrow: 1 }}
         >
-          Horizon LMS
+          HORIZON LMS
         </Typography>
         <Button
           variant="text"
           onClick={onAdminLogout}
           sx={{ color: "#fff", fontSize: ".95em" }}
         >
+          <LogoutIcon sx={{ fontSize: "1rem", m: 0.5 }} />
           Logout
         </Button>
         <IconButton color="inherit" sx={{ mx: 1 }}>

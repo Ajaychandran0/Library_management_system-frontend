@@ -16,7 +16,10 @@ function Header() {
     navigate("/home");
   };
   return (
-    <Box className="header" sx={{ mb: 0 }}>
+    <Box
+      className="header"
+      sx={{ zIndex: 10, position: "fixed", width: "100%" }}
+    >
       <ul>
         {" "}
         <div className="logo">
@@ -39,7 +42,16 @@ function Header() {
         <>
           <li>
             {member ? (
-              <Button variant="text" sx={{ color: "#fff" }} onClick={onLogOut}>
+              <Button
+                variant="text"
+                sx={{
+                  color: "#fff",
+                  "&:hover": {
+                    color: "grey",
+                  },
+                }}
+                onClick={onLogOut}
+              >
                 <FaSignOutAlt /> Logout
               </Button>
             ) : (
@@ -50,7 +62,14 @@ function Header() {
           </li>
           <li>
             {member ? (
-              <Box sx={{ mr: 5 }}>
+              <Box
+                sx={{
+                  mr: 5,
+                  "&:hover": {
+                    color: "grey",
+                  },
+                }}
+              >
                 <FaUser /> Account
               </Box>
             ) : (

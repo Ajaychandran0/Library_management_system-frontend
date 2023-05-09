@@ -43,15 +43,14 @@ export const columns = [
     getActions: params => [
       <GridActionsCellItem
         key="edit"
-        icon={<Edit color="info" />}
+        icon={<Edit color="primary" />}
         label="Edit"
         onClick={() => handleEdit(params.row._id)}
       />,
       <GridActionsCellItem
         key="delete"
-        icon={<Delete color="inherit" />}
+        icon={<Delete color="danger" />}
         label="Delete"
-        sx={{ color: "#D11A2A" }}
         onClick={() => handleDelete(params.row._id)}
       />,
     ],
@@ -59,9 +58,7 @@ export const columns = [
 ];
 
 export const booksTableStyles = {
-  height: "auto",
   backgroundColor: theme => theme.palette.grey[200],
-  width: "63.6rem",
   [`& .${gridClasses.cell}`]: {
     py: 2,
   },

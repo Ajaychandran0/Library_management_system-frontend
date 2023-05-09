@@ -11,16 +11,11 @@ import { getBooks, reset } from "./bookSlice";
 import { columns, booksTableStyles } from "./TableColums";
 
 const ListBooks = () => {
-  const { books, isLoading, isError, message } = useSelector(
-    state => state.books
-  );
+  const { books, isLoading } = useSelector(state => state.books);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (isError) {
-      console.log(message);
-    }
     dispatch(getBooks());
 
     return () => {

@@ -27,7 +27,6 @@ const getAllCategories = async token => {
       },
     };
     const response = await axios.get(API_URL, config);
-    console.log(response.data);
     return response.data;
   } catch (error) {
     throw new Error(error.response.data.message);
