@@ -8,7 +8,7 @@ import {
   CircularProgress,
 } from "@mui/material";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
 
@@ -29,16 +29,15 @@ const AddMember = () => {
   const [severity, setSeverity] = useState("error");
 
   const [profilePic, setProfilePic] = useState(null);
+  // const [collegeIdCard, setCollegeIdCard] = useState(null);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const formRef = useRef(null);
 
   const { isLoading, isError, isSuccess, message } = useSelector(
     state => state.members
   );
-
-  const [formData, setFormData] = useState({
+  const defaultFormData = {
     name: "",
     collegeId: "",
     email: "",
@@ -48,7 +47,8 @@ const AddMember = () => {
     profilePic: "",
     collegeIdCard: "",
     address: "",
-  });
+  };
+  const [formData, setFormData] = useState(defaultFormData);
 
   const handleChange = event => {
     setFormData({
@@ -60,10 +60,12 @@ const AddMember = () => {
   const handleProfilePicChange = event => {
     setProfilePic(event.target.files[0]);
   };
+  // const handleCollegeIdCardChange = event => {
+  //   setCollegeIdCard(event.target.files[0]);
+  // };
 
   const handleSubmit = event => {
     event.preventDefault();
-    console.log(formData);
     dispatch(addNewMember(formData));
   };
 
@@ -75,8 +77,7 @@ const AddMember = () => {
     }
     if (isSuccess) {
       setSeverity("success");
-      formRef.current.reset();
-      setFormData({ address: "" });
+      setFormData(defaultFormData);
       setToastMsg("Member added successfully");
       setToastOpen(true);
     }
@@ -102,7 +103,6 @@ const AddMember = () => {
       />
       <Box
         component="form"
-        ref={formRef}
         onSubmit={handleSubmit}
         sx={{ backgroundColor: theme => theme.palette.grey[200], p: 5 }}
       >
@@ -182,6 +182,7 @@ const AddMember = () => {
                 accept="image/*"
                 id="profilePic"
                 type="file"
+                required
                 onChange={handleProfilePicChange}
               />
             </Box>
@@ -196,7 +197,8 @@ const AddMember = () => {
               accept="image/*"
               id="collegeIdCard"
               type="file"
-              //   onChange={handleCollegeIdChange}
+              required
+              // onChange={handleCollegeIdCardChange}
               style={{ marginTop: "1.5rem" }}
             />
           </Grid>

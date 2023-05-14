@@ -2,13 +2,14 @@ import { Box, Button } from "@mui/material";
 
 import DataTable from "../../../components/common/DataTable/DataTable";
 import SearchBar from "../../../components/common/SearchBar/SearchBar";
+import TableSkeleton from "../../../components/common/TableSkleton/TableSkleton";
 
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
 import { getBooks, reset } from "./bookSlice";
-import { columns, booksTableStyles } from "./TableColums";
+import TableColumns, { booksTableStyles } from "./TableColums";
 
 const ListBooks = () => {
   const { books, isLoading } = useSelector(state => state.books);
@@ -33,18 +34,21 @@ const ListBooks = () => {
         </Link>
         <SearchBar placeholder="Search a book..." searchBarWidth="30rem" />
       </Box>
-      <DataTable
-        rows={books}
-        columns={columns}
-        loading={isLoading}
-        getRowId={row => row._id}
-        sx={{
-          ...booksTableStyles,
-          height: () => (books.length === 0 ? "400px" : "auto"),
-        }}
-      />
+      {isLoading ? (
+        <TableSkeleton />
+      ) : (
+        <DataTable
+          rows={books}
+          columns={TableColumns()}
+          loading={isLoading}
+          getRowId={row => row._id}
+          sx={{
+            ...booksTableStyles,
+            height: () => (books.length === 0 ? "400px" : "auto"),
+          }}
+        />
+      )}
     </>
   );
 };
-
 export default ListBooks;

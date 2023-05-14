@@ -3,15 +3,24 @@ import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
 
 import { Outlet } from "react-router-dom";
-import Header from "./Header";
+import Header from "./Header/Header";
 
-const mdTheme = createTheme();
+const mdTheme = createTheme({
+  palette: {
+    primary: {
+      main: "#162051",
+    },
+    danger: {
+      main: "#D11A2A",
+    },
+  },
+});
 
 const Layout = () => {
   return (
     <>
       <ThemeProvider theme={mdTheme}>
-        <Box sx={{ display: "flex" }}>
+        <Box sx={{ display: "flex", overflow: "hidden", height: "100vh" }}>
           <CssBaseline />
           <Header />
           <Box

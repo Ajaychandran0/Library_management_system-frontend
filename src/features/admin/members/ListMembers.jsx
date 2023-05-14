@@ -8,7 +8,8 @@ import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
 import { getMembers, reset } from "./memberSlice";
-import { columns, membersTableStyles } from "./TableColums";
+import TableColumns, { membersTableStyles } from "./TableColums";
+import TableSkleton from "../../../components/common/TableSkleton/TableSkleton";
 
 const ListMembers = () => {
   const { members, isLoading } = useSelector(state => state.members);
@@ -38,16 +39,20 @@ const ListMembers = () => {
         </Link>
         <SearchBar placeholder="Search a member..." searchBarWidth="30rem" />
       </Box>
-      <DataTable
-        rows={row}
-        columns={columns}
-        loading={isLoading}
-        getRowId={row => row._id}
-        sx={{
-          ...membersTableStyles,
-          height: () => (members.length === 0 ? "400px" : "auto"),
-        }}
-      />
+      {isLoading ? (
+        <TableSkleton />
+      ) : (
+        <DataTable
+          rows={row}
+          columns={TableColumns()}
+          loading={isLoading}
+          getRowId={row => row._id}
+          sx={{
+            ...membersTableStyles,
+            height: () => (members.length === 0 ? "400px" : "auto"),
+          }}
+        />
+      )}
     </>
   );
 };

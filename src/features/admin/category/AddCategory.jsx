@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 import BasicSnackbar from "../../../components/common/BasicSnackbar/BasicSnackbar";
@@ -32,16 +32,15 @@ const AddCategory = () => {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const formRef = useRef(null);
 
   const { isLoading, isError, isSuccess, message } = useSelector(
     state => state.categories
   );
-
-  const [formData, setFormData] = useState({
+  const defaultFormData = {
     name: "",
     description: "",
-  });
+  };
+  const [formData, setFormData] = useState(defaultFormData);
 
   const handleChange = event => {
     setFormData({
@@ -62,24 +61,24 @@ const AddCategory = () => {
     setImgUploading(true);
     const data = new FormData();
     data.append("file", catImage);
-    data.append("upload_preset", "horizon-LMS-category");
-    data.append("cloud_name", "dth0telv9");
+    data.append(
+      "upload_preset",
+      `${import.meta.env.VITE_CLOUDINARY_CAT_UPLOAD_PRESET}`
+    );
+    data.append("cloud_name", `${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME}`);
 
-    fetch("https://api.cloudinary.com/v1_1/dth0telv9/image/upload", {
+    fetch(`${import.meta.env.VITE_CLOUDINARY_URL}`, {
       method: "post",
       body: data,
     })
       .then(res => res.json())
       .then(data => {
         const categoryDetails = { ...formData, image: data.url };
-        console.log(categoryDetails);
         dispatch(addNewCategory(categoryDetails));
         setImgUploading(false);
       })
 
-      .catch(err => {
-        console.log(err);
-
+      .catch(() => {
         setToastMsg(`Failed to upload image`);
         setSeverity("error");
         setToastOpen(true);
@@ -94,8 +93,7 @@ const AddCategory = () => {
     }
     if (isSuccess) {
       setSeverity("success");
-      formRef.current.reset();
-      setFormData({ description: "" });
+      setFormData(defaultFormData);
       setCatImage(null);
       setToastMsg("Category added successfully");
       setToastOpen(true);
@@ -116,7 +114,6 @@ const AddCategory = () => {
       />
       <Box
         component="form"
-        ref={formRef}
         onSubmit={handleSubmit}
         sx={{ backgroundColor: theme => theme.palette.grey[200], p: 5, mt: 8 }}
       >

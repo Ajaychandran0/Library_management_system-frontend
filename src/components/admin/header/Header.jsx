@@ -27,7 +27,7 @@ const AdminHeader = ({ open, setOpen }) => {
   };
 
   const toggleDrawer = () => {
-    setOpen(prevState => !prevState);
+    setOpen(!open);
   };
   return (
     <AppBar position="fixed" open={open}>

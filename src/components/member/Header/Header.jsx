@@ -2,7 +2,8 @@ import { FaSignInAlt, FaSignOutAlt, FaUser } from "react-icons/fa";
 import { Box, Button } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { logout, reset } from "../../features/member/auth/authSlice";
+import { logout, reset } from "../../../features/member/auth/authSlice";
+import { style } from "./styles";
 
 function Header() {
   const navigate = useNavigate();
@@ -13,27 +14,23 @@ function Header() {
   const onLogOut = () => {
     dispatch(logout());
     dispatch(reset());
-    navigate("/home");
+    navigate("/");
   };
   return (
-    <Box
-      className="header"
-      sx={{ zIndex: 10, position: "fixed", width: "100%" }}
-    >
+    <Box className="header" sx={style}>
       <ul>
-        {" "}
         <div className="logo">
-          <Link to="/"> Horizon Library </Link>
+          <Link to="/"> HORIZON LIBRARY</Link>
         </div>
         <>
           <li>
-            <Link to="/home">Home</Link>
+            <Link to="/">Home</Link>
           </li>
           <li>
-            <Link to="/about">about</Link>
+            <Link to="/about">About</Link>
           </li>
           <li>
-            <Link to="/categories">categories</Link>
+            <Link to="/categories">Categories</Link>
           </li>
         </>
       </ul>

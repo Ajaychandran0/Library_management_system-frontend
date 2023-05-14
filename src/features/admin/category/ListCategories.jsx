@@ -7,12 +7,11 @@ import { useEffect } from "react";
 import { Link } from "react-router-dom";
 
 import { getAllCategories, reset } from "./categorySlice";
-import { columns, categoryTableStyles } from "./TableColums";
+import TableColumns, { categoryTableStyles } from "./TableColums";
+import TableSkleton from "../../../components/common/TableSkleton/TableSkleton";
 
 const ListCategories = () => {
-  const { categories, isLoading, isError, message } = useSelector(
-    state => state.categories
-  );
+  const { categories, isLoading } = useSelector(state => state.categories);
 
   let x = 0;
   const row = categories.map(category => {
@@ -23,10 +22,6 @@ const ListCategories = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (isError) {
-      console.log(message);
-    }
-
     dispatch(getAllCategories());
 
     return () => {
@@ -44,16 +39,20 @@ const ListCategories = () => {
         </Link>
         <SearchBar placeholder="Search a category..." searchBarWidth="30rem" />
       </Box>
-      <DataTable
-        rows={row}
-        columns={columns}
-        loading={isLoading}
-        getRowId={row => row._id}
-        sx={{
-          ...categoryTableStyles,
-          height: () => (categories.length === 0 ? "400px" : "auto"),
-        }}
-      />
+      {isLoading ? (
+        <TableSkleton />
+      ) : (
+        <DataTable
+          rows={row}
+          columns={TableColumns()}
+          loading={isLoading}
+          getRowId={row => row._id}
+          sx={{
+            ...categoryTableStyles,
+            height: () => (categories.length === 0 ? "400px" : "auto"),
+          }}
+        />
+      )}
     </>
   );
 };

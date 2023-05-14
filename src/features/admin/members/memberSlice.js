@@ -9,13 +9,11 @@ const initialState = {
   message: "",
 };
 
-// Add new member (give new memberships)
-export const addNewMember = createAsyncThunk(
-  "members/add",
-  async (member, thunkAPI) => {
+const generateAsyncThunk = (name, serviceCall) => {
+  return createAsyncThunk(`members/${name}`, async (arg = "_", thunkAPI) => {
     try {
       const token = thunkAPI.getState().admin.admin.token;
-      return await memberService.addNewMember(member, token);
+      return await serviceCall(token, arg);
     } catch (error) {
       const message =
         (error.response && error.reponse.data && error.response.data.message) ||
@@ -23,71 +21,33 @@ export const addNewMember = createAsyncThunk(
         error.toString();
       return thunkAPI.rejectWithValue(message);
     }
-  }
-);
+  });
+};
 
-export const getMembers = createAsyncThunk(
-  "members/getAll",
-  async (_, thunkAPI) => {
-    try {
-      const token = thunkAPI.getState().admin.admin.token;
-      return await memberService.getMembers(token);
-    } catch (error) {
-      const message =
-        (error.response && error.reponse.data && error.response.data.message) ||
-        error.message ||
-        error.toString();
-      return thunkAPI.rejectWithValue(message);
-    }
-  }
+// addNewMember(member)
+export const addNewMember = generateAsyncThunk(
+  "add",
+  memberService.addNewMember
 );
-
-export const deleteMember = createAsyncThunk(
-  "members/delete",
-  async (memberId, thunkAPI) => {
-    try {
-      const token = thunkAPI.getState().admin.admin.token;
-      return await memberService.deleteMember(memberId, token);
-    } catch (error) {
-      const message =
-        (error.response && error.reponse.data && error.response.data.message) ||
-        error.message ||
-        error.toString();
-      return thunkAPI.rejectWithValue(message);
-    }
-  }
+// getMembers()
+export const getMembers = generateAsyncThunk(
+  "getAll",
+  memberService.getMembers
 );
-
-export const blockMember = createAsyncThunk(
-  "members/block",
-  async (memberId, thunkAPI) => {
-    try {
-      const token = thunkAPI.getState().admin.admin.token;
-      return await memberService.blockMember(memberId, token);
-    } catch (error) {
-      const message =
-        (error.response && error.reponse.data && error.response.data.message) ||
-        error.message ||
-        error.toString();
-      return thunkAPI.rejectWithValue(message);
-    }
-  }
+// deleteMember(memberId)
+export const deleteMember = generateAsyncThunk(
+  "delete",
+  memberService.deleteMember
 );
-
-export const filterMember = createAsyncThunk(
-  "members/filter",
-  async (search, thunkAPI) => {
-    try {
-      const token = thunkAPI.getState().admin.admin.token;
-      return await memberService.filterMember(search, token);
-    } catch (error) {
-      const message =
-        (error.response && error.reponse.data && error.response.data.message) ||
-        error.message ||
-        error.toString();
-      return thunkAPI.rejectWithValue(message);
-    }
-  }
+// blockMember(memberId)
+export const blockMember = generateAsyncThunk(
+  "block",
+  memberService.blockMember
+);
+// filterMember(search)
+export const filterMember = generateAsyncThunk(
+  "filter",
+  memberService.filterMember
 );
 
 export const membersSlice = createSlice({
@@ -104,7 +64,6 @@ export const membersSlice = createSlice({
       .addCase(addNewMember.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        console.log(action.payload, "in add member successful state");
         state.members.push(action.payload);
       })
       .addCase(addNewMember.rejected, (state, action) => {

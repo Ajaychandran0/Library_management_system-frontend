@@ -1,12 +1,63 @@
 import { GridActionsCellItem, gridClasses } from "@mui/x-data-grid";
 import { Delete, Edit } from "@mui/icons-material";
+import { deleteCategory } from "./categorySlice";
+import { useDispatch } from "react-redux";
 
-const handleDelete = id => {
-  console.log(id, "delete called");
-};
+const TableColumns = () => {
+  const dispatch = useDispatch();
 
-const handleEdit = id => {
-  console.log(id, "edit called");
+  const handleDelete = id => {
+    dispatch(deleteCategory(id));
+  };
+
+  const handleEdit = id => {
+    dispatch(deleteCategory(id));
+  };
+
+  return [
+    { field: "sNo", headerName: "No.", flex: 1 },
+    { field: "name", headerName: "Category name", flex: 3 },
+    { field: "status", headerName: "Status", flex:2 },
+    { field: "description", headerName: "Description", flex: 9 },
+    { field: "createdAt", headerName: "Creation Date", flex: 3 },
+    { field: "updatedAt", headerName: "Updation Date", flex: 3 },
+    {
+      field: "imageUrl",
+      headerName: "Image",
+      flex: 4,
+      editable: true,
+      renderCell: params => {
+        return (
+          <img
+            src={params.value}
+            loading="lazy"
+            alt="category image"
+            style={{ display: "block", width: "100%", maxWidth: "9rem" }}
+          />
+        );
+      },
+    },
+    {
+      field: "actions",
+      headerName: "Actions",
+      type: "actions",
+      flex: 2,
+      getActions: params => [
+        <GridActionsCellItem
+          key="edit"
+          icon={<Edit color="primary" />}
+          label="Edit"
+          onClick={() => handleEdit(params.row._id)}
+        />,
+        <GridActionsCellItem
+          key="delete"
+          icon={<Delete color="danger" />}
+          label="Delete"
+          onClick={() => handleDelete(params.row._id)}
+        />,
+      ],
+    },
+  ];
 };
 
 export const categoryTableStyles = {
@@ -17,47 +68,4 @@ export const categoryTableStyles = {
   },
 };
 
-export const columns = [
-  { field: "sNo", headerName: "No.", flex: 1 },
-  { field: "name", headerName: "Category name", flex: 3 },
-  { field: "status", headerName: "Status" },
-  { field: "description", headerName: "Description", flex: 5 },
-  { field: "createdAt", headerName: "Creation Date", width: 120, flex: 3 },
-  { field: "updatedAt", headerName: "Updation Date", width: 120, flex: 3 },
-  {
-    field: "imageUrl",
-    headerName: "Image",
-    width: 200,
-    flex: 4,
-    editable: true,
-    renderCell: params => {
-      return (
-        <img
-          src={params.value}
-          alt="category image"
-          style={{ width: "100%" }}
-        />
-      );
-    },
-  },
-  {
-    field: "actions",
-    headerName: "Actions",
-    type: "actions",
-    flex: 3,
-    getActions: params => [
-      <GridActionsCellItem
-        key="edit"
-        icon={<Edit color="primary" />}
-        label="Edit"
-        onClick={() => handleEdit(params.row._id)}
-      />,
-      <GridActionsCellItem
-        key="delete"
-        icon={<Delete color="danger" />}
-        label="Delete"
-        onClick={() => handleDelete(params.row._id)}
-      />,
-    ],
-  },
-];
+export default TableColumns;

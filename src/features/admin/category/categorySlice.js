@@ -1,5 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import categoryService from "./categoryService";
+import {
+  addCategory,
+  fetchCategories,
+  deleteCategoryById,
+  blockCategoryById,
+  searchCategory,
+} from "./categoryService";
 
 const initialState = {
   categories: [],
@@ -9,13 +15,11 @@ const initialState = {
   message: "",
 };
 
-// Add new category
-export const addNewCategory = createAsyncThunk(
-  "category/add",
-  async (category, thunkAPI) => {
+const generateAsyncThunk = (name, serviceCall) => {
+  return createAsyncThunk(`category/${name}`, async (arg = "_", thunkAPI) => {
     try {
       const token = thunkAPI.getState().admin.admin.token;
-      return await categoryService.addNewCategory(category, token);
+      return await serviceCall(token, arg);
     } catch (error) {
       const message =
         (error.response && error.reponse.data && error.response.data.message) ||
@@ -23,72 +27,19 @@ export const addNewCategory = createAsyncThunk(
         error.toString();
       return thunkAPI.rejectWithValue(message);
     }
-  }
-);
+  });
+};
 
-export const getAllCategories = createAsyncThunk(
-  "category/getAll",
-  async (_, thunkAPI) => {
-    try {
-      const token = thunkAPI.getState().admin.admin.token;
-      return await categoryService.getAllCategories(token);
-    } catch (error) {
-      const message =
-        (error.response && error.reponse.data && error.response.data.message) ||
-        error.message ||
-        error.toString();
-      return thunkAPI.rejectWithValue(message);
-    }
-  }
-);
-
-export const deleteCategory = createAsyncThunk(
-  "category/delete",
-  async (categoryId, thunkAPI) => {
-    try {
-      const token = thunkAPI.getState().admin.admin.token;
-      return await categoryService.deleteCategory(categoryId, token);
-    } catch (error) {
-      const message =
-        (error.response && error.reponse.data && error.response.data.message) ||
-        error.message ||
-        error.toString();
-      return thunkAPI.rejectWithValue(message);
-    }
-  }
-);
-
-export const blockCategory = createAsyncThunk(
-  "category/block",
-  async (categoryId, thunkAPI) => {
-    try {
-      const token = thunkAPI.getState().admin.admin.token;
-      return await categoryService.blockCategory(categoryId, token);
-    } catch (error) {
-      const message =
-        (error.response && error.reponse.data && error.response.data.message) ||
-        error.message ||
-        error.toString();
-      return thunkAPI.rejectWithValue(message);
-    }
-  }
-);
-
-export const filterCategory = createAsyncThunk(
-  "category/filter",
-  async (search, thunkAPI) => {
-    try {
-      const token = thunkAPI.getState().admin.admin.token;
-      return await categoryService.filterCategory(search, token);
-    } catch (error) {
-      const message =
-        (error.response && error.reponse.data && error.response.data.message) ||
-        error.message ||
-        error.toString();
-      return thunkAPI.rejectWithValue(message);
-    }
-  }
-);
+// addNewCategory(category)
+export const addNewCategory = generateAsyncThunk("add", addCategory);
+// getAllCategories()
+export const getAllCategories = generateAsyncThunk("getAll", fetchCategories);
+// deleteCategory(categoryId)
+export const deleteCategory = generateAsyncThunk("delete", deleteCategoryById);
+// blockCategory(categoryId)
+export const blockCategory = generateAsyncThunk("block", blockCategoryById);
+// filterCategory(search)
+export const filterCategory = generateAsyncThunk("filter", searchCategory);
 
 export const categorySlice = createSlice({
   name: "category",
@@ -129,7 +80,7 @@ export const categorySlice = createSlice({
       .addCase(deleteCategory.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.categorys = state.categorys.filter(
+        state.categories = state.categories.filter(
           category => category._id !== action.payload.id
         );
       })
@@ -144,7 +95,7 @@ export const categorySlice = createSlice({
       .addCase(blockCategory.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.categorys = state.categorys.map(category => {
+        state.categories = state.categories.map(category => {
           if (category._id !== action.payload._id) return category;
           return action.payload;
         });
@@ -160,7 +111,7 @@ export const categorySlice = createSlice({
       .addCase(filterCategory.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.categorys = action.payload;
+        state.categories = action.payload;
       })
       .addCase(filterCategory.rejected, (state, action) => {
         state.isLoading = false;

@@ -14,7 +14,7 @@ import { Link } from "react-router-dom";
 
 const Navbar = ({ open, setOpen }) => {
   const toggleDrawer = () => {
-    setOpen(prevState => !prevState);
+    setOpen(!open);
   };
 
   return (

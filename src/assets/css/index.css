@@ -28,19 +28,6 @@ li {
   line-height: 2.2;
 }
 
-
-
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px 10px;
-  border-bottom: 1px solid #e6e6e6;
-  margin-bottom: 60px;
-  background-color: #162051;
-  color: #fff;
-}
-
 .header ul {
   display: flex;
   align-items: center;

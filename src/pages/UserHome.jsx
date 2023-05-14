@@ -1,20 +1,26 @@
-import image from "../assets/images/library.jpg";
+import { Typography, Container, Box } from "@mui/material";
+import { userHomeStyles as styles } from "./styles";
+import ListAllBooks from "../features/member/books/ListAllBooks";
 
 const UserHome = () => {
   return (
-    <div>
-      <p> User Home</p>
-      <p style={{ marginLeft: "550px" }}>Welcome to Horizon Library</p>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <img src={image} alt="" />
-      </div>
-    </div>
+    <Box sx={styles.root}>
+      <Box sx={styles.banner}>
+        <Box sx={{ mr: 6 }}>
+          <h4>Digital BookStore</h4>
+          <p style={{ fontSize: "1.5rem" }}>
+            Discover a new chapter in reading with us
+          </p>
+        </Box>
+      </Box>
+
+      <Container maxWidth="lg">
+        <Typography variant="h4" sx={styles.pageTitle}>
+          ALL BOOKS
+        </Typography>
+        <ListAllBooks />
+      </Container>
+    </Box>
   );
 };
 

@@ -3,7 +3,11 @@ const PageNotFound = () => {
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
-    margin: "82px",
+    alignItems: "center",
+    margin: "8rem",
+    marginTop: "14rem",
+    width: "80%",
+    heigth: "100%",
   };
   return (
     <div style={styles}>

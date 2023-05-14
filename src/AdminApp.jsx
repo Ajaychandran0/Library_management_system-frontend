@@ -39,9 +39,8 @@ function AdminApp() {
           <Route index element={<ListBooks />} />
           <Route path="add-book" element={<AddBook />} />
         </Route>
+        <Route path="*" element={<PageNotFound />} />
       </Route>
-
-      <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
 }

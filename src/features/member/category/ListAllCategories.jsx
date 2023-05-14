@@ -4,19 +4,14 @@ import { getAllCategories, reset } from "./categorySlice";
 
 import { Typography, Grid, Box } from "@mui/material";
 import CategoryCard from "./CategoryCard";
+import { style } from "./styles";
 
 const ListAllCategories = () => {
-  const { categories, isError, message } = useSelector(
-    state => state.categories
-  );
+  const { categories } = useSelector(state => state.categories);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (isError) {
-      console.log(message);
-    }
-
     dispatch(getAllCategories());
 
     return () => {
@@ -26,8 +21,8 @@ const ListAllCategories = () => {
 
   return (
     <Box sx={{ overflowX: "hidden", m: 5 }}>
-      <Typography variant="h4" sx={{ color: "#162051", mt: 3 }}>
-        All Categories
+      <Typography variant="h4" sx={style.heading}>
+        ALL CATEGORIES
       </Typography>
       <Grid container spacing={2} sx={{ mt: 1 }}>
         {categories.map(category => (

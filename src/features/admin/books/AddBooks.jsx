@@ -8,7 +8,7 @@ import {
   CircularProgress,
 } from "@mui/material";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
@@ -31,7 +31,6 @@ const AddBook = () => {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const formRef = useRef(null);
 
   const { isLoading, isError, isSuccess, message } = useSelector(
     state => state.books
@@ -41,7 +40,7 @@ const AddBook = () => {
     setBookImage(event.target.files[0]);
   };
 
-  const [formData, setFormData] = useState({
+  const defaultFormData = {
     bookTitle: "",
     ISBN: "",
     category: "",
@@ -52,7 +51,9 @@ const AddBook = () => {
     lostPrice: "",
     section: "",
     shelfNo: "",
-  });
+  };
+
+  const [formData, setFormData] = useState(defaultFormData);
 
   const handleChange = event => {
     if (event.target.name === "quantity" || event.target.name === "shelfNo") {
@@ -72,34 +73,28 @@ const AddBook = () => {
     }
   };
 
-  // add book image to cloudinary and  then submit form
   const [imgUploading, setImgUploading] = useState(false);
 
   const handleSubmit = event => {
     event.preventDefault();
-    console.log(formData);
     setImgUploading(true);
     const data = new FormData();
     data.append("file", bookImage);
     data.append("upload_preset", "horizon-LMS-books");
     data.append("cloud_name", "dth0telv9");
 
-    fetch("https://api.cloudinary.com/v1_1/dth0telv9/image/upload", {
+    fetch(`${import.meta.env.VITE_CLOUDINARY_URL}`, {
       method: "post",
       body: data,
     })
       .then(res => res.json())
       .then(data => {
-        console.log(data);
         const bookDetails = { ...formData, image: data.url };
-        console.log(bookDetails);
         dispatch(addNewBook(bookDetails));
         setImgUploading(false);
       })
 
-      .catch(err => {
-        console.log(err);
-
+      .catch(() => {
         setToastMsg(`Failed to upload image`);
         setSeverity("error");
         setToastOpen(true);
@@ -114,8 +109,7 @@ const AddBook = () => {
     }
     if (isSuccess) {
       setSeverity("success");
-      formRef.current.reset();
-      setFormData({ ISBN: "" });
+      setFormData(defaultFormData);
       setBookImage(null);
       setToastMsg("book added successfully");
       setToastOpen(true);
@@ -136,7 +130,6 @@ const AddBook = () => {
       />
       <Box
         component="form"
-        ref={formRef}
         onSubmit={handleSubmit}
         sx={{ backgroundColor: theme => theme.palette.grey[200], p: 5 }}
       >
@@ -333,5 +326,4 @@ const AddBook = () => {
   );
 };
 
-// export default StudentRegistrationForm;
 export default AddBook;

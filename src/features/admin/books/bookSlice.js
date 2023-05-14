@@ -9,13 +9,11 @@ const initialState = {
   message: "",
 };
 
-// Add new book
-export const addNewBook = createAsyncThunk(
-  "books/add",
-  async (book, thunkAPI) => {
+const generateAsyncThunk = (name, serviceCall) => {
+  return createAsyncThunk(`books/${name}`, async (arg = "_", thunkAPI) => {
     try {
       const token = thunkAPI.getState().admin.admin.token;
-      return await bookService.addNewBook(book, token);
+      return await serviceCall(token, arg);
     } catch (error) {
       const message =
         (error.response && error.reponse.data && error.response.data.message) ||
@@ -23,72 +21,19 @@ export const addNewBook = createAsyncThunk(
         error.toString();
       return thunkAPI.rejectWithValue(message);
     }
-  }
-);
+  });
+};
 
-export const getBooks = createAsyncThunk(
-  "books/getAll",
-  async (_, thunkAPI) => {
-    try {
-      const token = thunkAPI.getState().admin.admin.token;
-      return await bookService.getBooks(token);
-    } catch (error) {
-      const message =
-        (error.response && error.reponse.data && error.response.data.message) ||
-        error.message ||
-        error.toString();
-      return thunkAPI.rejectWithValue(message);
-    }
-  }
-);
-
-export const deleteBook = createAsyncThunk(
-  "books/delete",
-  async (bookId, thunkAPI) => {
-    try {
-      const token = thunkAPI.getState().admin.admin.token;
-      return await bookService.deleteBook(bookId, token);
-    } catch (error) {
-      const message =
-        (error.response && error.reponse.data && error.response.data.message) ||
-        error.message ||
-        error.toString();
-      return thunkAPI.rejectWithValue(message);
-    }
-  }
-);
-
-export const blockBook = createAsyncThunk(
-  "books/block",
-  async (bookId, thunkAPI) => {
-    try {
-      const token = thunkAPI.getState().admin.admin.token;
-      return await bookService.blockBook(bookId, token);
-    } catch (error) {
-      const message =
-        (error.response && error.reponse.data && error.response.data.message) ||
-        error.message ||
-        error.toString();
-      return thunkAPI.rejectWithValue(message);
-    }
-  }
-);
-
-export const filterBook = createAsyncThunk(
-  "books/filter",
-  async (search, thunkAPI) => {
-    try {
-      const token = thunkAPI.getState().admin.admin.token;
-      return await bookService.filterBook(search, token);
-    } catch (error) {
-      const message =
-        (error.response && error.reponse.data && error.response.data.message) ||
-        error.message ||
-        error.toString();
-      return thunkAPI.rejectWithValue(message);
-    }
-  }
-);
+// addNewBook(book)
+export const addNewBook = generateAsyncThunk("add", bookService.addNewBook);
+//getBooks()
+export const getBooks = generateAsyncThunk("getAll", bookService.getBooks);
+// deleteBook(bookId)
+export const deleteBook = generateAsyncThunk("delete", bookService.deleteBook);
+// blockBook(bookId)
+export const blockBook = generateAsyncThunk("block", bookService.blockBook);
+// filterBook(search)
+export const filterBook = generateAsyncThunk("filter", bookService.filterBook);
 
 export const booksSlice = createSlice({
   name: "books",
@@ -104,7 +49,6 @@ export const booksSlice = createSlice({
       .addCase(addNewBook.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        console.log(action.payload, "in add book successful state");
         state.books.push(action.payload);
       })
       .addCase(addNewBook.rejected, (state, action) => {
