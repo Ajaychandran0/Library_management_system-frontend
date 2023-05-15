@@ -29,9 +29,10 @@ const addNewMember = async (token, userData) => {
 };
 
 // get all members
-const getMembers = async token => {
+const getMembers = async (token, filter) => {
   const config = {
     ...setHeader(token),
+    params: filter,
     method: "GET",
     url: API_URL,
   };

@@ -29,9 +29,10 @@ const addNewBook = async (token, bookData) => {
 };
 
 // get all books
-const getBooks = async token => {
+const getBooks = async (token, filter) => {
   const config = {
     ...setHeader(token),
+    params: filter,
     method: "get",
     url: API_URL,
   };

@@ -1,27 +1,33 @@
 import { Box, Button } from "@mui/material";
+import React from "react";
 
 import DataTable from "../../../components/common/DataTable/DataTable";
 import SearchBar from "../../../components/common/SearchBar/SearchBar";
 import TableSkeleton from "../../../components/common/TableSkleton/TableSkleton";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
-import { getBooks, reset } from "./bookSlice";
+import { getBooks } from "./bookSlice";
 import TableColumns, { booksTableStyles } from "./TableColums";
 
 const ListBooks = () => {
-  const { books, isLoading } = useSelector(state => state.books);
+  const { books, totalBooks, isLoading } = useSelector(state => state.books);
+  const [paginationModel, setPaginationModel] = useState({
+    page: 0,
+    pageSize: 5,
+  });
 
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(getBooks());
+  const handlePagination = paginationModel => {
+    setPaginationModel(paginationModel);
+    dispatch(getBooks(paginationModel));
+  };
 
-    return () => {
-      dispatch(reset());
-    };
+  useEffect(() => {
+    dispatch(getBooks(paginationModel));
   }, []);
 
   return (
@@ -37,11 +43,14 @@ const ListBooks = () => {
       {isLoading ? (
         <TableSkeleton />
       ) : (
-        <DataTable
+        <MemoizedDataTable
+          rowCount={totalBooks}
           rows={books}
           columns={TableColumns()}
           loading={isLoading}
           getRowId={row => row._id}
+          paginationModel={paginationModel}
+          handlePagination={handlePagination}
           sx={{
             ...booksTableStyles,
             height: () => (books.length === 0 ? "400px" : "auto"),
@@ -51,4 +60,6 @@ const ListBooks = () => {
     </>
   );
 };
+
+const MemoizedDataTable = React.memo(DataTable);
 export default ListBooks;

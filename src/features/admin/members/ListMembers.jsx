@@ -3,7 +3,7 @@ import { Box, Button } from "@mui/material";
 import DataTable from "../../../components/common/DataTable/DataTable";
 import SearchBar from "../../../components/common/SearchBar/SearchBar";
 
-import { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -12,7 +12,15 @@ import TableColumns, { membersTableStyles } from "./TableColums";
 import TableSkleton from "../../../components/common/TableSkleton/TableSkleton";
 
 const ListMembers = () => {
-  const { members, isLoading } = useSelector(state => state.members);
+  const { members, totalMembers, isLoading } = useSelector(
+    state => state.members
+  );
+
+  const [paginationModel, setPaginationModel] = useState({
+    page: 0,
+    pageSize: 5,
+  });
+
   let x = 0;
   const row = members.map(member => {
     x += 1;
@@ -21,8 +29,13 @@ const ListMembers = () => {
 
   const dispatch = useDispatch();
 
+  const handlePagination = paginationModel => {
+    setPaginationModel(paginationModel);
+    dispatch(getMembers(paginationModel));
+  };
+
   useEffect(() => {
-    dispatch(getMembers());
+    dispatch(getMembers(paginationModel));
 
     return () => {
       dispatch(reset());
@@ -42,11 +55,14 @@ const ListMembers = () => {
       {isLoading ? (
         <TableSkleton />
       ) : (
-        <DataTable
+        <MemoizedDataTable
+          rowCount={totalMembers}
           rows={row}
           columns={TableColumns()}
           loading={isLoading}
           getRowId={row => row._id}
+          paginationModel={paginationModel}
+          handlePagination={handlePagination}
           sx={{
             ...membersTableStyles,
             height: () => (members.length === 0 ? "400px" : "auto"),
@@ -57,4 +73,5 @@ const ListMembers = () => {
   );
 };
 
+const MemoizedDataTable = React.memo(DataTable);
 export default ListMembers;

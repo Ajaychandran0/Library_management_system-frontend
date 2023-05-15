@@ -13,6 +13,7 @@ const initialState = {
   isLoading: false,
   isSuccess: false,
   message: "",
+  totalCategories: 0,
 };
 
 const generateAsyncThunk = (name, serviceCall) => {
@@ -67,6 +68,7 @@ export const categorySlice = createSlice({
       })
       .addCase(getAllCategories.fulfilled, (state, action) => {
         state.isLoading = false;
+        state.totalCategories = action.payload.totalItems;
         state.categories = action.payload.categories;
       })
       .addCase(getAllCategories.rejected, (state, action) => {

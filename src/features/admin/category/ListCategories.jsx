@@ -3,15 +3,22 @@ import DataTable from "../../../components/common/DataTable/DataTable";
 import SearchBar from "../../../components/common/SearchBar/SearchBar";
 
 import { useSelector, useDispatch } from "react-redux";
-import { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
-import { getAllCategories, reset } from "./categorySlice";
+import { getAllCategories } from "./categorySlice";
 import TableColumns, { categoryTableStyles } from "./TableColums";
 import TableSkleton from "../../../components/common/TableSkleton/TableSkleton";
 
 const ListCategories = () => {
-  const { categories, isLoading } = useSelector(state => state.categories);
+  const { categories, totalCategories, isLoading } = useSelector(
+    state => state.categories
+  );
+
+  const [paginationModel, setPaginationModel] = useState({
+    page: 0,
+    pageSize: 5,
+  });
 
   let x = 0;
   const row = categories.map(category => {
@@ -21,12 +28,13 @@ const ListCategories = () => {
 
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(getAllCategories());
+  const handlePagination = paginationModel => {
+    setPaginationModel(paginationModel);
+    dispatch(getAllCategories(paginationModel));
+  };
 
-    return () => {
-      dispatch(reset());
-    };
+  useEffect(() => {
+    dispatch(getAllCategories(paginationModel));
   }, []);
 
   return (
@@ -42,11 +50,14 @@ const ListCategories = () => {
       {isLoading ? (
         <TableSkleton />
       ) : (
-        <DataTable
+        <MemoizedDataTable
+          rowCount={totalCategories}
           rows={row}
           columns={TableColumns()}
           loading={isLoading}
           getRowId={row => row._id}
+          paginationModel={paginationModel}
+          handlePagination={handlePagination}
           sx={{
             ...categoryTableStyles,
             height: () => (categories.length === 0 ? "400px" : "auto"),
@@ -56,5 +67,7 @@ const ListCategories = () => {
     </>
   );
 };
+
+const MemoizedDataTable = React.memo(DataTable);
 
 export default ListCategories;

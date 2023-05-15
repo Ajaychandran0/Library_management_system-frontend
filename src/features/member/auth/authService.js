@@ -14,8 +14,6 @@ const login = async memberData => {
     }
     return response.data;
   } catch (error) {
-    console.log(error, "error message");
-
     throw new Error(error.response.data.message);
   }
 };

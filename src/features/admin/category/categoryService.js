@@ -29,9 +29,10 @@ export const addCategory = async (token, categoryData) => {
 };
 
 // get all categories
-export const fetchCategories = async token => {
+export const fetchCategories = async (token, filter) => {
   const config = {
     ...setHeader(token),
+    params: filter,
     method: "GET",
     url: API_URL,
   };

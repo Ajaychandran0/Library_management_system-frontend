@@ -3,7 +3,7 @@ import { GridActionsCellItem, gridClasses } from "@mui/x-data-grid";
 import { deleteBook } from "./bookSlice";
 import { useDispatch } from "react-redux";
 
-const TableColums = () => {
+const TableColumns = () => {
   const dispatch = useDispatch();
   const handleDelete = id => {
     dispatch(deleteBook(id));
@@ -73,4 +73,4 @@ export const booksTableStyles = {
   },
 };
 
-export default TableColums;
+export default TableColumns;
