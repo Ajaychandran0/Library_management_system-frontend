@@ -20,7 +20,7 @@ const ListCategories = () => {
     pageSize: 5,
   });
 
-  let x = 0;
+  let x = paginationModel.page * paginationModel.pageSize;
   const row = categories.map(category => {
     x += 1;
     return { ...category, sNo: x };
