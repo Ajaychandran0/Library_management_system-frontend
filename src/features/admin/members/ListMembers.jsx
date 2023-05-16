@@ -21,7 +21,7 @@ const ListMembers = () => {
     pageSize: 5,
   });
 
-  let x = 0;
+  let x = paginationModel.page * paginationModel.pageSize;
   const row = members.map(member => {
     x += 1;
     return { ...member, sNo: x };

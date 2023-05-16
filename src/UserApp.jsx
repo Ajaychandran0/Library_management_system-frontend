@@ -5,6 +5,7 @@ import PageNotFound from "./pages/PageNotFound";
 import UserSignin from "./pages/UserSignin";
 // import StudentRegistrationForm from "./features/admin/members/test";
 import ListAllCategories from "./features/member/category/ListAllCategories";
+import MemberAccountPage from "./features/member/Account/MemberAccountPage";
 
 import { useSelector } from "react-redux";
 
@@ -20,6 +21,7 @@ function UserApp() {
       <Route path="/" element={<Layout />}>
         <Route index element={<UserHome />} />
         <Route path="categories" element={<ListAllCategories />} />
+        <Route path="account" element={<MemberAccountPage />} />
         <Route path="*" element={<PageNotFound />} />
       </Route>
     </Routes>

@@ -67,7 +67,9 @@ function Header() {
                   },
                 }}
               >
-                <FaUser /> Account
+                <Link to="/account">
+                  <FaUser /> Account
+                </Link>
               </Box>
             ) : (
               <Box sx={{ mr: 5 }}>

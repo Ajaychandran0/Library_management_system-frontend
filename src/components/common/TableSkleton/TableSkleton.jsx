@@ -11,10 +11,30 @@ const TableSkleton = () => {
           key={index}
           sx={{ display: "flex", justifyContent: "space-between" }}
         >
-          <Skeleton variant="rectangular" width={255} height={40} />
-          <Skeleton variant="rectangular" width={255} height={40} />
-          <Skeleton variant="rectangular" width={255} height={40} />
-          <Skeleton variant="rectangular" width={255} height={40} />
+          <Skeleton
+            variant="rectangular"
+            animation="wave"
+            width={255}
+            height={40}
+          />
+          <Skeleton
+            variant="rectangular"
+            animation="wave"
+            width={255}
+            height={40}
+          />
+          <Skeleton
+            variant="rectangular"
+            animation="wave"
+            width={255}
+            height={40}
+          />
+          <Skeleton
+            variant="rectangular"
+            animation="wave"
+            width={255}
+            height={40}
+          />
         </Box>
       ))}
     </Stack>

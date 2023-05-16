@@ -46,7 +46,6 @@ export default function UserSignin() {
       email: data.get("email"),
       password: data.get("password"),
     };
-    console.log(memberData);
     dispatch(login(memberData));
   };
 
