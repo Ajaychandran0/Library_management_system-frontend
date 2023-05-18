@@ -4,9 +4,9 @@ import SearchBar from "../../../components/common/SearchBar/SearchBar";
 
 import { useSelector, useDispatch } from "react-redux";
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
-import { getAllCategories } from "./categorySlice";
+import { getAllCategories, reset } from "./categorySlice";
 import TableColumns, { categoryTableStyles } from "./TableColums";
 import TableSkleton from "../../../components/common/TableSkleton/TableSkleton";
 
@@ -27,6 +27,11 @@ const ListCategories = () => {
   });
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleEdit = catData => {
+    navigate("/admin/categories/edit/", { state: { catData } });
+  };
 
   const handlePagination = paginationModel => {
     setPaginationModel(paginationModel);
@@ -35,6 +40,8 @@ const ListCategories = () => {
 
   useEffect(() => {
     dispatch(getAllCategories(paginationModel));
+
+    return () => dispatch(reset());
   }, []);
 
   return (
@@ -53,14 +60,14 @@ const ListCategories = () => {
         <MemoizedDataTable
           rowCount={totalCategories}
           rows={row}
-          columns={TableColumns()}
+          columns={TableColumns(handleEdit)}
           loading={isLoading}
           getRowId={row => row._id}
           paginationModel={paginationModel}
           handlePagination={handlePagination}
           sx={{
             ...categoryTableStyles,
-            height: () => (categories.length === 0 ? "400px" : "auto"),
+            height: "27.5rem",
           }}
         />
       )}

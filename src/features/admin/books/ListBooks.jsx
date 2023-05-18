@@ -6,7 +6,7 @@ import SearchBar from "../../../components/common/SearchBar/SearchBar";
 import TableSkeleton from "../../../components/common/TableSkleton/TableSkleton";
 
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
 import { getBooks } from "./bookSlice";
@@ -20,6 +20,11 @@ const ListBooks = () => {
   });
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleEdit = bookData => {
+    navigate("/admin/books/edit", { state: { bookData } });
+  };
 
   const handlePagination = paginationModel => {
     setPaginationModel(paginationModel);
@@ -33,7 +38,7 @@ const ListBooks = () => {
   return (
     <>
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-        <Link to="add-book">
+        <Link to="add">
           <Button variant="outlined" sx={{ m: 3 }}>
             Add books
           </Button>
@@ -46,7 +51,7 @@ const ListBooks = () => {
         <MemoizedDataTable
           rowCount={totalBooks}
           rows={books}
-          columns={TableColumns()}
+          columns={TableColumns(handleEdit)}
           loading={isLoading}
           getRowId={row => row._id}
           paginationModel={paginationModel}

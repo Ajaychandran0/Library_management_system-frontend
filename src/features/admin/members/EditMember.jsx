@@ -10,13 +10,13 @@ import {
 
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate, Link } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import BasicSnackbar from "../../../components/common/BasicSnackbar/BasicSnackbar";
-import { addNewMember, reset } from "./memberSlice";
+import { editMember, reset } from "./memberSlice";
 import cloudinaryImageUpload from "../../../utils/cloudinaryImageUpload";
 
-const AddMember = () => {
+const EditMember = () => {
   // toast message
   const [toastOpen, setToastOpen] = useState(false);
   const [toastMsg, setToastMsg] = useState("");
@@ -34,21 +34,13 @@ const AddMember = () => {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const location = useLocation();
+  const memberData = location.state?.memberData;
 
   const { isLoading, isError, isSuccess, message } = useSelector(
     state => state.members
   );
-  const defaultFormData = {
-    name: "",
-    collegeId: "",
-    email: "",
-    phone: "",
-    department: "",
-    course: "",
-    profilePic: "",
-    collegeIdCard: "",
-    address: "",
-  };
+  const defaultFormData = memberData || {};
   const [formData, setFormData] = useState(defaultFormData);
 
   const handleChange = event => {
@@ -71,23 +63,26 @@ const AddMember = () => {
   const handleSubmit = event => {
     event.preventDefault();
     setImgUploading(true);
-    const profileUploadPreset = `${
-      import.meta.env.VITE_CLOUDINARY_PROFILE_UPLOAD_PRESET
-    }`;
-    const idUploadPreset = `${
-      import.meta.env.VITE_CLOUDINARY_ID_CARD_UPLOAD_PRESET
-    }`;
-    Promise.all([
-      cloudinaryImageUpload(profilePic, profileUploadPreset),
-      cloudinaryImageUpload(collegeIdCard, idUploadPreset),
-    ])
+    const profileUpload = profilePic
+      ? cloudinaryImageUpload(
+          profilePic,
+          `${import.meta.env.VITE_CLOUDINARY_PROFILE_UPLOAD_PRESET}`
+        )
+      : null;
+    const idUpload = collegeIdCard
+      ? cloudinaryImageUpload(
+          collegeIdCard,
+          `${import.meta.env.VITE_CLOUDINARY_ID_CARD_UPLOAD_PRESET}`
+        )
+      : null;
+    Promise.all([profileUpload, idUpload])
       .then(data => {
         const memberDetails = {
           ...formData,
-          profilePic: data[0].url,
-          collegeIdCard: data[1].url,
+          profilePic: data[0] ? data[0].url : memberData.profilePic,
+          collegeIdCard: data[1] ? data[1].url : memberData.collegeIdCard,
         };
-        dispatch(addNewMember(memberDetails));
+        dispatch(editMember(memberDetails));
         setImgUploading(false);
       })
       .catch(() => {
@@ -106,10 +101,10 @@ const AddMember = () => {
     }
     if (isSuccess) {
       setSeverity("success");
-      setFormData(defaultFormData);
       setProfilePic(null);
       setToastMsg("Member added successfully");
       setToastOpen(true);
+      navigate("/admin/members");
     }
 
     return () => {
@@ -119,12 +114,6 @@ const AddMember = () => {
 
   return (
     <>
-      <Link to="add-member">
-        <Button variant="outlined" sx={{ m: 3 }}>
-          View Membership Requests
-        </Button>
-      </Link>
-
       <BasicSnackbar
         open={toastOpen}
         onClose={handleToastClose}
@@ -137,7 +126,7 @@ const AddMember = () => {
         sx={{ backgroundColor: theme => theme.palette.grey[200], p: 5 }}
       >
         <Typography variant="h6" sx={{ mb: 2 }}>
-          Student Registration Form
+          Edit Student Information
         </Typography>
         <Grid container spacing={3}>
           <Grid item xs={12} sm={6}>
@@ -205,14 +194,17 @@ const AddMember = () => {
             >
               <Avatar
                 alt="Profile Picture"
-                src={profilePic ? URL.createObjectURL(profilePic) : undefined}
+                src={
+                  profilePic
+                    ? URL.createObjectURL(profilePic)
+                    : memberData.profilePic
+                }
                 sx={{ mr: 1 }}
               />
               <input
                 accept="image/*"
                 id="profilePic"
                 type="file"
-                required
                 onChange={handleProfilePicChange}
               />
             </Box>
@@ -223,14 +215,31 @@ const AddMember = () => {
                 Upload College ID Card
               </Typography>
             </label>
-            <input
-              accept="image/*"
-              id="collegeIdCard"
-              type="file"
-              required
-              onChange={handleCollegeIdCardChange}
-              style={{ marginTop: "1.5rem" }}
-            />
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                mt: 2,
+              }}
+            >
+              <Avatar
+                alt="ID Card Img"
+                variant="rounded"
+                src={
+                  collegeIdCard
+                    ? URL.createObjectURL(collegeIdCard)
+                    : memberData.collegeIdCard
+                }
+                sx={{ mr: 1 }}
+              />
+              <input
+                accept="image/*"
+                id="collegeIdCard"
+                type="file"
+                onChange={handleCollegeIdCardChange}
+              />
+            </Box>
           </Grid>
 
           <Grid item xs={12} sm={6}>
@@ -241,7 +250,7 @@ const AddMember = () => {
               label="Phone Number"
               type="number"
               fullWidth
-              value={formData.phoneNumber}
+              value={formData.phone}
               onChange={handleChange}
             />
           </Grid>
@@ -282,7 +291,7 @@ const AddMember = () => {
                 type="submit"
                 sx={{ width: "25rem", mt: 2 }}
               >
-                Add Member
+                Edit Member
               </Button>
             )}
           </Grid>
@@ -292,4 +301,4 @@ const AddMember = () => {
   );
 };
 
-export default AddMember;
+export default EditMember;

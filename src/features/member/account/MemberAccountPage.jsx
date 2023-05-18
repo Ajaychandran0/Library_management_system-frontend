@@ -9,7 +9,7 @@ const UserAccountPage = () => {
 
   return (
     <Box sx={styles.box}>
-      <Typography variant="h4">MY ACCOUNT</Typography>
+      <Typography variant="h5">MY ACCOUNT</Typography>
       <Grid container spacing={4} sx={styles.grid}>
         {navItems.map(item => (
           <Grid item xs={12} sm={6} md={4} lg={3} key={item.id}>

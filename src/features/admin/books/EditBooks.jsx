@@ -10,13 +10,12 @@ import {
 
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import BasicSnackbar from "../../../components/common/BasicSnackbar/BasicSnackbar";
-import { addNewBook, reset } from "./bookSlice";
-import cloudinaryImageUpload from "../../../utils/cloudinaryImageUpload";
+import { editBook, reset } from "./bookSlice";
 
-const AddBook = () => {
+const EditBook = () => {
   const [toastOpen, setToastOpen] = useState(false);
   const [toastMsg, setToastMsg] = useState("");
   const handleToastClose = (event, reason) => {
@@ -27,11 +26,11 @@ const AddBook = () => {
   };
 
   const [severity, setSeverity] = useState("error");
-
   const [bookImage, setBookImage] = useState(null);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const location = useLocation();
 
   const { isLoading, isError, isSuccess, message } = useSelector(
     state => state.books
@@ -41,18 +40,7 @@ const AddBook = () => {
     setBookImage(event.target.files[0]);
   };
 
-  const defaultFormData = {
-    bookTitle: "",
-    ISBN: "",
-    category: "",
-    author: "",
-    language: "",
-    quantity: "",
-    price: "",
-    lostPrice: "",
-    section: "",
-    shelfNo: "",
-  };
+  const defaultFormData = location.state?.bookData || {};
 
   const [formData, setFormData] = useState(defaultFormData);
 
@@ -78,23 +66,32 @@ const AddBook = () => {
 
   const handleSubmit = event => {
     event.preventDefault();
-    setImgUploading(true);
-    const uploadPreset = `${
-      import.meta.env.VITE_CLOUDINARY_BOOK_UPLOAD_PRESET
-    }`;
-    cloudinaryImageUpload(bookImage, uploadPreset)
-      .then(data => {
-        const bookDetails = { ...formData, image: data.url };
-        dispatch(addNewBook(bookDetails));
-        setImgUploading(false);
-      })
+    if (bookImage) {
+      setImgUploading(true);
+      const data = new FormData();
+      data.append("file", bookImage);
+      data.append("upload_preset", "horizon-LMS-books");
+      data.append("cloud_name", "dth0telv9");
 
-      .catch(() => {
-        setToastMsg(`Failed to upload image`);
-        setSeverity("error");
-        setToastOpen(true);
-        setImgUploading(false);
-      });
+      fetch(`${import.meta.env.VITE_CLOUDINARY_URL}`, {
+        method: "post",
+        body: data,
+      })
+        .then(res => res.json())
+        .then(data => {
+          const bookDetails = { ...formData, imageUrl: data.url };
+          dispatch(editBook(bookDetails));
+          setImgUploading(false);
+        })
+
+        .catch(() => {
+          setToastMsg(`Failed to upload image`);
+          setSeverity("error");
+          setToastOpen(true);
+        });
+    } else {
+      dispatch(editBook(formData));
+    }
   };
 
   useEffect(() => {
@@ -105,10 +102,10 @@ const AddBook = () => {
     }
     if (isSuccess) {
       setSeverity("success");
-      setFormData(defaultFormData);
       setBookImage(null);
       setToastMsg("book added successfully");
       setToastOpen(true);
+      navigate("/admin/books");
     }
 
     return () => {
@@ -130,7 +127,7 @@ const AddBook = () => {
         sx={{ backgroundColor: theme => theme.palette.grey[200], p: 5 }}
       >
         <Typography variant="h6" sx={{ mb: 2 }}>
-          Add New Book
+          Edit Book
         </Typography>
         <Grid container spacing={2}>
           <Grid item xs={12}>
@@ -205,20 +202,21 @@ const AddBook = () => {
                 <input
                   accept="image/*"
                   id="bookImage"
-                  required
                   type="file"
                   onChange={handleBookImageChange}
                 />
               </Box>
 
-              {bookImage && (
-                <Avatar
-                  variant="rounded"
-                  alt="Book image"
-                  src={bookImage ? URL.createObjectURL(bookImage) : undefined}
-                  sx={{ mr: 8, width: 70, height: 100 }}
-                />
-              )}
+              <Avatar
+                variant="rounded"
+                alt="Book image"
+                src={
+                  bookImage
+                    ? URL.createObjectURL(bookImage)
+                    : location.state?.bookData.imageUrl
+                }
+                sx={{ mr: 8, width: 70, height: 100 }}
+              />
             </Box>
           </Grid>
 
@@ -312,7 +310,7 @@ const AddBook = () => {
                 type="submit"
                 sx={{ width: "25rem", mt: 2 }}
               >
-                Add book
+                Edit book
               </Button>
             )}
           </Grid>
@@ -322,4 +320,4 @@ const AddBook = () => {
   );
 };
 
-export default AddBook;
+export default EditBook;

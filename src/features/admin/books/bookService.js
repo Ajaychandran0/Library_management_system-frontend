@@ -13,7 +13,7 @@ const sendRequest = async config => {
     const response = await axios(config);
     return response.data;
   } catch (error) {
-    throw new Error(error.response.data.message);
+    return error.response.data.message;
   }
 };
 
@@ -33,8 +33,32 @@ const getBooks = async (token, filter) => {
   const config = {
     ...setHeader(token),
     params: filter,
-    method: "get",
+    method: "GET",
     url: API_URL,
+  };
+  return await sendRequest(config);
+};
+
+// edit book by id
+const editBook = async (token, updatedBook) => {
+  const bookId = updatedBook._id;
+  delete updatedBook._id;
+
+  const config = {
+    ...setHeader(token),
+    data: updatedBook,
+    method: "PUT",
+    url: `${API_URL}/${bookId}`,
+  };
+  return await sendRequest(config);
+};
+
+// delete book by id
+const deleteBook = async (token, id) => {
+  const config = {
+    ...setHeader(token),
+    method: "DELETE",
+    url: `${API_URL}/${id}`,
   };
   return await sendRequest(config);
 };
@@ -42,6 +66,8 @@ const getBooks = async (token, filter) => {
 const bookService = {
   addNewBook,
   getBooks,
+  editBook,
+  deleteBook,
 };
 
 export default bookService;

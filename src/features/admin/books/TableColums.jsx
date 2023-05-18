@@ -3,13 +3,9 @@ import { GridActionsCellItem, gridClasses } from "@mui/x-data-grid";
 import { deleteBook } from "./bookSlice";
 import { useDispatch } from "react-redux";
 
-const TableColumns = () => {
+const TableColumns = handleEdit => {
   const dispatch = useDispatch();
   const handleDelete = id => {
-    dispatch(deleteBook(id));
-  };
-
-  const handleEdit = id => {
     dispatch(deleteBook(id));
   };
 
@@ -53,7 +49,7 @@ const TableColumns = () => {
           key="edit"
           icon={<Edit color="primary" />}
           label="Edit"
-          onClick={() => handleEdit(params.row._id)}
+          onClick={() => handleEdit(params.row)}
         />,
         <GridActionsCellItem
           key="delete"

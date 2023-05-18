@@ -6,10 +6,13 @@ import PageNotFound from "./pages/PageNotFound";
 import AdminSignin from "./pages/AdminSignin";
 import ListMembers from "./features/admin/members/ListMembers";
 import AddMember from "./features/admin/members/AddMember";
+import EditMember from "./features/admin/members/EditMember";
 import ListCategories from "./features/admin/category/ListCategories";
 import AddCategory from "./features/admin/category/AddCategory";
+import EditCategory from "./features/admin/category/EditCategory";
 import ListBooks from "./features/admin/books/ListBooks";
 import AddBook from "./features/admin/books/AddBooks";
+import EditBook from "./features/admin/books/EditBooks";
 import { useSelector } from "react-redux";
 
 function AdminApp() {
@@ -27,17 +30,20 @@ function AdminApp() {
         <Route path="members">
           <Route index element={<ListMembers />} />
           <Route path="add" element={<AddMember />} />
+          <Route path="edit" element={<EditMember />} />
           {/* <Route path="requests" element={<StudentRegistrationForm />} /> */}
         </Route>
 
         <Route path="categories">
           <Route index element={<ListCategories />} />
           <Route path="add" element={<AddCategory />} />
+          <Route path="edit" element={<EditCategory />} />
         </Route>
 
         <Route path="books">
           <Route index element={<ListBooks />} />
-          <Route path="add-book" element={<AddBook />} />
+          <Route path="add" element={<AddBook />} />
+          <Route path="edit" element={<EditBook />} />
         </Route>
         <Route path="*" element={<PageNotFound />} />
       </Route>

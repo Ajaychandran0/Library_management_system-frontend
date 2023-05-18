@@ -5,7 +5,13 @@ import PageNotFound from "./pages/PageNotFound";
 import UserSignin from "./pages/UserSignin";
 // import StudentRegistrationForm from "./features/admin/members/test";
 import ListAllCategories from "./features/member/category/ListAllCategories";
-import MemberAccountPage from "./features/member/Account/MemberAccountPage";
+import MemberAccountPage from "./features/member/account/MemberAccountPage";
+import RequestedBooksPage from "./features/member/requestedBooks/RequestedBooks";
+import BorrowedBooks from "./features/member/borrowedBooks/AllBorrowedBooks";
+import Wishlist from "./features/member/wishlist/Wishlist";
+import BooksInPossession from "./features/member/booksInPossession/BooksInPossession";
+import LostBooks from "./features/member/lostBooks/LostBooks";
+import OverdueItemsLlist from "./features/member/fine/OverdueItemsList";
 
 import { useSelector } from "react-redux";
 
@@ -22,6 +28,18 @@ function UserApp() {
         <Route index element={<UserHome />} />
         <Route path="categories" element={<ListAllCategories />} />
         <Route path="account" element={<MemberAccountPage />} />
+        <Route
+          path="account/requested_books"
+          element={<RequestedBooksPage />}
+        />
+        <Route path="account/wishlist" element={<Wishlist />} />
+        <Route path="account/borrowed_books" element={<BorrowedBooks />} />
+        <Route
+          path="account/books_in_possession"
+          element={<BooksInPossession />}
+        />
+        <Route path="account/lost_books" element={<LostBooks />} />
+        <Route path="/account/fine" element={<OverdueItemsLlist />} />
         <Route path="*" element={<PageNotFound />} />
       </Route>
     </Routes>

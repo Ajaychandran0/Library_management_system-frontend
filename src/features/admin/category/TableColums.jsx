@@ -3,21 +3,18 @@ import { Delete, Edit } from "@mui/icons-material";
 import { deleteCategory } from "./categorySlice";
 import { useDispatch } from "react-redux";
 
-const TableColumns = () => {
+const TableColumns = handleEdit => {
+  // const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const handleDelete = id => {
     dispatch(deleteCategory(id));
   };
 
-  const handleEdit = id => {
-    dispatch(deleteCategory(id));
-  };
-
   return [
     { field: "sNo", headerName: "No.", flex: 1 },
     { field: "name", headerName: "Category name", flex: 3 },
-    { field: "status", headerName: "Status", flex:2 },
+    { field: "status", headerName: "Status", flex: 2 },
     { field: "description", headerName: "Description", flex: 9 },
     { field: "createdAt", headerName: "Creation Date", flex: 3 },
     { field: "updatedAt", headerName: "Updation Date", flex: 3 },
@@ -47,7 +44,7 @@ const TableColumns = () => {
           key="edit"
           icon={<Edit color="primary" />}
           label="Edit"
-          onClick={() => handleEdit(params.row._id)}
+          onClick={() => handleEdit(params.row)}
         />,
         <GridActionsCellItem
           key="delete"

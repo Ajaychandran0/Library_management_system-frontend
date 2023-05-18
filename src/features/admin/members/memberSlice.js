@@ -35,6 +35,8 @@ export const getMembers = generateAsyncThunk(
   "getAll",
   memberService.getMembers
 );
+// editMember(updatedMember)
+export const editMember = generateAsyncThunk("edit", memberService.editMember);
 // deleteMember(memberId)
 export const deleteMember = generateAsyncThunk(
   "delete",
@@ -81,6 +83,18 @@ export const membersSlice = createSlice({
         state.members = action.payload.members;
       })
       .addCase(getMembers.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      .addCase(editMember.pending, state => {
+        state.isLoading = true;
+      })
+      .addCase(editMember.fulfilled, state => {
+        state.isLoading = false;
+        state.isSuccess = true;
+      })
+      .addCase(editMember.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;

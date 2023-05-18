@@ -39,6 +39,17 @@ export const fetchCategories = async (token, filter) => {
   return await sendRequest(config);
 };
 
+// edit category by id
+export const editCategoryById = async (token, { updatedCat, catId }) => {
+  const config = {
+    ...setHeader(token),
+    data: updatedCat,
+    method: "PUT",
+    url: `${API_URL}/${catId}`,
+  };
+  return await sendRequest(config);
+};
+
 // delete category by id
 export const deleteCategoryById = async (token, catId) => {
   const config = {

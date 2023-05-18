@@ -1,50 +1,87 @@
-import Toolbar from "@mui/material/Toolbar";
-import List from "@mui/material/List";
-import Divider from "@mui/material/Divider";
-import IconButton from "@mui/material/IconButton";
+import {
+  Toolbar,
+  List,
+  Divider,
+  IconButton,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Box,
+  Collapse,
+} from "@mui/material";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
 
-import Drawer from "./style";
+import { Link } from "react-router-dom";
+import { useState } from "react";
+import Drawer, {
+  activeItem,
+  activeNavList,
+  navSubText,
+  navDrawer,
+  navToolbar,
+  navList,
+} from "./style";
 import PropTypes from "prop-types";
 import navItems from "./NavItems";
-import { Link } from "react-router-dom";
 
 const Navbar = ({ open, setOpen }) => {
   const toggleDrawer = () => {
     setOpen(!open);
   };
+  const [expandedItems, setExpandedItems] = useState([]);
+  const [activeList, setActiveList] = useState("");
+  const [activeElement, setActiveElement] = useState("");
+
+  const handleExpand = item => {
+    if (expandedItems.includes(item)) {
+      setExpandedItems(expandedItems.filter(i => i !== item));
+    } else {
+      setExpandedItems([...expandedItems, item]);
+    }
+  };
+  const handleClick = (item, navItem) => {
+    setActiveList(navItem);
+    setActiveElement(item);
+  };
 
   return (
-    <Drawer
-      variant="permanent"
-      open={open}
-      sx={{ height: "100vh", position: "fixed" }}
-    >
-      <Toolbar
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "flex-end",
-          px: [1],
-        }}
-      >
+    <Drawer variant="permanent" open={open} sx={navDrawer}>
+      <Toolbar sx={navToolbar}>
         <IconButton onClick={toggleDrawer}>
           <ChevronLeftIcon />
         </IconButton>
       </Toolbar>
       <Divider />
       <List component="nav">
-        {navItems.map(item => (
-          <Link to={item.route} key={item.id}>
-            <ListItemButton>
-              <ListItemIcon>{item.icon}</ListItemIcon>
+        {navItems.map(navItem => (
+          <Box key={navItem.id}>
+            <Box sx={navList}>
+              {activeList === navItem.label ? <Box sx={activeNavList} /> : ""}
 
-              <ListItemText primary={item.label} />
-            </ListItemButton>
-          </Link>
+              <ListItemButton onClick={() => handleExpand(navItem.label)}>
+                <ListItemIcon>{navItem.icon}</ListItemIcon>
+                <ListItemText primary={navItem.label} />
+              </ListItemButton>
+            </Box>
+            <Collapse
+              in={expandedItems.includes(navItem.label)}
+              timeout="auto"
+              unmountOnExit
+            >
+              <List component="div" disablePadding>
+                {navItem.items.map(item => (
+                  <Link key={item.id} to={item.route}>
+                    <ListItemButton
+                      onClick={() => handleClick(item.label, navItem.label)}
+                      sx={activeElement === item.label ? activeItem : {}}
+                    >
+                      <ListItemText primary={item.label} sx={navSubText} />
+                    </ListItemButton>
+                  </Link>
+                ))}
+              </List>
+            </Collapse>
+          </Box>
         ))}
       </List>
     </Drawer>

@@ -1,10 +1,10 @@
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 import BasicSnackbar from "../../../components/common/BasicSnackbar/BasicSnackbar";
-import { addNewCategory, reset } from "./categorySlice";
-import cloudinaryImageUpload from "../../../utils/cloudinaryImageUpload";
+import { editCategory, reset } from "./categorySlice";
+
 import {
   TextField,
   Button,
@@ -15,7 +15,7 @@ import {
   Avatar,
 } from "@mui/material";
 
-const AddCategory = () => {
+const EditCategory = () => {
   // toast message
   const [toastOpen, setToastOpen] = useState(false);
   const [toastMsg, setToastMsg] = useState("");
@@ -27,19 +27,18 @@ const AddCategory = () => {
   };
 
   const [severity, setSeverity] = useState("error");
-
   const [catImage, setCatImage] = useState(null);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const location = useLocation();
+  const catData = location.state?.catData;
 
   const { isLoading, isError, isSuccess, message } = useSelector(
     state => state.categories
   );
-  const defaultFormData = {
-    name: "",
-    description: "",
-  };
+  const defaultFormData =
+    { name: catData?.name, description: catData?.description } || {};
   const [formData, setFormData] = useState(defaultFormData);
 
   const handleChange = event => {
@@ -58,22 +57,38 @@ const AddCategory = () => {
 
   const handleSubmit = event => {
     event.preventDefault();
-    setImgUploading(true);
-    const uploadPreset = `${import.meta.env.VITE_CLOUDINARY_CAT_UPLOAD_PRESET}`;
+    if (catImage) {
+      setImgUploading(true);
+      const data = new FormData();
+      data.append("file", catImage);
+      data.append(
+        "upload_preset",
+        `${import.meta.env.VITE_CLOUDINARY_CAT_UPLOAD_PRESET}`
+      );
+      data.append(
+        "cloud_name",
+        `${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME}`
+      );
 
-    cloudinaryImageUpload(catImage, uploadPreset)
-      .then(data => {
-        const categoryDetails = { ...formData, image: data.url };
-        dispatch(addNewCategory(categoryDetails));
-        setImgUploading(false);
+      fetch(`${import.meta.env.VITE_CLOUDINARY_URL}`, {
+        method: "post",
+        body: data,
       })
+        .then(res => res.json())
+        .then(data => {
+          const updatedCat = { ...formData, image: data.url };
+          dispatch(editCategory({ updatedCat, catId: catData._id }));
+          setImgUploading(false);
+        })
 
-      .catch(() => {
-        setToastMsg(`Failed to upload image`);
-        setSeverity("error");
-        setToastOpen(true);
-        setImgUploading(false);
-      });
+        .catch(() => {
+          setToastMsg(`Failed to upload image`);
+          setSeverity("error");
+          setToastOpen(true);
+        });
+    } else {
+      dispatch(editCategory({ updatedCat: formData, catId: catData._id }));
+    }
   };
 
   useEffect(() => {
@@ -84,10 +99,10 @@ const AddCategory = () => {
     }
     if (isSuccess) {
       setSeverity("success");
-      setFormData(defaultFormData);
       setCatImage(null);
       setToastMsg("Category added successfully");
       setToastOpen(true);
+      navigate("/admin/categories");
     }
 
     return () => {
@@ -109,7 +124,7 @@ const AddCategory = () => {
         sx={{ backgroundColor: theme => theme.palette.grey[200], p: 5, mt: 8 }}
       >
         <Typography variant="h6" sx={{ mb: 2 }}>
-          Add New Category
+          Edit Category
         </Typography>
         <Grid container spacing={3}>
           <Grid item xs={12} sm={6}>
@@ -142,19 +157,20 @@ const AddCategory = () => {
                   accept="image/*"
                   id="catImage"
                   type="file"
-                  required
                   onChange={handleImageChange}
                 />
               </Box>
               <Box>
-                {catImage && (
-                  <Avatar
-                    variant="rounded"
-                    alt="Category Image"
-                    src={catImage ? URL.createObjectURL(catImage) : undefined}
-                    sx={{ mr: 5, width: 100, height: 100 }}
-                  />
-                )}
+                <Avatar
+                  variant="rounded"
+                  alt="Category Image"
+                  src={
+                    catImage
+                      ? URL.createObjectURL(catImage)
+                      : location.state?.catData.imageUrl
+                  }
+                  sx={{ mr: 5, width: 100, height: 100 }}
+                />
               </Box>
             </Grid>
           </Grid>
@@ -188,7 +204,7 @@ const AddCategory = () => {
                 type="submit"
                 sx={{ width: "25rem", mt: 2 }}
               >
-                Add Category
+                Edit Category
               </Button>
             )}
           </Grid>
@@ -198,4 +214,4 @@ const AddCategory = () => {
   );
 };
 
-export default AddCategory;
+export default EditCategory;

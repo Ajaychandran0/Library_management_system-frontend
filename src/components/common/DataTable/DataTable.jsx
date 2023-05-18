@@ -34,10 +34,7 @@ const DataTable = ({
       onPaginationModelChange={newModel => {
         handlePagination(newModel);
       }}
-      sx={{
-        ...sx,
-        overflow: "hidden",
-      }}
+      sx={{ ...sx, overflow: "hidden" }}
     />
   );
 };

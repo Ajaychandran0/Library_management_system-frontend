@@ -39,9 +39,36 @@ const getMembers = async (token, filter) => {
   return await sendRequest(config);
 };
 
+// edit Member by id
+const editMember = async (token, updatedMember) => {
+  const memberId = updatedMember._id;
+  delete updatedMember._id;
+  delete updatedMember.sNo;
+
+  const config = {
+    ...setHeader(token),
+    data: updatedMember,
+    method: "PUT",
+    url: `${API_URL}/${memberId}`,
+  };
+  return await sendRequest(config);
+};
+
+// delete member by id
+const deleteMember = async (token, id) => {
+  const config = {
+    ...setHeader(token),
+    method: "DELETE",
+    url: `${API_URL}/${id}`,
+  };
+  return await sendRequest(config);
+};
+
 const memberService = {
   addNewMember,
   getMembers,
+  editMember,
+  deleteMember,
 };
 
 export default memberService;

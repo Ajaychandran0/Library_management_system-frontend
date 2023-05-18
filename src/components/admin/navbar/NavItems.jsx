@@ -9,31 +9,43 @@ const navMainItems = [
     id: 0,
     icon: <DashboardIcon />,
     label: "Dashboard",
-    route: "/admin",
+    items: [{ id: 0, label: "Home", route: "/admin" }],
   },
   {
     id: 1,
     icon: <PeopleIcon />,
     label: "Members",
-    route: "/admin/members",
+    items: [
+      { id: 0, label: "View Members", route: "/admin/members" },
+      { id: 1, label: "Add Members", route: "/admin/members/add" },
+    ],
   },
   {
     id: 2,
     icon: <CategoryIcon />,
     label: "Categories",
-    route: "/admin/categories",
+    items: [
+      { id: 0, label: "View Categories", route: "/admin/categories" },
+      { id: 1, label: "Add Categories", route: "/admin/categories/add" },
+    ],
   },
   {
     id: 3,
     icon: <BookIcon />,
     label: "Books",
-    route: "/admin/books",
+    items: [
+      { id: 0, label: "View Books", route: "/admin/books" },
+      { id: 1, label: "Add Book", route: "/admin/books/add" },
+    ],
   },
   {
     id: 4,
     icon: <LibraryBooksIcon />,
     label: "Book Transactions",
-    route: "/admin/book-transactions",
+    items: [
+      { id: 0, label: "Issue Book", route: "/admin/issue-books" },
+      { id: 1, label: "Fine", route: "/admin/fine" },
+    ],
   },
 ];
 export default navMainItems;

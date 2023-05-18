@@ -4,7 +4,7 @@ import DataTable from "../../../components/common/DataTable/DataTable";
 import SearchBar from "../../../components/common/SearchBar/SearchBar";
 
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
 import { getMembers, reset } from "./memberSlice";
@@ -28,6 +28,11 @@ const ListMembers = () => {
   });
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleEdit = memberData => {
+    navigate("/admin/members/edit", { state: { memberData } });
+  };
 
   const handlePagination = paginationModel => {
     setPaginationModel(paginationModel);
@@ -58,7 +63,7 @@ const ListMembers = () => {
         <MemoizedDataTable
           rowCount={totalMembers}
           rows={row}
-          columns={TableColumns()}
+          columns={TableColumns(handleEdit)}
           loading={isLoading}
           getRowId={row => row._id}
           paginationModel={paginationModel}

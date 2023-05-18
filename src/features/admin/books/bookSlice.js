@@ -29,6 +29,8 @@ const generateAsyncThunk = (name, serviceCall) => {
 export const addNewBook = generateAsyncThunk("add", bookService.addNewBook);
 //getBooks()
 export const getBooks = generateAsyncThunk("getAll", bookService.getBooks);
+// editBook(updatedBook)
+export const editBook = generateAsyncThunk("edit", bookService.editBook);
 // deleteBook(bookId)
 export const deleteBook = generateAsyncThunk("delete", bookService.deleteBook);
 // blockBook(bookId)
@@ -66,6 +68,18 @@ export const booksSlice = createSlice({
         state.books = action.payload.books;
       })
       .addCase(getBooks.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      .addCase(editBook.pending, state => {
+        state.isLoading = true;
+      })
+      .addCase(editBook.fulfilled, state => {
+        state.isLoading = false;
+        state.isSuccess = true;
+      })
+      .addCase(editBook.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;

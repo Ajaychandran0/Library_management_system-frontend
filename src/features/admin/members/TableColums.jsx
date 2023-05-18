@@ -3,14 +3,10 @@ import { Delete, Edit } from "@mui/icons-material";
 import { deleteMember } from "./memberSlice";
 import { useDispatch } from "react-redux";
 
-const TableColumns = () => {
+const TableColumns = handleEdit => {
   const dispatch = useDispatch();
 
   const handleDelete = id => {
-    dispatch(deleteMember(id));
-  };
-
-  const handleEdit = id => {
     dispatch(deleteMember(id));
   };
 
@@ -22,6 +18,38 @@ const TableColumns = () => {
     { field: "phone", headerName: "Phone No.", flex: 3 },
     { field: "department", headerName: "Department", flex: 3 },
     {
+      field: "profilePic",
+      headerName: "User Pic",
+      flex: 2,
+      editable: true,
+      renderCell: params => {
+        return (
+          <img
+            src={params.value}
+            loading="lazy"
+            alt="profile picture"
+            style={{ display: "block", width: "100%", maxWidth: "9rem" }}
+          />
+        );
+      },
+    },
+    {
+      field: "collegeIdCard",
+      headerName: "ID Card",
+      flex: 3,
+      editable: true,
+      renderCell: params => {
+        return (
+          <img
+            src={params.value}
+            loading="lazy"
+            alt="College id card"
+            style={{ display: "block", width: "100%", maxWidth: "9rem" }}
+          />
+        );
+      },
+    },
+    {
       field: "actions",
       headerName: "Actions",
       type: "actions",
@@ -31,7 +59,7 @@ const TableColumns = () => {
           key="edit"
           icon={<Edit color="primary" />}
           label="Edit"
-          onClick={() => handleEdit(params.row._id)}
+          onClick={() => handleEdit(params.row)}
         />,
         <GridActionsCellItem
           key="delete"

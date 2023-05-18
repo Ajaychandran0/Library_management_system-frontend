@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import {
   addCategory,
   fetchCategories,
+  editCategoryById,
   deleteCategoryById,
   blockCategoryById,
   searchCategory,
@@ -35,6 +36,8 @@ const generateAsyncThunk = (name, serviceCall) => {
 export const addNewCategory = generateAsyncThunk("add", addCategory);
 // getAllCategories()
 export const getAllCategories = generateAsyncThunk("getAll", fetchCategories);
+// editCategory({updatedCategory, catId})
+export const editCategory = generateAsyncThunk("edit", editCategoryById);
 // deleteCategory(categoryId)
 export const deleteCategory = generateAsyncThunk("delete", deleteCategoryById);
 // blockCategory(categoryId)
@@ -87,6 +90,18 @@ export const categorySlice = createSlice({
         );
       })
       .addCase(deleteCategory.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      .addCase(editCategory.pending, state => {
+        state.isLoading = true;
+      })
+      .addCase(editCategory.fulfilled, state => {
+        state.isLoading = false;
+        state.isSuccess = true;
+      })
+      .addCase(editCategory.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;

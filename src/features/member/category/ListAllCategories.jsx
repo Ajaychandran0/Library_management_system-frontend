@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { getAllCategories, reset } from "./categorySlice";
+import { getAllCategories } from "./categorySlice";
 
 import { Typography, Grid, Box } from "@mui/material";
 import CategoryCard from "./CategoryCard";
@@ -13,10 +13,6 @@ const ListAllCategories = () => {
 
   useEffect(() => {
     dispatch(getAllCategories());
-
-    return () => {
-      dispatch(reset());
-    };
   }, []);
 
   return (
