@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getBooks, reset } from "./bookSlice";
 
@@ -12,14 +12,49 @@ import {
   CardActions,
   Button,
   Tooltip,
+  IconButton,
 } from "@mui/material";
+import { Favorite } from "@mui/icons-material";
 
 import { styles } from "./style";
+import {
+  requestBook,
+  reset as reqReset,
+} from "../requestedBooks/requestedBooksSlice";
+import BasicSnackbar, {
+  basicSnackbar,
+} from "../../../components/common/BasicSnackbar/BasicSnackbar";
+import { addToWishlist, removeFromWishlist } from "../wishlist/wishlistSlice";
 
 function ListAllBooks() {
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+
+  const { isError, isSuccess, message } = useSelector(state => state.reqBooks);
+  const { wishlistIds } = useSelector(state => state.wishlist);
   const { books } = useSelector(state => state.books);
 
   const dispatch = useDispatch();
+
+  const handleClick = bookId => {
+    dispatch(requestBook(bookId));
+  };
+
+  const handleWishlist = (bookId, bookTitle) => {
+    if (wishlistIds.includes(bookId)) {
+      dispatch(removeFromWishlist(bookId));
+      basicSnackbar({
+        message: `"${bookTitle}" removed from your wishlist`,
+        severity: "warning",
+      });
+    } else {
+      dispatch(addToWishlist(bookId));
+      basicSnackbar({
+        message: `"${bookTitle}" added to you wishlist`,
+        severity: "success",
+      });
+    }
+    setSnackbarOpen(true);
+  };
 
   useEffect(() => {
     dispatch(getBooks());
@@ -28,9 +63,25 @@ function ListAllBooks() {
       dispatch(reset());
     };
   }, []);
+  useEffect(() => {
+    if (isError) {
+      const severity = message === "Network Error" ? "error" : "warning";
+      basicSnackbar({ message, severity });
+      setSnackbarOpen(true);
+    }
+    if (isSuccess && message) {
+      basicSnackbar({
+        message,
+        severity: "success",
+      });
+      setSnackbarOpen(true);
+    }
+    dispatch(reqReset());
+  }, [isError, isSuccess, message]);
 
   return (
     <Grid container spacing={3}>
+      <BasicSnackbar open={snackbarOpen} onClose={setSnackbarOpen} />
       {books.map(book => (
         <Grid item xs={12} sm={6} md={3} key={book._id}>
           <Card sx={styles.bookCard}>
@@ -68,9 +119,22 @@ function ListAllBooks() {
               </CardContent>
             </CardActionArea>
             <CardActions sx={styles.bookButton}>
-              <Button size="small" color="primary" variant="outlined">
+              <Button
+                size="small"
+                color="primary"
+                variant="outlined"
+                onClick={() => handleClick(book._id)}
+              >
                 Request book
               </Button>
+              &nbsp; &nbsp;
+              <IconButton
+                onClick={() => handleWishlist(book._id, book.bookTitle)}
+                aria-label="add to favorites"
+                color={wishlistIds.includes(book._id) ? "primary" : "shade"}
+              >
+                <Favorite />
+              </IconButton>
             </CardActions>
           </Card>
         </Grid>

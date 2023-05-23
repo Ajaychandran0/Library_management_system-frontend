@@ -1,15 +1,7 @@
 import { GridActionsCellItem, gridClasses } from "@mui/x-data-grid";
 import { Delete, Edit } from "@mui/icons-material";
-import { deleteMember } from "./memberSlice";
-import { useDispatch } from "react-redux";
 
-const TableColumns = handleEdit => {
-  const dispatch = useDispatch();
-
-  const handleDelete = id => {
-    dispatch(deleteMember(id));
-  };
-
+const TableColumns = (handleEdit, openConfirmDialog) => {
   return [
     { field: "sNo", headerName: "No.", flex: 1 },
     { field: "name", headerName: "Name", flex: 3 },
@@ -65,7 +57,7 @@ const TableColumns = handleEdit => {
           key="delete"
           icon={<Delete color="danger" />}
           label="Delete"
-          onClick={() => handleDelete(params.row._id)}
+          onClick={() => openConfirmDialog(params.row._id)}
         />,
       ],
     },

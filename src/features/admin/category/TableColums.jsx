@@ -1,16 +1,7 @@
 import { GridActionsCellItem, gridClasses } from "@mui/x-data-grid";
 import { Delete, Edit } from "@mui/icons-material";
-import { deleteCategory } from "./categorySlice";
-import { useDispatch } from "react-redux";
 
-const TableColumns = handleEdit => {
-  // const navigate = useNavigate();
-  const dispatch = useDispatch();
-
-  const handleDelete = id => {
-    dispatch(deleteCategory(id));
-  };
-
+const TableColumns = (handleEdit, openConfirmDialog) => {
   return [
     { field: "sNo", headerName: "No.", flex: 1 },
     { field: "name", headerName: "Category name", flex: 3 },
@@ -50,7 +41,7 @@ const TableColumns = handleEdit => {
           key="delete"
           icon={<Delete color="danger" />}
           label="Delete"
-          onClick={() => handleDelete(params.row._id)}
+          onClick={() => openConfirmDialog(params.row._id)}
         />,
       ],
     },

@@ -16,4 +16,9 @@ export const styles = {
     width: 100,
     height: 150,
   },
+  cardActions: {
+    display: "flex",
+    alignItems: "flex-end",
+    p: 2,
+  },
 };

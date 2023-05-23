@@ -13,7 +13,11 @@ const sendRequest = async config => {
     const response = await axios(config);
     return response.data;
   } catch (error) {
-    throw new Error(error.response.data.message);
+    const message =
+      (error.response && error.response.data && error.response.data.message) ||
+      error.message ||
+      error.toString();
+    throw new Error(message);
   }
 };
 

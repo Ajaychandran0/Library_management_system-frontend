@@ -15,10 +15,7 @@ export const getAllCategories = createAsyncThunk(
     try {
       return await categoryService.getAllCategories();
     } catch (error) {
-      const message =
-        (error.response && error.reponse.data && error.response.data.message) ||
-        error.message ||
-        error.toString();
+      const message = error.message || error.toString();
       return thunkAPI.rejectWithValue(message);
     }
   }

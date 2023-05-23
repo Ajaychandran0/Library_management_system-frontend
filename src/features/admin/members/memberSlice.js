@@ -16,10 +16,7 @@ const generateAsyncThunk = (name, serviceCall) => {
       const token = thunkAPI.getState().admin.admin.token;
       return await serviceCall(token, arg);
     } catch (error) {
-      const message =
-        (error.response && error.reponse.data && error.response.data.message) ||
-        error.message ||
-        error.toString();
+      const message = error.message || error.toString();
       return thunkAPI.rejectWithValue(message);
     }
   });

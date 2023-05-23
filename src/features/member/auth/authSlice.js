@@ -6,6 +6,7 @@ const member = JSON.parse(localStorage.getItem("member"));
 
 const initialState = {
   member: member ? member : null,
+  memberInfo: {},
   isError: false,
   isSuccess: false,
   isLoading: false,
@@ -19,10 +20,7 @@ export const login = createAsyncThunk(
     try {
       return await authService.login(member);
     } catch (error) {
-      const message =
-        (error.response && error.reponse.data && error.response.data.message) ||
-        error.message ||
-        error.toString();
+      const message = error.message || error.toString();
       return thunkAPI.rejectWithValue(message);
     }
   }
@@ -53,7 +51,8 @@ export const authSlice = createSlice({
       .addCase(login.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.member = action.payload;
+        state.member = action.payload.token;
+        state.memberInfo = action.payload.user;
       })
       .addCase(login.rejected, (state, action) => {
         state.isLoading = false;

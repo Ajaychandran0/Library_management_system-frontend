@@ -9,35 +9,20 @@ const initialState = {
   message: "",
 };
 
-export const getBooks = createAsyncThunk(
-  "books/getAll",
-  async (_, thunkAPI) => {
+const generateAsyncThunk = (name, serviceCall) => {
+  return createAsyncThunk(`books/${name}`, async (arg = "_", thunkAPI) => {
     try {
-      return await bookService.getBooks();
+      const token = thunkAPI.getState().auth.member;
+      return await serviceCall(token, arg);
     } catch (error) {
-      const message =
-        (error.response && error.reponse.data && error.response.data.message) ||
-        error.message ||
-        error.toString();
+      const message = error.message || error.toString();
       return thunkAPI.rejectWithValue(message);
     }
-  }
-);
+  });
+};
 
-export const filterBook = createAsyncThunk(
-  "books/filter",
-  async (search, thunkAPI) => {
-    try {
-      return await bookService.filterBook(search);
-    } catch (error) {
-      const message =
-        (error.response && error.reponse.data && error.response.data.message) ||
-        error.message ||
-        error.toString();
-      return thunkAPI.rejectWithValue(message);
-    }
-  }
-);
+export const getBooks = generateAsyncThunk("getAll", bookService.getBooks);
+export const filterBook = generateAsyncThunk("filter", bookService.filterBook);
 
 export const booksSlice = createSlice({
   name: "books",
@@ -52,6 +37,7 @@ export const booksSlice = createSlice({
       })
       .addCase(getBooks.fulfilled, (state, action) => {
         state.isLoading = false;
+        state.isSuccess = true;
         state.books = action.payload.books;
       })
       .addCase(getBooks.rejected, (state, action) => {

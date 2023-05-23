@@ -18,10 +18,7 @@ export const login = createAsyncThunk(
     try {
       return await adminService.login(admin);
     } catch (error) {
-      const message =
-        (error.response && error.reponse.data && error.response.data.message) ||
-        error.message ||
-        error.toString();
+      const message = error.message || error.toString();
       return thunkAPI.rejectWithValue(message);
     }
   }

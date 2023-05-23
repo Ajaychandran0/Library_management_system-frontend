@@ -1,10 +1,10 @@
 import axios from "axios";
 
-const API_URL = `${import.meta.env.VITE_SERVER_API_URL}/admin/members`;
+const API_URL = `${import.meta.env.VITE_SERVER_API_URL}/wishlist`;
 
 const setHeader = token => ({
   headers: {
-    Authorization: `Bearer ${token} admin`,
+    Authorization: `Bearer ${token}`,
   },
 });
 
@@ -21,58 +21,51 @@ const sendRequest = async config => {
   }
 };
 
-// Register a member
-const addNewMember = async (token, userData) => {
+// add a book to wishlist
+const addToWishlist = async (token, bookId) => {
   const config = {
     ...setHeader(token),
-    data: userData,
     method: "POST",
-    url: API_URL,
+    url: `${API_URL}/${bookId}`,
   };
   return await sendRequest(config);
 };
 
-// get all members
-const getMembers = async (token, filter) => {
+// get all wishlist item ids
+const getWishlistIds = async token => {
   const config = {
     ...setHeader(token),
-    params: filter,
+    method: "GET",
+    url: `${API_URL}/id`,
+  };
+  return await sendRequest(config);
+};
+
+// get wishlist
+const getWishlist = async token => {
+  const config = {
+    ...setHeader(token),
     method: "GET",
     url: API_URL,
   };
   return await sendRequest(config);
 };
 
-// edit Member by id
-const editMember = async (token, updatedMember) => {
-  const memberId = updatedMember._id;
-  delete updatedMember._id;
-  delete updatedMember.sNo;
-
-  const config = {
-    ...setHeader(token),
-    data: updatedMember,
-    method: "PUT",
-    url: `${API_URL}/${memberId}`,
-  };
-  return await sendRequest(config);
-};
-
-// delete member by id
-const deleteMember = async (token, id) => {
+// rmove an item from wishlist
+const removeFromWishlist = async (token, bookId) => {
   const config = {
     ...setHeader(token),
     method: "DELETE",
-    url: `${API_URL}/${id}`,
+    url: `${API_URL}/${bookId}`,
   };
   return await sendRequest(config);
 };
 
-const memberService = {
-  addNewMember,
-  getMembers,
-  editMember,
-  deleteMember,
+const wishlistService = {
+  addToWishlist,
+  getWishlistIds,
+  getWishlist,
+  removeFromWishlist,
 };
 
-export default memberService;
+export default wishlistService;

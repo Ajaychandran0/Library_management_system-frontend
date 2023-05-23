@@ -21,20 +21,14 @@ import { useSelector, useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { login, reset } from "../features/admin/auth/authSlice";
 import image from "../assets/images/adminLogin.avif";
-import BasicSnackbar from "../components/common/BasicSnackbar/BasicSnackbar";
+import BasicSnackbar, {
+  basicSnackbar,
+} from "../components/common/BasicSnackbar/BasicSnackbar";
 
 const theme = createTheme();
 
 export default function AdminSignin() {
-  const [toastOpen, setToastOpen] = useState(false);
-  const [toastMsg, setToastMsg] = useState("");
-  const handleToastClose = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-    setToastOpen(false);
-  };
-
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -51,8 +45,8 @@ export default function AdminSignin() {
 
   useEffect(() => {
     if (isError) {
-      setToastMsg(message);
-      setToastOpen(true);
+      basicSnackbar({ message, severity: "error" });
+      setSnackbarOpen(true);
     }
     if (isSuccess || admin) {
       navigate("/admin");
@@ -90,12 +84,7 @@ export default function AdminSignin() {
         }}
       >
         <CssBaseline />
-        <BasicSnackbar
-          open={toastOpen}
-          onClose={handleToastClose}
-          severity="error"
-          message={toastMsg ? toastMsg : "login Failed"}
-        />
+        <BasicSnackbar open={snackbarOpen} onClose={setSnackbarOpen} />
         <Grid
           item
           xs={false}

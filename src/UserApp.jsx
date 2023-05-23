@@ -1,4 +1,5 @@
 import { Route, Routes, Navigate } from "react-router-dom";
+import { store } from "./app/store";
 import Layout from "./components/member/Layout";
 import UserHome from "./pages/UserHome";
 import PageNotFound from "./pages/PageNotFound";
@@ -12,11 +13,13 @@ import Wishlist from "./features/member/wishlist/Wishlist";
 import BooksInPossession from "./features/member/booksInPossession/BooksInPossession";
 import LostBooks from "./features/member/lostBooks/LostBooks";
 import OverdueItemsLlist from "./features/member/fine/OverdueItemsList";
+import { getWishlistIds } from "./features/member/wishlist/wishlistSlice";
 
 import { useSelector } from "react-redux";
 
 function UserApp() {
   const { member } = useSelector(state => state.auth);
+  if (member) store.dispatch(getWishlistIds());
 
   return (
     <Routes>

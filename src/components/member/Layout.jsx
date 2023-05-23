@@ -13,6 +13,9 @@ const mdTheme = createTheme({
     danger: {
       main: "#D11A2A",
     },
+    shade: {
+      main: "#bbb",
+    },
   },
 });
 

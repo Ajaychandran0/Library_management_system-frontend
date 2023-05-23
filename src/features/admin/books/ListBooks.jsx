@@ -9,8 +9,12 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
-import { getBooks } from "./bookSlice";
+import { getBooks, deleteBook } from "./bookSlice";
+
 import TableColumns, { booksTableStyles } from "./TableColums";
+import ConfirmDialog, {
+  confirmDialog,
+} from "../../../components/common/ConfirmDialog/ConfirmDialog";
 
 const ListBooks = () => {
   const { books, totalBooks, isLoading } = useSelector(state => state.books);
@@ -26,6 +30,17 @@ const ListBooks = () => {
     navigate("/admin/books/edit", { state: { bookData } });
   };
 
+  const openConfirmDialog = bookId =>
+    confirmDialog({
+      message: "Are you sure you want to delete this book ?",
+      title: "Delete",
+      onConfirm: () => handleDelete(bookId),
+    });
+
+  const handleDelete = id => {
+    dispatch(deleteBook(id));
+  };
+
   const handlePagination = paginationModel => {
     setPaginationModel(paginationModel);
     dispatch(getBooks(paginationModel));
@@ -37,6 +52,8 @@ const ListBooks = () => {
 
   return (
     <>
+      <ConfirmDialog />
+
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>
         <Link to="add">
           <Button variant="outlined" sx={{ m: 3 }}>
@@ -51,7 +68,7 @@ const ListBooks = () => {
         <MemoizedDataTable
           rowCount={totalBooks}
           rows={books}
-          columns={TableColumns(handleEdit)}
+          columns={TableColumns(handleEdit, openConfirmDialog)}
           loading={isLoading}
           getRowId={row => row._id}
           paginationModel={paginationModel}

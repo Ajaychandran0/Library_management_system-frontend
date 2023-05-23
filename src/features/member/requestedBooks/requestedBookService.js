@@ -1,10 +1,10 @@
 import axios from "axios";
 
-const API_URL = `${import.meta.env.VITE_SERVER_API_URL}/admin/books`;
+const API_URL = `${import.meta.env.VITE_SERVER_API_URL}/requested_books`;
 
 const setHeader = token => ({
   headers: {
-    Authorization: `Bearer ${token} admin`,
+    Authorization: `Bearer ${token}`,
   },
 });
 
@@ -21,57 +21,40 @@ const sendRequest = async config => {
   }
 };
 
-// add a new book
-const addNewBook = async (token, bookData) => {
+// request a book
+const requestBook = async (token, bookId) => {
   const config = {
     ...setHeader(token),
-    data: bookData,
     method: "POST",
-    url: API_URL,
+    url: `${API_URL}/${bookId}`,
   };
   return await sendRequest(config);
 };
 
 // get all books
-const getBooks = async (token, filter) => {
+const getReqBooks = async token => {
   const config = {
     ...setHeader(token),
-    params: filter,
     method: "GET",
     url: API_URL,
   };
   return await sendRequest(config);
 };
 
-// edit book by id
-const editBook = async (token, updatedBook) => {
-  const bookId = updatedBook._id;
-  delete updatedBook._id;
-
+// delete book by id
+const removeBookRequest = async (token, bookId) => {
   const config = {
     ...setHeader(token),
-    data: updatedBook,
-    method: "PUT",
+    method: "DELETE",
     url: `${API_URL}/${bookId}`,
   };
   return await sendRequest(config);
 };
 
-// delete book by id
-const deleteBook = async (token, id) => {
-  const config = {
-    ...setHeader(token),
-    method: "DELETE",
-    url: `${API_URL}/${id}`,
-  };
-  return await sendRequest(config);
+const requestedBookService = {
+  requestBook,
+  getReqBooks,
+  removeBookRequest,
 };
 
-const bookService = {
-  addNewBook,
-  getBooks,
-  editBook,
-  deleteBook,
-};
-
-export default bookService;
+export default requestedBookService;

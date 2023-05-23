@@ -8,7 +8,11 @@ const getBooks = async () => {
     const response = await axios.get(API_URL);
     return response.data;
   } catch (error) {
-    throw new Error(error.response.data.message);
+    const message =
+      (error.response && error.response.data && error.response.data.message) ||
+      error.message ||
+      error.toString();
+    throw new Error(message);
   }
 };
 

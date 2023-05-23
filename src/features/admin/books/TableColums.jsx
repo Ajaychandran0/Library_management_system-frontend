@@ -1,14 +1,7 @@
 import { Delete, Edit } from "@mui/icons-material";
 import { GridActionsCellItem, gridClasses } from "@mui/x-data-grid";
-import { deleteBook } from "./bookSlice";
-import { useDispatch } from "react-redux";
 
-const TableColumns = handleEdit => {
-  const dispatch = useDispatch();
-  const handleDelete = id => {
-    dispatch(deleteBook(id));
-  };
-
+const TableColumns = (handleEdit, openConfirmDialog) => {
   return [
     { field: "bookTitle", headerName: "Book Title", flex: 5 },
     { field: "ISBN", headerName: "ISBN", flex: 4 },
@@ -27,7 +20,7 @@ const TableColumns = handleEdit => {
         return (
           <img
             src={params.value}
-            alt="category image"
+            alt="Book image"
             loading="lazy"
             style={{
               display: "block",
@@ -55,7 +48,7 @@ const TableColumns = handleEdit => {
           key="delete"
           icon={<Delete color="danger" />}
           label="Delete"
-          onClick={() => handleDelete(params.row._id)}
+          onClick={() => openConfirmDialog(params.row._id)}
         />,
       ],
     },

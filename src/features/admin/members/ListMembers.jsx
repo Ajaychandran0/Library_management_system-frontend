@@ -7,9 +7,12 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
-import { getMembers, reset } from "./memberSlice";
+import { getMembers, deleteMember, reset } from "./memberSlice";
 import TableColumns, { membersTableStyles } from "./TableColums";
 import TableSkleton from "../../../components/common/TableSkleton/TableSkleton";
+import ConfirmDialog, {
+  confirmDialog,
+} from "../../../components/common/ConfirmDialog/ConfirmDialog";
 
 const ListMembers = () => {
   const { members, totalMembers, isLoading } = useSelector(
@@ -34,6 +37,17 @@ const ListMembers = () => {
     navigate("/admin/members/edit", { state: { memberData } });
   };
 
+  const openConfirmDialog = bookId =>
+    confirmDialog({
+      message: "Are you sure you want to revoke this membership ?",
+      title: "Delete",
+      onConfirm: () => handleDelete(bookId),
+    });
+
+  const handleDelete = id => {
+    dispatch(deleteMember(id));
+  };
+
   const handlePagination = paginationModel => {
     setPaginationModel(paginationModel);
     dispatch(getMembers(paginationModel));
@@ -49,6 +63,7 @@ const ListMembers = () => {
 
   return (
     <>
+      <ConfirmDialog />
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>
         <Link to="add">
           <Button variant="outlined" sx={{ m: 3 }}>
@@ -63,7 +78,7 @@ const ListMembers = () => {
         <MemoizedDataTable
           rowCount={totalMembers}
           rows={row}
-          columns={TableColumns(handleEdit)}
+          columns={TableColumns(handleEdit, openConfirmDialog)}
           loading={isLoading}
           getRowId={row => row._id}
           paginationModel={paginationModel}

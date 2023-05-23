@@ -12,7 +12,7 @@ const login = async adminData => {
     }
     return response.data;
   } catch (error) {
-    throw new Error(error.response.data.message);
+    throw new Error(error.response.data.message || error.message);
   }
 };
 

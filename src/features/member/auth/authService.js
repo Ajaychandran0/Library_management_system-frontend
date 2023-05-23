@@ -10,11 +10,11 @@ const login = async memberData => {
     const response = await axios.post(API_URL + "login", memberData);
 
     if (response.data) {
-      localStorage.setItem("member", JSON.stringify(response.data));
+      localStorage.setItem("member", JSON.stringify(response.data.token));
     }
     return response.data;
   } catch (error) {
-    throw new Error(error.response.data.message);
+    throw new Error(error.response.data.message || error.message);
   }
 };
 

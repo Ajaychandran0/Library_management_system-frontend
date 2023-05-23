@@ -14,24 +14,19 @@ import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import image from "../assets/images/signinPage.jpg";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 // import { toast } from "react-toastify";
-import { login, reset } from "../features/member/auth/authSlice";
-import BasicSnackbar from "../components/common/BasicSnackbar/BasicSnackbar";
+import { login } from "../features/member/auth/authSlice";
+import BasicSnackbar, {
+  basicSnackbar,
+} from "../components/common/BasicSnackbar/BasicSnackbar";
 
 const theme = createTheme();
 
 export default function UserSignin() {
-  const [toastOpen, setToastOpen] = useState(false);
-  const [toastMsg, setToastMsg] = useState("");
-  const handleToastClose = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-    setToastOpen(false);
-  };
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
   const { member, isError, isSuccess, message } = useSelector(
     state => state.auth
   );
@@ -51,14 +46,12 @@ export default function UserSignin() {
 
   useEffect(() => {
     if (isError) {
-      setToastMsg(message);
-      setToastOpen(true);
+      basicSnackbar({ message, severity: "error" });
+      setSnackbarOpen(true);
     }
     if (isSuccess || member) {
       navigate("/home");
     }
-
-    dispatch(reset());
   }, [member, isError, isSuccess, message, navigate, dispatch]);
 
   return (
@@ -74,12 +67,7 @@ export default function UserSignin() {
         }}
       >
         <CssBaseline />
-        <BasicSnackbar
-          open={toastOpen}
-          onClose={handleToastClose}
-          severity="error"
-          message={toastMsg ? toastMsg : "login Failed"}
-        />
+        <BasicSnackbar open={snackbarOpen} onClose={setSnackbarOpen} />
         <Grid
           item
           xs={false}

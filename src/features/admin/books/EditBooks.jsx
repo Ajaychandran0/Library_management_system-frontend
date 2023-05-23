@@ -12,20 +12,13 @@ import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 
-import BasicSnackbar from "../../../components/common/BasicSnackbar/BasicSnackbar";
+import BasicSnackbar, {
+  basicSnackbar,
+} from "../../../components/common/BasicSnackbar/BasicSnackbar";
 import { editBook, reset } from "./bookSlice";
 
 const EditBook = () => {
-  const [toastOpen, setToastOpen] = useState(false);
-  const [toastMsg, setToastMsg] = useState("");
-  const handleToastClose = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-    setToastOpen(false);
-  };
-
-  const [severity, setSeverity] = useState("error");
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [bookImage, setBookImage] = useState(null);
 
   const navigate = useNavigate();
@@ -85,9 +78,11 @@ const EditBook = () => {
         })
 
         .catch(() => {
-          setToastMsg(`Failed to upload image`);
-          setSeverity("error");
-          setToastOpen(true);
+          basicSnackbar({
+            message: "Failed to upload image",
+            severity: "error",
+          });
+          setSnackbarOpen(true);
         });
     } else {
       dispatch(editBook(formData));
@@ -96,15 +91,15 @@ const EditBook = () => {
 
   useEffect(() => {
     if (isError) {
-      setToastMsg(message);
-      setSeverity("error");
-      setToastOpen(true);
+      basicSnackbar({ message, severity: "error" });
     }
     if (isSuccess) {
-      setSeverity("success");
       setBookImage(null);
-      setToastMsg("book added successfully");
-      setToastOpen(true);
+      basicSnackbar({
+        message: "Book updated successfully",
+        severity: "success",
+      });
+      setSnackbarOpen(true);
       navigate("/admin/books");
     }
 
@@ -115,12 +110,7 @@ const EditBook = () => {
 
   return (
     <>
-      <BasicSnackbar
-        open={toastOpen}
-        onClose={handleToastClose}
-        severity={severity}
-        message={toastMsg ? toastMsg : "Add book failed"}
-      />
+      <BasicSnackbar open={snackbarOpen} onClose={setSnackbarOpen} />
       <Box
         component="form"
         onSubmit={handleSubmit}
