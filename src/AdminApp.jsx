@@ -13,6 +13,7 @@ import EditCategory from "./features/admin/category/EditCategory";
 import ListBooks from "./features/admin/books/ListBooks";
 import AddBook from "./features/admin/books/AddBooks";
 import EditBook from "./features/admin/books/EditBooks";
+import ListRequestedBooks from "./features/admin/requestedBooks/ListRequestedBooks";
 import { useSelector } from "react-redux";
 
 function AdminApp() {
@@ -45,6 +46,11 @@ function AdminApp() {
           <Route path="add" element={<AddBook />} />
           <Route path="edit" element={<EditBook />} />
         </Route>
+
+        <Route path="book-transactions">
+          <Route path="book-requests" element={<ListRequestedBooks />} />
+        </Route>
+
         <Route path="*" element={<PageNotFound />} />
       </Route>
     </Routes>

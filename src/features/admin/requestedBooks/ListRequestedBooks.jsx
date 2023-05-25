@@ -6,49 +6,56 @@ import SearchBar from "../../../components/common/SearchBar/SearchBar";
 import TableSkeleton from "../../../components/common/TableSkleton/TableSkleton";
 
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
-import { getBooks, deleteBook } from "./bookSlice";
+import { getAllBookRequests, issueBook } from "./requestedBookSlice";
 
-import TableColumns from "./TableColums";
-import booksTableStyles from "./tableStyles";
+import TableColumns from "./TableColumns";
+import reqBooksTableStyles from "./tableStyles";
 import ConfirmDialog, {
   confirmDialog,
 } from "../../../components/common/ConfirmDialog/ConfirmDialog";
 
-const ListBooks = () => {
-  const { books, totalBooks, isLoading } = useSelector(state => state.books);
+const ListRequestedBooks = () => {
+  const { requests, totalBooks, isLoading } = useSelector(
+    state => state.adminBookReqs
+  );
+  const rows = requests
+    .filter(request => request.book && request.member)
+    .map(request => {
+      const { book, member, ...rest } = request;
+      return {
+        ...rest,
+        ...book,
+        ...member,
+      };
+    });
   const [paginationModel, setPaginationModel] = useState({
     page: 0,
     pageSize: 5,
   });
 
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-
-  const handleEdit = bookData => {
-    navigate("/admin/books/edit", { state: { bookData } });
-  };
 
   const openConfirmDialog = bookId =>
     confirmDialog({
-      message: "Are you sure you want to delete this book ?",
-      title: "Delete",
-      onConfirm: () => handleDelete(bookId),
+      message: "Confirm issue book!",
+      title: "Confirmation",
+      onConfirm: () => handleIssueBook(bookId),
     });
 
-  const handleDelete = id => {
-    dispatch(deleteBook(id));
+  const handleIssueBook = id => {
+    dispatch(issueBook(id));
   };
 
   const handlePagination = paginationModel => {
     setPaginationModel(paginationModel);
-    dispatch(getBooks(paginationModel));
+    dispatch(getAllBookRequests(paginationModel));
   };
 
   useEffect(() => {
-    dispatch(getBooks(paginationModel));
+    dispatch(getAllBookRequests(paginationModel));
   }, []);
 
   return (
@@ -58,7 +65,7 @@ const ListBooks = () => {
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>
         <Link to="add">
           <Button variant="outlined" sx={{ m: 3 }}>
-            Add books
+            Issue New Book
           </Button>
         </Link>
         <SearchBar placeholder="Search a book..." searchBarWidth="30rem" />
@@ -66,17 +73,17 @@ const ListBooks = () => {
       {isLoading ? (
         <TableSkeleton />
       ) : (
-        <MemoizedDataTable
+        <DataTable
           rowCount={totalBooks}
-          rows={books}
-          columns={TableColumns(handleEdit, openConfirmDialog)}
+          rows={rows}
+          columns={TableColumns(openConfirmDialog)}
           loading={isLoading}
           getRowId={row => row._id}
           paginationModel={paginationModel}
           handlePagination={handlePagination}
           sx={{
-            ...booksTableStyles,
-            height: () => (books.length === 0 ? "400px" : "auto"),
+            ...reqBooksTableStyles,
+            height: () => (totalBooks === 0 ? "400px" : "auto"),
           }}
         />
       )}
@@ -84,5 +91,4 @@ const ListBooks = () => {
   );
 };
 
-const MemoizedDataTable = React.memo(DataTable);
-export default ListBooks;
+export default ListRequestedBooks;

@@ -23,15 +23,15 @@ const Layout = () => {
   return (
     <>
       <ThemeProvider theme={mdTheme}>
-        <Box sx={{ display: "flex", overflow: "hidden", height: "100vh" }}>
+        <Box sx={{ overflow: "hidden" }}>
           <CssBaseline />
           <Header />
           <Box
             component="main"
             sx={{
-              flexGrow: 1,
               overflow: "auto",
-              marginTop: "4rem",
+              marginTop: "3.5rem",
+              mb: "3rem",
             }}
           >
             <Outlet />

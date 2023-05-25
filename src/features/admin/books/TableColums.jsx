@@ -1,5 +1,5 @@
 import { Delete, Edit } from "@mui/icons-material";
-import { GridActionsCellItem, gridClasses } from "@mui/x-data-grid";
+import { GridActionsCellItem } from "@mui/x-data-grid";
 
 const TableColumns = (handleEdit, openConfirmDialog) => {
   return [
@@ -53,13 +53,6 @@ const TableColumns = (handleEdit, openConfirmDialog) => {
       ],
     },
   ];
-};
-
-export const booksTableStyles = {
-  backgroundColor: theme => theme.palette.grey[200],
-  [`& .${gridClasses.cell}`]: {
-    py: 2,
-  },
 };
 
 export default TableColumns;

@@ -127,14 +127,19 @@ function ListAllBooks() {
               >
                 Request book
               </Button>
-              &nbsp; &nbsp;
-              <IconButton
-                onClick={() => handleWishlist(book._id, book.bookTitle)}
-                aria-label="add to favorites"
-                color={wishlistIds.includes(book._id) ? "primary" : "shade"}
-              >
-                <Favorite />
-              </IconButton>
+
+              {wishlistIds.length ? (
+                <IconButton
+                  onClick={() => handleWishlist(book._id, book.bookTitle)}
+                  aria-label="add to favorites"
+                  color={wishlistIds.includes(book._id) ? "primary" : "shade"}
+                >
+                  &nbsp; &nbsp;
+                  <Favorite />
+                </IconButton>
+              ) : (
+                ""
+              )}
             </CardActions>
           </Card>
         </Grid>

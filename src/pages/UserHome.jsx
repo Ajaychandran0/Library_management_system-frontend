@@ -6,6 +6,7 @@ const UserHome = () => {
   return (
     <Box sx={styles.root}>
       <Box sx={styles.banner}>
+        <Box sx={{ width: "60%" }} />
         <Box sx={{ mr: 6 }}>
           <h4>Digital BookStore</h4>
           <p style={{ fontSize: "1.5rem" }}>

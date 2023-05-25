@@ -93,7 +93,7 @@ const EditBook = () => {
     if (isError) {
       basicSnackbar({ message, severity: "error" });
     }
-    if (isSuccess) {
+    if (isSuccess && message === true) {
       setBookImage(null);
       basicSnackbar({
         message: "Book updated successfully",
