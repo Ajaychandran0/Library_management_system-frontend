@@ -20,7 +20,11 @@ const TableColumns = (handleEdit, openConfirmDialog) => {
             src={params.value}
             loading="lazy"
             alt="profile picture"
-            style={{ display: "block", width: "100%", maxWidth: "9rem" }}
+            style={{
+              display: "block",
+              width: "4rem",
+              maxWidth: "9rem",
+            }}
           />
         );
       },

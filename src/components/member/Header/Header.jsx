@@ -60,7 +60,7 @@ function Header() {
             <Typography
               variant="h6"
               noWrap
-              component="a"
+              component="span"
               sx={{
                 mr: 2,
                 display: { xs: "none", md: "flex" },
@@ -117,7 +117,7 @@ function Header() {
             <Typography
               variant="h5"
               noWrap
-              component="a"
+              component="span"
               href=""
               sx={{
                 mr: 2,
@@ -150,7 +150,7 @@ function Header() {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 1 }}>
-                <Avatar alt="Almond Howard" src="/static/images/avatar/2.jpg" />
+                <Avatar alt="Almond Howard" />
               </IconButton>
             </Tooltip>
             <Menu

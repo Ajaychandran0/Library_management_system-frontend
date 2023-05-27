@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getReqBooks, removeBookRequest, reset } from "./requestedBooksSlice";
+import { reset as wishReset } from "../wishlist/wishlistSlice";
 import { Delete, Favorite } from "@mui/icons-material";
 import {
   Box,
@@ -21,21 +22,41 @@ import BasicSnackbar, {
 import ConfirmDialog, {
   confirmDialog,
 } from "../../../components/common/ConfirmDialog/ConfirmDialog";
+import { addToWishlist, removeFromWishlist } from "../wishlist/wishlistSlice";
 
 const RequestedBooksPage = () => {
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const dispatch = useDispatch();
-  const [wishList, setWishList] = useState([]);
+  const { wishlistIds } = useSelector(state => state.wishlist);
+  const { isSuccess, isError, message } = useSelector(state => state.wishlist);
 
-  const handleClick = bookId => {
-    setWishList(prevState => {
-      if (prevState.includes(bookId)) {
-        return prevState.filter(book => book !== bookId);
-      } else {
-        return [...prevState, bookId];
-      }
-    });
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [bookTitle, setBookTitle] = useState(null);
+  const dispatch = useDispatch();
+
+  const handleClick = (bookId, bookTitle) => {
+    if (wishlistIds.includes(bookId)) {
+      dispatch(removeFromWishlist(bookId));
+    } else {
+      dispatch(addToWishlist(bookId));
+    }
+    setBookTitle(bookTitle);
   };
+  useEffect(() => {
+    if (isSuccess && message === "removedFromWishlist") {
+      basicSnackbar({
+        message: `"${bookTitle}" removed from your wishlist`,
+        severity: "warning",
+      });
+      setSnackbarOpen(true);
+    }
+    if (isSuccess && message === "addedToWishlist") {
+      basicSnackbar({
+        message: `"${bookTitle}" added to you wishlist`,
+        severity: "success",
+      });
+      setSnackbarOpen(true);
+    }
+    dispatch(wishReset());
+  }, [isSuccess, isError, message]);
 
   const handleDelete = bookId => {
     dispatch(removeBookRequest(bookId));
@@ -99,10 +120,14 @@ const RequestedBooksPage = () => {
                         </Box>
                         <CardActions sx={styles.cardActions}>
                           <IconButton
-                            onClick={() => handleClick(book._id)}
+                            onClick={() =>
+                              handleClick(book._id, book.bookTitle)
+                            }
                             aria-label="add to favorites"
                             color={
-                              wishList.includes(book?._id) ? "primary" : "shade"
+                              wishlistIds.includes(book._id)
+                                ? "primary"
+                                : "shade"
                             }
                           >
                             <Favorite />

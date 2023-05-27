@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getAllCategories } from "./categorySlice";
 
-import { Typography, Grid, Box } from "@mui/material";
+import { Typography, Grid, Container } from "@mui/material";
 import CategoryCard from "./CategoryCard";
 import { style } from "./styles";
 
@@ -16,7 +16,7 @@ const ListAllCategories = () => {
   }, []);
 
   return (
-    <Box sx={{ overflowX: "hidden", m: 5 }}>
+    <Container sx={{ mt: 8 }}>
       <Typography variant="h4" sx={style.heading}>
         ALL CATEGORIES
       </Typography>
@@ -25,7 +25,7 @@ const ListAllCategories = () => {
           <CategoryCard key={category._id} category={category} />
         ))}
       </Grid>
-    </Box>
+    </Container>
   );
 };
 

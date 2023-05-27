@@ -64,7 +64,7 @@ export const wishlistSlice = createSlice({
       .addCase(addToWishlist.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.message = "Book added to wishlist successfully";
+        state.message = "addedToWishlist";
         state.wishlistIds.push(action.payload.id);
       })
       .addCase(addToWishlist.rejected, (state, action) => {
@@ -105,6 +105,7 @@ export const wishlistSlice = createSlice({
       .addCase(removeFromWishlist.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
+        state.message = "removedFromWishlist";
         state.wishlistIds = state.wishlistIds.filter(
           book => book !== action.payload.id
         );

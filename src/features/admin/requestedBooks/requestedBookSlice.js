@@ -65,7 +65,7 @@ export const adminReqBooksSlice = createSlice({
       .addCase(filterReqBook.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.books = action.payload;
+        state.requests = action.payload;
       })
       .addCase(filterReqBook.rejected, (state, action) => {
         state.isLoading = false;

@@ -10,10 +10,10 @@ const initialState = {
 };
 
 const generateAsyncThunk = (name, serviceCall) => {
-  return createAsyncThunk(`books/${name}`, async (arg = "_", thunkAPI) => {
+  return createAsyncThunk(`books/${name}`, async (filter, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.member;
-      return await serviceCall(token, arg);
+      return await serviceCall({ token, filter });
     } catch (error) {
       const message = error.message || error.toString();
       return thunkAPI.rejectWithValue(message);

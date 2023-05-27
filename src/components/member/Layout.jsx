@@ -30,8 +30,8 @@ const Layout = () => {
             component="main"
             sx={{
               overflow: "auto",
+              height: "91.6vh",
               marginTop: "3.5rem",
-              mb: "3rem",
             }}
           >
             <Outlet />

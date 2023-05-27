@@ -4,8 +4,10 @@ import Layout from "./components/member/Layout";
 import UserHome from "./pages/UserHome";
 import PageNotFound from "./pages/PageNotFound";
 import UserSignin from "./pages/UserSignin";
+import About from "./pages/About";
 // import StudentRegistrationForm from "./features/admin/members/test";
 import ListAllCategories from "./features/member/category/ListAllCategories";
+import ListBooksByCategory from "./features/member/books/ListBooksByCategory";
 import MemberAccountPage from "./features/member/account/MemberAccountPage";
 import RequestedBooksPage from "./features/member/requestedBooks/RequestedBooks";
 import BorrowedBooks from "./features/member/borrowedBooks/AllBorrowedBooks";
@@ -13,7 +15,6 @@ import Wishlist from "./features/member/wishlist/Wishlist";
 import BooksInPossession from "./features/member/booksInPossession/BooksInPossession";
 import LostBooks from "./features/member/lostBooks/LostBooks";
 import OverdueItemsLlist from "./features/member/fine/OverdueItemsList";
-import ListBooksByCategory from "./features/member/books/ListBooksByCategory";
 import { getWishlistIds } from "./features/member/wishlist/wishlistSlice";
 
 import { useSelector } from "react-redux";
@@ -30,6 +31,7 @@ function UserApp() {
       />
       <Route path="/" element={<Layout />}>
         <Route index element={<UserHome />} />
+        <Route path="/about" element={<About />} />
         <Route path="categories" element={<ListAllCategories />} />
         <Route path="categories/:category" element={<ListBooksByCategory />} />
         <Route path="account" element={<MemberAccountPage />} />

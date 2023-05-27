@@ -92,7 +92,7 @@ const AddBook = () => {
     if (isError) {
       basicSnackbar({ message, severity: "error" });
     }
-    if (isSuccess) {
+    if (isSuccess && message === "addSuccessful") {
       setFormData(defaultFormData);
       setBookImage(null);
       basicSnackbar({

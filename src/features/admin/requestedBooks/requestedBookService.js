@@ -22,9 +22,10 @@ const sendRequest = async config => {
 };
 
 // get all book requests
-const getAllBookRequests = async token => {
+const getAllBookRequests = async (token, filter) => {
   const config = {
     ...setHeader(token),
+    params: filter,
     method: "GET",
     url: API_URL,
   };

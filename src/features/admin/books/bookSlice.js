@@ -49,6 +49,7 @@ export const booksSlice = createSlice({
       .addCase(addNewBook.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
+        state.message = "addSuccessful";
         state.books.push(action.payload);
       })
       .addCase(addNewBook.rejected, (state, action) => {
