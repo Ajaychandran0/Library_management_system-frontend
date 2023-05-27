@@ -61,6 +61,8 @@ export const booksSlice = createSlice({
       })
       .addCase(getBooks.fulfilled, (state, action) => {
         state.isLoading = false;
+        state.isSuccess = true;
+        state.message = "success";
         state.totalBooks = action.payload.totalItems;
         state.books = action.payload.books;
       })
@@ -72,7 +74,8 @@ export const booksSlice = createSlice({
       .addCase(editBook.pending, state => {
         state.isLoading = true;
       })
-      .addCase(editBook.fulfilled, state => {
+      .addCase(editBook.fulfilled, (state, action) => {
+        state.message = action.payload.success;
         state.isLoading = false;
         state.isSuccess = true;
       })

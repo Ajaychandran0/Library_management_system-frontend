@@ -43,8 +43,22 @@ const navMainItems = [
     icon: <LibraryBooksIcon />,
     label: "Book Transactions",
     items: [
-      { id: 0, label: "Issue Book", route: "/admin/issue-books" },
-      { id: 1, label: "Fine", route: "/admin/fine" },
+      {
+        id: 0,
+        label: "Book Requests",
+        route: "/admin/book-transactions/book-requests",
+      },
+      {
+        id: 1,
+        label: "Issue Book",
+        route: "/admin/book-transactions/issue-books",
+      },
+      {
+        id: 2,
+        label: "Return Book",
+        route: "/admin/book-transactions/return-books",
+      },
+      { id: 3, label: "Fine", route: "/admin/book-transactions/fine" },
     ],
   },
 ];
