@@ -1,6 +1,6 @@
 import { Button } from "@mui/material";
 
-const TableColumns = openConfirmDialog => {
+const TableColumns = (openConfirmDialog, issuedBookIds) => {
   return [
     { field: "bookTitle", headerName: "Book Title", flex: 6 },
     { field: "ISBN", headerName: "ISBN", flex: 4 },
@@ -11,14 +11,22 @@ const TableColumns = openConfirmDialog => {
       field: "actions",
       headerName: "Actions",
       flex: 4,
-      editable: true,
       renderCell: params => {
-        return (
+        return issuedBookIds.includes(params.row.bookId) ? (
+          <Button
+            key={params.row._id}
+            variant="outlined"
+            disabled
+            sx={{ width: "7.2rem" }}
+          >
+            Issued
+          </Button>
+        ) : (
           <Button
             key={params.row._id}
             variant="contained"
             onClick={() => {
-              openConfirmDialog(params.row._id);
+              openConfirmDialog(params.row.bookId, params.row.memberId);
             }}
           >
             Issue Book

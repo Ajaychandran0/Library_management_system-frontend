@@ -15,6 +15,7 @@ import AddBook from "./features/admin/books/AddBooks";
 import EditBook from "./features/admin/books/EditBooks";
 import ListRequestedBooks from "./features/admin/requestedBooks/ListRequestedBooks";
 import { useSelector } from "react-redux";
+import ListIssuedBooks from "./features/admin/issuedBooks/ListIssuedBooks";
 
 function AdminApp() {
   const { admin } = useSelector(state => state.admin);
@@ -49,6 +50,7 @@ function AdminApp() {
 
         <Route path="book-transactions">
           <Route path="book-requests" element={<ListRequestedBooks />} />
+          <Route path="return-books" element={<ListIssuedBooks />} />
         </Route>
 
         <Route path="*" element={<PageNotFound />} />

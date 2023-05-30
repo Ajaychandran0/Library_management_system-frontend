@@ -26,10 +26,7 @@ export const getAllBookRequests = generateAsyncThunk(
   "getAllRequests",
   requestedBookService.getAllBookRequests
 );
-export const issueBook = generateAsyncThunk(
-  "issueBook",
-  requestedBookService.issueBook
-);
+
 export const filterReqBook = generateAsyncThunk(
   "filter",
   requestedBookService.filterBook
