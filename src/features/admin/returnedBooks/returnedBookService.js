@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = `${import.meta.env.VITE_SERVER_API_URL}/admin/requested_books`;
+const API_URL = `${import.meta.env.VITE_SERVER_API_URL}/admin/returned_books`;
 
 const setHeader = token => ({
   headers: {
@@ -22,7 +22,7 @@ const sendRequest = async config => {
 };
 
 // get all book requests
-const getAllBookRequests = async (token, filter) => {
+const getReturnedBooksByMember = async (token, filter) => {
   const config = {
     ...setHeader(token),
     params: filter,
@@ -32,8 +32,19 @@ const getAllBookRequests = async (token, filter) => {
   return await sendRequest(config);
 };
 
-const requestedBookService = {
-  getAllBookRequests,
+const returnBook = async (token, data) => {
+  const config = {
+    ...setHeader(token),
+    method: "POST",
+    data,
+    url: API_URL,
+  };
+  return await sendRequest(config);
 };
 
-export default requestedBookService;
+const returnedBookService = {
+  getReturnedBooksByMember,
+  returnBook,
+};
+
+export default returnedBookService;

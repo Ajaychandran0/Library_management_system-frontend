@@ -1,10 +1,10 @@
 import axios from "axios";
 
-const API_URL = `${import.meta.env.VITE_SERVER_API_URL}/admin/requested_books`;
+const API_URL = `${import.meta.env.VITE_SERVER_API_URL}/issued_books`;
 
 const setHeader = token => ({
   headers: {
-    Authorization: `Bearer ${token} admin`,
+    Authorization: `Bearer ${token}`,
   },
 });
 
@@ -21,11 +21,10 @@ const sendRequest = async config => {
   }
 };
 
-// get all book requests
-const getAllBookRequests = async (token, filter) => {
+// get all borrowed books (books in possession of a member)
+const getBorrowedBooks = async token => {
   const config = {
     ...setHeader(token),
-    params: filter,
     method: "GET",
     url: API_URL,
   };
@@ -33,7 +32,7 @@ const getAllBookRequests = async (token, filter) => {
 };
 
 const requestedBookService = {
-  getAllBookRequests,
+  getBorrowedBooks,
 };
 
 export default requestedBookService;

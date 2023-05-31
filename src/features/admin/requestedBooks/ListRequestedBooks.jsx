@@ -9,28 +9,31 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
-import { getAllBookRequests, issueBook } from "./requestedBookSlice";
+import { getAllBookRequests, reset } from "./requestedBookSlice";
+import { issueBook, issueReset } from "../issuedBooks/issuedBookSlice";
 
 import TableColumns from "./TableColumns";
 import reqBooksTableStyles from "./tableStyles";
+
 import ConfirmDialog, {
   confirmDialog,
 } from "../../../components/common/ConfirmDialog/ConfirmDialog";
+import BasicSnackbar, {
+  basicSnackbar,
+} from "../../../components/common/BasicSnackbar/BasicSnackbar";
 
 const ListRequestedBooks = () => {
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [issuedId, setIssuedId] = useState(null);
+  const [issuedBookIds, setIssuedBookIds] = useState([]);
+
   const { requests, totalBooks, isLoading } = useSelector(
     state => state.adminBookReqs
   );
-  const rows = requests
-    .filter(request => request.book && request.member)
-    .map(request => {
-      const { book, member, ...rest } = request;
-      return {
-        ...rest,
-        ...book,
-        ...member,
-      };
-    });
+  const { issueSuccess, issueError, issueMessage, issueLoading } = useSelector(
+    state => state.issuedBooks
+  );
+
   const [paginationModel, setPaginationModel] = useState({
     page: 0,
     pageSize: 5,
@@ -38,15 +41,16 @@ const ListRequestedBooks = () => {
 
   const dispatch = useDispatch();
 
-  const openConfirmDialog = bookId =>
+  const openConfirmDialog = (bookId, memberId) =>
     confirmDialog({
       message: "Confirm issue book!",
       title: "Confirmation",
-      onConfirm: () => handleIssueBook(bookId),
+      onConfirm: () => handleIssueBook({ bookId, memberId }),
     });
 
-  const handleIssueBook = id => {
-    dispatch(issueBook(id));
+  const handleIssueBook = ({ bookId, memberId }) => {
+    dispatch(issueBook({ bookId, memberId }));
+    setIssuedId(bookId);
   };
 
   const handlePagination = paginationModel => {
@@ -56,14 +60,29 @@ const ListRequestedBooks = () => {
 
   useEffect(() => {
     dispatch(getAllBookRequests(paginationModel));
+    return () => dispatch(reset());
   }, []);
+
+  useEffect(() => {
+    if (issueSuccess && issueMessage === "Book Issued Successfully") {
+      basicSnackbar({ message: issueMessage, severity: "success" });
+      setSnackbarOpen(true);
+      setIssuedBookIds(prevState => [...prevState, issuedId]);
+    }
+    if (issueError && issueMessage) {
+      basicSnackbar({ message: issueMessage, severity: "error" });
+      setSnackbarOpen(true);
+    }
+    dispatch(issueReset());
+  }, [issueMessage, issueError, issueSuccess]);
 
   return (
     <>
       <ConfirmDialog />
+      <BasicSnackbar open={snackbarOpen} onClose={setSnackbarOpen} />
 
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-        <Link to="add">
+        <Link to="/admin/book-transactions/issue-books">
           <Button variant="outlined" sx={{ m: 3 }}>
             Issue New Book
           </Button>
@@ -75,8 +94,8 @@ const ListRequestedBooks = () => {
       ) : (
         <DataTable
           rowCount={totalBooks}
-          rows={rows}
-          columns={TableColumns(openConfirmDialog)}
+          rows={requests}
+          columns={TableColumns(openConfirmDialog, issuedBookIds, issueLoading)}
           loading={isLoading}
           getRowId={row => row._id}
           paginationModel={paginationModel}

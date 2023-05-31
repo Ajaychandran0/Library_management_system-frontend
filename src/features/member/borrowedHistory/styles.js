@@ -14,6 +14,6 @@ export const styles = {
   },
   cardMedia: {
     width: 100,
-    height: 150,
+    height: 160,
   },
 };

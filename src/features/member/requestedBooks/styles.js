@@ -14,8 +14,8 @@ export const styles = {
   },
   cardMedia: {
     flex: "0 0 auto",
-    width: 100,
-    height: 150,
+    width: 105,
+    height: 160,
   },
   cardActions: {
     display: "flex",
