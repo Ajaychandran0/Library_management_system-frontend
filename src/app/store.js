@@ -8,6 +8,8 @@ import reqBooksReducer from "../features/member/requestedBooks/requestedBooksSli
 import wishlistReducer from "../features/member/wishlist/wishlistSlice";
 import adminReqBooksReducer from "../features/admin/requestedBooks/requestedBookSlice";
 import issuedBooksReducer from "../features/admin/issuedBooks/issuedBookSlice";
+import borrowedBooksReducer from "../features/member/borrowedBooks/borrowedBookSlice";
+import returnedBooksReducer from "../features/admin/returnedBooks/returnedBookSlice";
 
 export const store = configureStore({
   reducer: {
@@ -20,5 +22,7 @@ export const store = configureStore({
     wishlist: wishlistReducer,
     adminBookReqs: adminReqBooksReducer,
     issuedBooks: issuedBooksReducer,
+    borrowedBooks: borrowedBooksReducer,
+    returnedBooks: returnedBooksReducer,
   },
 });

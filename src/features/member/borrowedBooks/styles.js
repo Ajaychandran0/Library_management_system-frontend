@@ -10,10 +10,13 @@ export const styles = {
     backgroundColor: theme => theme.palette.grey[100],
   },
   cardContent: {
-    flex: "1 0 auto",
+    flex: "1 1 auto",
   },
   cardMedia: {
-    width: 100,
-    height: 160,
+    flex: "0 0 auto",
+    justifyContent: "center",
+    alignItems: "center",
+    width: 110,
+    height: 170,
   },
 };

@@ -107,7 +107,11 @@ const RequestedBooksPage = () => {
                         />
                         <Box sx={styles.cardContent}>
                           <CardContent>
-                            <Typography variant="h6" component="h2">
+                            <Typography
+                              variant="h6"
+                              component="h2"
+                              sx={{ height: "4rem" }}
+                            >
                               {book?.bookTitle}
                             </Typography>
                             <Typography
@@ -115,6 +119,14 @@ const RequestedBooksPage = () => {
                               color="textSecondary"
                             >
                               {book?.author}
+                            </Typography>
+                            <Typography
+                              variant="subtitle1"
+                              color="textSecondary"
+                            >
+                              Available Quantity: {book?.availableQty}
+                              &nbsp;&nbsp;&nbsp;&nbsp; Language:{" "}
+                              {book?.language}
                             </Typography>
                           </CardContent>
                         </Box>

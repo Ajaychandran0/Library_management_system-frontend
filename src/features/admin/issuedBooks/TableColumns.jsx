@@ -54,7 +54,7 @@ const TableColumns = openConfirmDialog => {
             key={params.row._id}
             variant="contained"
             onClick={() => {
-              openConfirmDialog(params.row._id);
+              openConfirmDialog(params.row.book._id, params.row.member._id);
             }}
           >
             Return Book
