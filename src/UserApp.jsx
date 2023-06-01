@@ -10,7 +10,7 @@ import ListAllCategories from "./features/member/category/ListAllCategories";
 import ListBooksByCategory from "./features/member/books/ListBooksByCategory";
 import MemberAccountPage from "./features/member/account/MemberAccountPage";
 import RequestedBooksPage from "./features/member/requestedBooks/RequestedBooks";
-import BorrowedHistory from "./features/member/borrowedHistory/AllBorrowedBooks";
+import BorrowedHistory from "./features/member/borrowedHistory/ListBorrowedBookHistory";
 import Wishlist from "./features/member/wishlist/Wishlist";
 import BorrowedBooks from "./features/member/borrowedBooks/BorrowedBooks";
 import LostBooks from "./features/member/lostBooks/LostBooks";

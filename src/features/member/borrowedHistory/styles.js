@@ -3,9 +3,11 @@ export const styles = {
     P: 4,
     m: 6,
     mt: 9,
+    mx: 15,
   },
   card: {
     display: "flex",
+    height: "auto",
     mb: 2,
     backgroundColor: theme => theme.palette.grey[100],
   },
@@ -13,7 +15,8 @@ export const styles = {
     flex: "1 0 auto",
   },
   cardMedia: {
-    width: 100,
-    height: 160,
+    flex: "0 0 auto",
+    width: 105,
+    height: 155,
   },
 };

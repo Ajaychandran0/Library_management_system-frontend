@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = `${import.meta.env.VITE_SERVER_API_URL}/issued_books`;
+const API_URL = `${import.meta.env.VITE_SERVER_API_URL}/returned_books`;
 
 const setHeader = token => ({
   headers: {
@@ -21,8 +21,8 @@ const sendRequest = async config => {
   }
 };
 
-// get all borrowed books (books in possession of a member)
-const getBorrowedBooks = async token => {
+// get history of all books member borrowed
+const getBorrowedHistory = async token => {
   const config = {
     ...setHeader(token),
     method: "GET",
@@ -31,8 +31,8 @@ const getBorrowedBooks = async token => {
   return await sendRequest(config);
 };
 
-const borrowedBookService = {
-  getBorrowedBooks,
+const borrowedHistoryService = {
+  getBorrowedHistory,
 };
 
-export default borrowedBookService;
+export default borrowedHistoryService;
