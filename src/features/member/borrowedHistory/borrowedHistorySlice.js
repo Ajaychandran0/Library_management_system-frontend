@@ -1,18 +1,18 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import borrowedBookService from "./borrowedBookService";
+import borrowedHistoryService from "./borrowedHistoryService";
 
 const initialState = {
-  borrowedBooks: [],
+  borrowedHistory: [],
   isError: false,
   isLoading: false,
   isSuccess: false,
   message: "",
-  totalBorrowedBooks: 0,
+  totalBooks: 0,
 };
 
 const generateAsyncThunk = (name, serviceCall) => {
   return createAsyncThunk(
-    `borrowedBooks/${name}`,
+    `borrowedHistory/${name}`,
     async (arg = "_", thunkAPI) => {
       try {
         const token = thunkAPI.getState().auth.member;
@@ -25,13 +25,13 @@ const generateAsyncThunk = (name, serviceCall) => {
   );
 };
 
-export const getBorrowedBooks = generateAsyncThunk(
+export const getBorrowedHistory = generateAsyncThunk(
   "getAll",
-  borrowedBookService.getBorrowedBooks
+  borrowedHistoryService.getBorrowedHistory
 );
 
-export const borrowedBookSlice = createSlice({
-  name: "borrowedBooks",
+export const borrowedHistorySlice = createSlice({
+  name: "borrowedHistory",
   initialState,
   reducers: {
     reset: () => initialState,
@@ -39,16 +39,16 @@ export const borrowedBookSlice = createSlice({
   extraReducers: builder => {
     builder
 
-      .addCase(getBorrowedBooks.pending, state => {
+      .addCase(getBorrowedHistory.pending, state => {
         state.isLoading = true;
       })
-      .addCase(getBorrowedBooks.fulfilled, (state, action) => {
+      .addCase(getBorrowedHistory.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.totalBorrowedBooks = action.payload.totalItems;
-        state.borrowedBooks = action.payload.borrowedBooks;
+        state.totalBooks = action.payload.totalItems;
+        state.borrowedHistory = action.payload.returnedBooks;
       })
-      .addCase(getBorrowedBooks.rejected, (state, action) => {
+      .addCase(getBorrowedHistory.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
@@ -56,5 +56,5 @@ export const borrowedBookSlice = createSlice({
   },
 });
 
-export const { reset } = borrowedBookSlice.actions;
-export default borrowedBookSlice.reducer;
+export const { reset } = borrowedHistorySlice.actions;
+export default borrowedHistorySlice.reducer;

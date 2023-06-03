@@ -30,9 +30,7 @@ const theme = createTheme();
 
 export default function UserSignin() {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const { member, isError, isSuccess, message } = useSelector(
-    state => state.auth
-  );
+  const { isError, isSuccess, message } = useSelector(state => state.auth);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -52,11 +50,11 @@ export default function UserSignin() {
       basicSnackbar({ message, severity: "error" });
       setSnackbarOpen(true);
     }
-    if (isSuccess || member) {
+    if (isSuccess) {
       navigate("/home");
     }
     dispatch(reset());
-  }, [member, isError, isSuccess, message, navigate, dispatch]);
+  }, [isError, isSuccess, message, navigate, dispatch]);
 
   return (
     <ThemeProvider theme={theme}>

@@ -10,6 +10,7 @@ import adminReqBooksReducer from "../features/admin/requestedBooks/requestedBook
 import issuedBooksReducer from "../features/admin/issuedBooks/issuedBookSlice";
 import borrowedBooksReducer from "../features/member/borrowedBooks/borrowedBookSlice";
 import returnedBooksReducer from "../features/admin/returnedBooks/returnedBookSlice";
+import borrowedHistoryReducer from "../features/member/borrowedHistory/borrowedHistorySlice";
 
 export const store = configureStore({
   reducer: {
@@ -24,5 +25,6 @@ export const store = configureStore({
     issuedBooks: issuedBooksReducer,
     borrowedBooks: borrowedBooksReducer,
     returnedBooks: returnedBooksReducer,
+    borrowedHistory: borrowedHistoryReducer,
   },
 });

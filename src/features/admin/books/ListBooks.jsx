@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
-import { getBooks, deleteBook } from "./bookSlice";
+import { getBooks, deleteBook, reset } from "./bookSlice";
 
 import TableColumns from "./TableColums";
 import booksTableStyles from "./tableStyles";
@@ -49,6 +49,7 @@ const ListBooks = () => {
 
   useEffect(() => {
     dispatch(getBooks(paginationModel));
+    return () => dispatch(reset());
   }, []);
 
   return (
