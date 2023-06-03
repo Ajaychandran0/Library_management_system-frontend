@@ -231,6 +231,7 @@ const AddBook = () => {
               onChange={handleChange}
             />
           </Grid>
+
           <Grid item xs={12} sm={6}>
             <TextField
               required
@@ -278,6 +279,20 @@ const AddBook = () => {
               type="number"
               fullWidth
               value={formData.shelfNo}
+              onChange={handleChange}
+            />
+          </Grid>
+
+          <Grid item xs={12}>
+            <TextField
+              required
+              id="aboutBook"
+              name="aboutBook"
+              label="About Book"
+              multiline
+              rows={4}
+              fullWidth
+              value={formData.aboutBook}
               onChange={handleChange}
             />
           </Grid>

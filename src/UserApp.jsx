@@ -15,6 +15,7 @@ import Wishlist from "./features/member/wishlist/Wishlist";
 import BorrowedBooks from "./features/member/borrowedBooks/BorrowedBooks";
 import LostBooks from "./features/member/lostBooks/LostBooks";
 import OverdueItemsLlist from "./features/member/fine/OverdueItemsList";
+import SingleBookPage from "./features/member/books/SingleBookPage";
 import { getWishlistIds } from "./features/member/wishlist/wishlistSlice";
 
 import { useSelector } from "react-redux";
@@ -32,6 +33,7 @@ function UserApp() {
       <Route path="/" element={<Layout />}>
         <Route index element={<UserHome />} />
         <Route path="/about" element={<About />} />
+        <Route path="/books/:bookId" element={<SingleBookPage />} />
         <Route path="categories" element={<ListAllCategories />} />
         <Route path="categories/:category" element={<ListBooksByCategory />} />
         <Route path="account" element={<MemberAccountPage />} />

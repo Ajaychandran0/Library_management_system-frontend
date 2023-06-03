@@ -27,6 +27,7 @@ import BasicSnackbar, {
   basicSnackbar,
 } from "../../../components/common/BasicSnackbar/BasicSnackbar";
 import { addToWishlist, removeFromWishlist } from "../wishlist/wishlistSlice";
+import { useNavigate } from "react-router-dom";
 
 function ListAllBooks({ filter }) {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
@@ -36,6 +37,7 @@ function ListAllBooks({ filter }) {
   const { books } = useSelector(state => state.books);
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleClick = bookId => {
     dispatch(requestBook(bookId));
@@ -101,7 +103,7 @@ function ListAllBooks({ filter }) {
         books.map(book => (
           <Grid item xs={12} sm={6} md={3} key={book._id}>
             <Card sx={styles.bookCard}>
-              <CardActionArea>
+              <CardActionArea onClick={() => navigate(`/books/${book._id}`)}>
                 <CardMedia
                   component="img"
                   alt="Book Cover"

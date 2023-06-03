@@ -30,4 +30,33 @@ export const styles = {
   bookPrice: {
     fontWeight: "bold",
   },
+  root: {
+    padding: theme => theme.spacing(4),
+    pt: 6,
+  },
+  cardMedia: {
+    display: "block",
+    p: 4,
+    width: "50%",
+    height: "50vh",
+  },
+  cardContent: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  priceContainer: {
+    display: "flex",
+    alignItems: "center",
+    marginBottom: theme => theme.spacing(1),
+  },
+  price: {
+    marginRight: theme => theme.spacing(1),
+  },
+  wishlistButton: {
+    marginBottom: theme => theme.spacing(2),
+  },
+  requestButton: {
+    marginRight: theme => theme.spacing(1),
+  },
 };

@@ -284,6 +284,20 @@ const EditBook = () => {
             />
           </Grid>
 
+          <Grid item xs={12}>
+            <TextField
+              required
+              id="aboutBook"
+              name="aboutBook"
+              label="About Book"
+              multiline
+              rows={4}
+              fullWidth
+              value={formData.aboutBook}
+              onChange={handleChange}
+            />
+          </Grid>
+
           <Grid item xs={12} display="flex" justifyContent="center">
             {isLoading || imgUploading ? (
               <Button
