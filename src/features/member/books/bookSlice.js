@@ -22,7 +22,10 @@ const generateAsyncThunk = (name, serviceCall) => {
 };
 
 export const getBooks = generateAsyncThunk("getAll", bookService.getBooks);
-export const filterBook = generateAsyncThunk("filter", bookService.filterBook);
+export const filterBooks = generateAsyncThunk(
+  "filter",
+  bookService.filterBooks
+);
 
 export const booksSlice = createSlice({
   name: "books",
@@ -45,15 +48,15 @@ export const booksSlice = createSlice({
         state.isError = true;
         state.message = action.payload;
       })
-      .addCase(filterBook.pending, state => {
+      .addCase(filterBooks.pending, state => {
         state.isLoading = true;
       })
-      .addCase(filterBook.fulfilled, (state, action) => {
+      .addCase(filterBooks.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.books = action.payload;
+        state.books = action.payload.books;
       })
-      .addCase(filterBook.rejected, (state, action) => {
+      .addCase(filterBooks.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;

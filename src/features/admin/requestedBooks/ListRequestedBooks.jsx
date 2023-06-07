@@ -81,11 +81,16 @@ const ListRequestedBooks = () => {
       <ConfirmDialog />
       <BasicSnackbar open={snackbarOpen} onClose={setSnackbarOpen} />
 
-      <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          my: 3,
+        }}
+      >
         <Link to="/admin/book-transactions/issue-books">
-          <Button variant="outlined" sx={{ m: 3 }}>
-            Issue New Book
-          </Button>
+          <Button variant="outlined">Issue New Book</Button>
         </Link>
         <SearchBar placeholder="Search a book..." searchBarWidth="30rem" />
       </Box>

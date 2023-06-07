@@ -34,7 +34,7 @@ export const issueBook = generateAsyncThunk(
   issuedBookService.issueBook
 );
 
-export const IssuedBooksSlice = createSlice({
+export const issuedBooksSlice = createSlice({
   name: "issuedBooks",
   initialState,
   reducers: {
@@ -73,5 +73,5 @@ export const IssuedBooksSlice = createSlice({
   },
 });
 
-export const { issueReset } = IssuedBooksSlice.actions;
-export default IssuedBooksSlice.reducer;
+export const { issueReset } = issuedBooksSlice.actions;
+export default issuedBooksSlice.reducer;

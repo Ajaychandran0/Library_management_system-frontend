@@ -24,8 +24,18 @@ const getBooks = async ({ filter }) => {
   return await sendRequest(config);
 };
 
+const filterBooks = async ({ filter }) => {
+  const config = {
+    params: { filter },
+    method: "GET",
+    url: `${API_URL}/filter`,
+  };
+  return await sendRequest(config);
+};
+
 const bookService = {
   getBooks,
+  filterBooks,
 };
 
 export default bookService;

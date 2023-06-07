@@ -76,7 +76,14 @@ const ListIssuedBooks = () => {
       <ConfirmDialog />
       <BasicSnackbar open={snackbarOpen} onClose={setSnackbarOpen} />
 
-      <Box sx={{ display: "flex", justifyContent: "space-between", mb: 3 }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItem: "center",
+          my: 3,
+        }}
+      >
         <Typography variant="h5">ISSUED BOOKS</Typography>
         <SearchBar
           placeholder="Search a book or a member"

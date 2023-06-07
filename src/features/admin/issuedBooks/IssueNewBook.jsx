@@ -9,8 +9,8 @@ import ConfirmDialog, {
 import { useDispatch, useSelector } from "react-redux";
 import { getBooks, reset as bookReset } from "../books/bookSlice";
 import { getMembers, reset as memberReset } from "../members/memberSlice";
-import MemberDetails from "./MemberDetails";
-import BookDetails from "./BookDetails";
+import MemberDetails from "../../../components/admin/table/MemberDetails";
+import BookDetails from "../../../components/admin/table/BookDetails";
 import { issueBook } from "./issuedBookSlice";
 import { issueReset } from "./issuedBookSlice";
 
@@ -59,7 +59,6 @@ const IssueNewBook = () => {
   };
 
   const handleIssueBook = () => {
-    console.log("Issuing book...", bookIsbn, memberId);
     dispatch(
       issueBook({ bookId: bookDetails[0]._id, memberId: memberDetails[0]._id })
     );

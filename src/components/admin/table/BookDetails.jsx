@@ -39,7 +39,7 @@ const BookDetails = ({ bookDetails }) => {
 };
 
 BookDetails.propTypes = {
-  bookDetails: PropTypes.object,
+  bookDetails: PropTypes.array,
 };
 
 export default BookDetails;

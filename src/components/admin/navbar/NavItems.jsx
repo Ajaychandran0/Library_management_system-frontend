@@ -3,6 +3,7 @@ import PeopleIcon from "@mui/icons-material/People";
 import BookIcon from "@mui/icons-material/Book";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 import CategoryIcon from "@mui/icons-material/Category";
+import ErrorIcon from "@mui/icons-material/Error";
 
 const navMainItems = [
   {
@@ -59,6 +60,16 @@ const navMainItems = [
         route: "/admin/book-transactions/return-books",
       },
       { id: 3, label: "Fine", route: "/admin/book-transactions/fine" },
+    ],
+  },
+  {
+    id: 5,
+    icon: <ErrorIcon />,
+    label: "Lost Books",
+    items: [
+      { id: 0, label: "View Lost Books", route: "/admin/lost_books" },
+      { id: 1, label: "Add Lost Book", route: "/admin/lost_books/add" },
+      { id: 2, label: "fine", route: "/admin/lost_books/fine" },
     ],
   },
 ];

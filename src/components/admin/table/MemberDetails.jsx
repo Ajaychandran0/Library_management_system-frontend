@@ -39,7 +39,7 @@ const MemberDetails = ({ memberDetails }) => {
 };
 
 MemberDetails.propTypes = {
-  memberDetails: PropTypes.object,
+  memberDetails: PropTypes.array,
 };
 
 export default MemberDetails;

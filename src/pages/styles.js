@@ -2,8 +2,6 @@ import image from "../assets/images/banner.webp";
 
 export const userHomeStyles = {
   pageTitle: {
-    m: 2,
-    mt: 5,
     fontSize: 28,
     color: theme => theme.palette.primary.main,
   },

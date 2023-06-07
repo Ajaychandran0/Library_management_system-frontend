@@ -56,11 +56,16 @@ const ListBooks = () => {
     <>
       <ConfirmDialog />
 
-      <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          my: 3,
+        }}
+      >
         <Link to="add">
-          <Button variant="outlined" sx={{ m: 3 }}>
-            Add books
-          </Button>
+          <Button variant="outlined">Add books</Button>
         </Link>
         <SearchBar placeholder="Search a book..." searchBarWidth="30rem" />
       </Box>

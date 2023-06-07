@@ -9,6 +9,7 @@ const mdTheme = createTheme({
   palette: {
     primary: {
       main: "#162051",
+      light: "#003b93",
     },
     danger: {
       main: "#D11A2A",

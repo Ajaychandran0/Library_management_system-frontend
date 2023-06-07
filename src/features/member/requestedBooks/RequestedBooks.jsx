@@ -159,14 +159,14 @@ const RequestedBooksPage = () => {
             ) : (
               <Box
                 mt="8rem"
-                mx="30rem"
                 sx={{
                   display: "flex",
                   flexDirection: "column",
                   alignItems: "center",
+                  width: "100%",
                 }}
               >
-                <Typography variant="h6">
+                <Typography variant="h6" m={2}>
                   You have not requested any books
                 </Typography>
                 <Link to="/">

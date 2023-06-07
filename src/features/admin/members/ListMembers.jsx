@@ -64,11 +64,16 @@ const ListMembers = () => {
   return (
     <>
       <ConfirmDialog />
-      <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          my: 3,
+        }}
+      >
         <Link to="add">
-          <Button variant="outlined" sx={{ m: 3 }}>
-            Add Members
-          </Button>
+          <Button variant="outlined">Add Members</Button>
         </Link>
         <SearchBar placeholder="Search a member..." searchBarWidth="30rem" />
       </Box>

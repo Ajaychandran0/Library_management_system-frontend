@@ -61,11 +61,16 @@ const ListCategories = () => {
   return (
     <Box sx={{ mb: "-3rem" }}>
       <ConfirmDialog />
-      <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          my: 3,
+        }}
+      >
         <Link to="add">
-          <Button variant="outlined" sx={{ m: 3 }}>
-            Add New Category
-          </Button>
+          <Button variant="outlined">Add New Category</Button>
         </Link>
         <SearchBar placeholder="Search a category..." searchBarWidth="30rem" />
       </Box>

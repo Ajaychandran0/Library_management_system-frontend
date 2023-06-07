@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { getBooks, reset } from "./bookSlice";
+import { filterBooks, getBooks, reset } from "./bookSlice";
 import { reset as wishReset } from "../wishlist/wishlistSlice";
 import PropTypes from "prop-types";
 
@@ -29,7 +29,7 @@ import BasicSnackbar, {
 import { addToWishlist, removeFromWishlist } from "../wishlist/wishlistSlice";
 import { useNavigate } from "react-router-dom";
 
-function ListAllBooks({ filter }) {
+function ListAllBooks({ filter, searchValue }) {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   const { isError, isSuccess, message } = useSelector(state => state.reqBooks);
@@ -73,12 +73,16 @@ function ListAllBooks({ filter }) {
   }, [wishSuccess, wishError, wishMessage]);
 
   useEffect(() => {
-    dispatch(getBooks(filter));
+    if (searchValue) {
+      dispatch(filterBooks(searchValue));
+    } else {
+      dispatch(getBooks(filter));
+    }
 
     return () => {
       dispatch(reset());
     };
-  }, []);
+  }, [searchValue]);
 
   useEffect(() => {
     if (isError) {
@@ -173,6 +177,7 @@ function ListAllBooks({ filter }) {
 
 ListAllBooks.propTypes = {
   filter: PropTypes.object,
+  searchValue: PropTypes.string,
 };
 
 export default ListAllBooks;
