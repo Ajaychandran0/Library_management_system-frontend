@@ -26,7 +26,7 @@ const getBooks = async ({ filter }) => {
 
 const filterBooks = async ({ filter }) => {
   const config = {
-    params: { filter },
+    params: filter,
     method: "GET",
     url: `${API_URL}/filter`,
   };

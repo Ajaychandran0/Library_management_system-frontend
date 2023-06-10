@@ -3,6 +3,7 @@ export const styles = {
     P: 4,
     m: 6,
     mt: 9,
+    mx: 15,
   },
   card: {
     display: "flex",

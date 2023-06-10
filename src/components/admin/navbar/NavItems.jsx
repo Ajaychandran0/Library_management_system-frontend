@@ -69,7 +69,6 @@ const navMainItems = [
     items: [
       { id: 0, label: "View Lost Books", route: "/admin/lost_books" },
       { id: 1, label: "Add Lost Book", route: "/admin/lost_books/add" },
-      { id: 2, label: "fine", route: "/admin/lost_books/fine" },
     ],
   },
 ];

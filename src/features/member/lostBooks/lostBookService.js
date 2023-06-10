@@ -1,10 +1,10 @@
 import axios from "axios";
 
-const API_URL = `${import.meta.env.VITE_SERVER_API_URL}/admin/lost_books`;
+const API_URL = `${import.meta.env.VITE_SERVER_API_URL}/lost_books`;
 
 const setHeader = token => ({
   headers: {
-    Authorization: `Bearer ${token} admin`,
+    Authorization: `Bearer ${token}`,
   },
 });
 
@@ -21,8 +21,8 @@ const sendRequest = async config => {
   }
 };
 
-// get all book requests
-const getAllLostBooks = async token => {
+// get all books lost by member id
+const getMemberLostBooks = async token => {
   const config = {
     ...setHeader(token),
     method: "GET",
@@ -31,19 +31,8 @@ const getAllLostBooks = async token => {
   return await sendRequest(config);
 };
 
-const addToLostBooks = async (token, data) => {
-  const config = {
-    ...setHeader(token),
-    method: "POST",
-    data,
-    url: API_URL,
-  };
-  return await sendRequest(config);
-};
-
 const lostBookService = {
-  getAllLostBooks,
-  addToLostBooks,
+  getMemberLostBooks,
 };
 
 export default lostBookService;

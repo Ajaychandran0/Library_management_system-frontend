@@ -8,6 +8,8 @@ const initialState = {
   isSuccess: false,
   message: "",
   totalBooks: 0,
+  totalPages: 0,
+  itemsPerPage: 0,
 };
 
 const generateAsyncThunk = (name, serviceCall) => {
@@ -65,6 +67,8 @@ export const booksSlice = createSlice({
         state.isSuccess = true;
         state.message = "success";
         state.totalBooks = action.payload.totalItems;
+        state.totalPages = action.payload.totalPages;
+        state.itemsPerPage = action.payload.itemsPerPage;
         state.books = action.payload.books;
       })
       .addCase(getBooks.rejected, (state, action) => {
@@ -122,6 +126,9 @@ export const booksSlice = createSlice({
       .addCase(filterBook.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
+        state.totalBooks = action.payload.totalItems;
+        state.totalPages = action.payload.totalPages;
+        state.itemsPerPage = action.payload.itemsPerPage;
         state.books = action.payload.books;
       })
       .addCase(filterBook.rejected, (state, action) => {

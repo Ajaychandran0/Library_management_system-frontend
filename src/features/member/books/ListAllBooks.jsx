@@ -15,6 +15,8 @@ import {
   Button,
   Tooltip,
   IconButton,
+  Pagination,
+  Box,
 } from "@mui/material";
 import { Favorite } from "@mui/icons-material";
 
@@ -31,10 +33,20 @@ import { useNavigate } from "react-router-dom";
 
 function ListAllBooks({ filter, searchValue }) {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
-
   const { isError, isSuccess, message } = useSelector(state => state.reqBooks);
   const { wishlistIds } = useSelector(state => state.wishlist);
-  const { books } = useSelector(state => state.books);
+  const { books, totalPages } = useSelector(state => state.books);
+  const defaultPagination = {
+    page: 0,
+    pageSize: 8,
+  };
+  const [paginationModel, setPaginationModel] = useState(defaultPagination);
+  const [search, setSearch] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const handlePagination = (event, page) => {
+    setCurrentPage(page);
+    setPaginationModel({ page: page - 1, pageSize: 8 });
+  };
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -73,16 +85,20 @@ function ListAllBooks({ filter, searchValue }) {
   }, [wishSuccess, wishError, wishMessage]);
 
   useEffect(() => {
-    if (searchValue) {
-      dispatch(filterBooks(searchValue));
+    if (searchValue && searchValue === search) {
+      dispatch(filterBooks({ ...paginationModel, filter: searchValue }));
+    } else if (searchValue) {
+      setSearch(searchValue);
+      setCurrentPage(1);
+      dispatch(filterBooks({ ...defaultPagination, filter: searchValue }));
     } else {
-      dispatch(getBooks(filter));
+      dispatch(getBooks({ ...paginationModel, ...filter }));
     }
 
     return () => {
       dispatch(reset());
     };
-  }, [searchValue]);
+  }, [searchValue, paginationModel]);
 
   useEffect(() => {
     if (isError) {
@@ -171,6 +187,15 @@ function ListAllBooks({ filter, searchValue }) {
           No Books Avialable
         </Typography>
       )}
+      <Box sx={{ display: "flex", justifyContent: "center", width: "100%" }}>
+        <Pagination
+          count={totalPages}
+          color="primary"
+          page={currentPage}
+          sx={{ mb: 4 }}
+          onChange={handlePagination}
+        />
+      </Box>
     </Grid>
   );
 }
