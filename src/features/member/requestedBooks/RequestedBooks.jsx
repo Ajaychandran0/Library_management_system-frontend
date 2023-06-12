@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getReqBooks, removeBookRequest, reset } from "./requestedBooksSlice";
-import { reset as wishReset } from "../wishlist/wishlistSlice";
 import { Delete, Favorite } from "@mui/icons-material";
 import {
   Box,
@@ -15,72 +14,23 @@ import {
   Typography,
 } from "@mui/material";
 import { styles } from "./styles";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import BasicSnackbar, {
   basicSnackbar,
 } from "../../../components/common/BasicSnackbar/BasicSnackbar";
 import ConfirmDialog, {
   confirmDialog,
 } from "../../../components/common/ConfirmDialog/ConfirmDialog";
-import { addToWishlist, removeFromWishlist } from "../wishlist/wishlistSlice";
+import useWishlist from "../../../hooks/useWishlist";
+import reqBookEmpty from "../../../assets/images/empty.jpg";
 
 const RequestedBooksPage = () => {
-  const { wishlistIds } = useSelector(state => state.wishlist);
-  const { isSuccess, isError, message } = useSelector(state => state.wishlist);
-
   const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [bookTitle, setBookTitle] = useState(null);
-  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const handleClick = (bookId, bookTitle) => {
-    if (wishlistIds.includes(bookId)) {
-      dispatch(removeFromWishlist(bookId));
-    } else {
-      dispatch(addToWishlist(bookId));
-    }
-    setBookTitle(bookTitle);
-  };
-  useEffect(() => {
-    if (isSuccess && message === "removedFromWishlist") {
-      basicSnackbar({
-        message: `"${bookTitle}" removed from your wishlist`,
-        severity: "warning",
-      });
-      setSnackbarOpen(true);
-    }
-    if (isSuccess && message === "addedToWishlist") {
-      basicSnackbar({
-        message: `"${bookTitle}" added to you wishlist`,
-        severity: "success",
-      });
-      setSnackbarOpen(true);
-    }
-    dispatch(wishReset());
-  }, [isSuccess, isError, message]);
-
-  const handleDelete = bookId => {
-    dispatch(removeBookRequest(bookId));
-    basicSnackbar({
-      message: "Book request deleted successfully",
-      severity: "success",
-    });
-    setSnackbarOpen(true);
-  };
-  const openConfirmDialog = bookId =>
-    confirmDialog({
-      message: "Are you sure you want to delete this book request ?",
-      title: "Delete",
-      onConfirm: () => handleDelete(bookId),
-    });
-
-  useEffect(() => {
-    dispatch(getReqBooks());
-    return () => {
-      dispatch(reset());
-    };
-  }, []);
-
-  const { reqBooks, isLoading } = useSelector(state => state.reqBooks);
+  const { handleWishlist, wishlistIds } = useWishlist({ setSnackbarOpen });
+  const { reqBooks, isLoading, handleDelete } =
+    useRequestedBooksList(setSnackbarOpen);
 
   return (
     <Box sx={styles.root}>
@@ -101,6 +51,7 @@ const RequestedBooksPage = () => {
                     <Grid item xs={12} sm={6} key={book?._id}>
                       <Card sx={styles.card}>
                         <CardMedia
+                          onClick={() => navigate(`/books/${book._id}`)}
                           sx={styles.cardMedia}
                           image={book?.imageUrl}
                           title={book?.bookTitle}
@@ -133,7 +84,7 @@ const RequestedBooksPage = () => {
                         <CardActions sx={styles.cardActions}>
                           <IconButton
                             onClick={() =>
-                              handleClick(book._id, book.bookTitle)
+                              handleWishlist(book._id, book.bookTitle)
                             }
                             aria-label="add to favorites"
                             color={
@@ -146,7 +97,7 @@ const RequestedBooksPage = () => {
                           </IconButton>
                           <IconButton
                             aria-label="delete"
-                            onClick={() => openConfirmDialog(book?._id)}
+                            onClick={() => handleDelete(book?._id)}
                           >
                             <Delete color="danger" />
                           </IconButton>
@@ -158,7 +109,7 @@ const RequestedBooksPage = () => {
               })
             ) : (
               <Box
-                mt="8rem"
+                mt="2rem"
                 sx={{
                   display: "flex",
                   flexDirection: "column",
@@ -169,6 +120,14 @@ const RequestedBooksPage = () => {
                 <Typography variant="h6" m={2}>
                   You have not requested any books
                 </Typography>
+                <Card>
+                  <CardMedia
+                    component="img"
+                    alt="Wishlist Empty Image"
+                    height="300"
+                    image={reqBookEmpty}
+                  />
+                </Card>
                 <Link to="/">
                   <Button variant="outlined">Continue to browse books</Button>
                 </Link>
@@ -179,6 +138,34 @@ const RequestedBooksPage = () => {
       )}
     </Box>
   );
+};
+
+const useRequestedBooksList = setSnackbarOpen => {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getReqBooks());
+    return () => {
+      dispatch(reset());
+    };
+  }, []);
+
+  const deleteReqBook = bookId => {
+    dispatch(removeBookRequest(bookId));
+    basicSnackbar({
+      message: "Book request deleted successfully",
+      severity: "success",
+    });
+    setSnackbarOpen(true);
+  };
+  const handleDelete = bookId =>
+    confirmDialog({
+      message: "Are you sure you want to delete this book request ?",
+      title: "Delete",
+      onConfirm: () => deleteReqBook(bookId),
+    });
+
+  const { reqBooks, isLoading } = useSelector(state => state.reqBooks);
+  return { reqBooks, isLoading, handleDelete };
 };
 
 export default RequestedBooksPage;

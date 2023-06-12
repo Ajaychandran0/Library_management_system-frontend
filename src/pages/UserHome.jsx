@@ -1,8 +1,8 @@
-import { Typography, Container, Box } from "@mui/material";
+import { Container, Box } from "@mui/material";
 import { userHomeStyles as styles } from "./styles";
 import ListAllBooks from "../features/member/books/ListAllBooks";
-import SearchBar from "../components/common/SearchBar/SearchBar";
 import { useState } from "react";
+import TitleAndSearch from "../components/common/TitleAndSearch/TitleAndSearch";
 
 const UserHome = () => {
   const [searchValue, setSearchValue] = useState("");
@@ -22,32 +22,12 @@ const UserHome = () => {
       </Box>
 
       <Container maxWidth="lg">
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            my: 5,
-          }}
-        >
-          <Typography variant="h4" sx={styles.pageTitle}>
-            ALL BOOKS
-          </Typography>
-          <SearchBar
-            placeholder="Search by Title, Author or ISBN"
-            searchBarWidth="30rem"
-            onSearch={onSearch}
-          />
-        </Box>
-        {searchValue ? (
-          <Typography sx={{ m: 3 }}>
-            showing results for{" "}
-            <span style={{ fontWeight: "bold" }}>{`"${searchValue}"`}</span>
-          </Typography>
-        ) : (
-          ""
-        )}
-
+        <TitleAndSearch
+          title="ALL BOOKS"
+          placeholder="Search by Title, Author or ISBN"
+          onSearch={onSearch}
+          searchValue={searchValue}
+        />
         <ListAllBooks searchValue={searchValue} />
       </Container>
     </Box>

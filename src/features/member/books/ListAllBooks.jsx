@@ -1,9 +1,4 @@
-import { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { filterBooks, getBooks, reset } from "./bookSlice";
-import { reset as wishReset } from "../wishlist/wishlistSlice";
 import PropTypes from "prop-types";
-
 import {
   Typography,
   Grid,
@@ -18,103 +13,28 @@ import {
   Pagination,
   Box,
 } from "@mui/material";
+
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+
 import { Favorite } from "@mui/icons-material";
+import BasicSnackbar from "../../../components/common/BasicSnackbar/BasicSnackbar";
 
 import { styles } from "./style";
-import {
-  requestBook,
-  reset as reqReset,
-} from "../requestedBooks/requestedBooksSlice";
-import BasicSnackbar, {
-  basicSnackbar,
-} from "../../../components/common/BasicSnackbar/BasicSnackbar";
-import { addToWishlist, removeFromWishlist } from "../wishlist/wishlistSlice";
-import { useNavigate } from "react-router-dom";
+import useBooks from "../../../hooks/useBooks";
+import useWishlist from "../../../hooks/useWishlist";
+import useRequestBook from "../../../hooks/useRequestBook";
 
 function ListAllBooks({ filter, searchValue }) {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const { isError, isSuccess, message } = useSelector(state => state.reqBooks);
-  const { wishlistIds } = useSelector(state => state.wishlist);
-  const { books, totalPages } = useSelector(state => state.books);
-  const defaultPagination = {
-    page: 0,
-    pageSize: 8,
-  };
-  const [paginationModel, setPaginationModel] = useState(defaultPagination);
-  const [search, setSearch] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-  const handlePagination = (event, page) => {
-    setCurrentPage(page);
-    setPaginationModel({ page: page - 1, pageSize: 8 });
-  };
 
-  const dispatch = useDispatch();
+  const { books, handlePagination, currentPage, totalPages } = useBooks({
+    searchValue,
+    filter,
+  });
+  const { wishlistIds, handleWishlist } = useWishlist({ setSnackbarOpen });
+  const { handleRequestBook } = useRequestBook({ setSnackbarOpen });
   const navigate = useNavigate();
-
-  const handleClick = bookId => {
-    dispatch(requestBook(bookId));
-  };
-  const [bookTitle, setBookTitle] = useState(null);
-  const handleWishlist = (bookId, bookTitle) => {
-    if (wishlistIds.includes(bookId)) {
-      dispatch(removeFromWishlist(bookId));
-    } else {
-      dispatch(addToWishlist(bookId));
-    }
-    setBookTitle(bookTitle);
-  };
-  const wishSuccess = useSelector(state => state.wishlist.isSuccess);
-  const wishError = useSelector(state => state.wishlist.isError);
-  const wishMessage = useSelector(state => state.wishlist.message);
-  useEffect(() => {
-    if (wishSuccess && wishMessage === "removedFromWishlist") {
-      basicSnackbar({
-        message: `"${bookTitle}" removed from your wishlist`,
-        severity: "warning",
-      });
-      setSnackbarOpen(true);
-    }
-    if (wishSuccess && wishMessage === "addedToWishlist") {
-      basicSnackbar({
-        message: `"${bookTitle}" added to you wishlist`,
-        severity: "success",
-      });
-      setSnackbarOpen(true);
-    }
-    dispatch(wishReset());
-  }, [wishSuccess, wishError, wishMessage]);
-
-  useEffect(() => {
-    if (searchValue && searchValue === search) {
-      dispatch(filterBooks({ ...paginationModel, filter: searchValue }));
-    } else if (searchValue) {
-      setSearch(searchValue);
-      setCurrentPage(1);
-      dispatch(filterBooks({ ...defaultPagination, filter: searchValue }));
-    } else {
-      dispatch(getBooks({ ...paginationModel, ...filter }));
-    }
-
-    return () => {
-      dispatch(reset());
-    };
-  }, [searchValue, paginationModel]);
-
-  useEffect(() => {
-    if (isError) {
-      const severity = message === "Network Error" ? "error" : "warning";
-      basicSnackbar({ message, severity });
-      setSnackbarOpen(true);
-    }
-    if (isSuccess && message) {
-      basicSnackbar({
-        message,
-        severity: "success",
-      });
-      setSnackbarOpen(true);
-    }
-    dispatch(reqReset());
-  }, [isError, isSuccess, message]);
 
   return (
     <Grid container spacing={3}>
@@ -161,12 +81,12 @@ function ListAllBooks({ filter, searchValue }) {
                   size="small"
                   color="primary"
                   variant="outlined"
-                  onClick={() => handleClick(book._id)}
+                  onClick={() => handleRequestBook(book._id)}
                 >
                   Request book
                 </Button>
 
-                {wishlistIds.length ? (
+                {wishlistIds ? (
                   <IconButton
                     onClick={() => handleWishlist(book._id, book.bookTitle)}
                     aria-label="add to favorites"

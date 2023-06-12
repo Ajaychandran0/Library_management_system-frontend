@@ -19,7 +19,7 @@ export const styles = {
   },
   cardActions: {
     display: "flex",
-    alignItems: "flex-end",
-    p: 2,
+    justifyContent: "flex-end",
+    gap: "3rem",
   },
 };

@@ -3,11 +3,14 @@ import borrowedHistoryService from "./borrowedHistoryService";
 
 const initialState = {
   borrowedHistory: [],
+  overdueItems: [],
   isError: false,
   isLoading: false,
   isSuccess: false,
   message: "",
   totalBooks: 0,
+  totalPages: 0,
+  itemsPerPage: 0,
 };
 
 const generateAsyncThunk = (name, serviceCall) => {
@@ -29,6 +32,14 @@ export const getBorrowedHistory = generateAsyncThunk(
   "getAll",
   borrowedHistoryService.getBorrowedHistory
 );
+export const filterBorrowedHistory = generateAsyncThunk(
+  "filter",
+  borrowedHistoryService.filterBorrowedHistory
+);
+export const getMemberOverdueItems = generateAsyncThunk(
+  "overdueItems",
+  borrowedHistoryService.getMemberOverdueItems
+);
 
 export const borrowedHistorySlice = createSlice({
   name: "borrowedHistory",
@@ -38,7 +49,6 @@ export const borrowedHistorySlice = createSlice({
   },
   extraReducers: builder => {
     builder
-
       .addCase(getBorrowedHistory.pending, state => {
         state.isLoading = true;
       })
@@ -46,9 +56,40 @@ export const borrowedHistorySlice = createSlice({
         state.isLoading = false;
         state.isSuccess = true;
         state.totalBooks = action.payload.totalItems;
+        state.totalPages = action.payload.totalPages;
+        state.itemsPerPage = action.payload.itemsPerPage;
         state.borrowedHistory = action.payload.returnedBooks;
       })
       .addCase(getBorrowedHistory.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      .addCase(filterBorrowedHistory.pending, state => {
+        state.isLoading = true;
+      })
+      .addCase(filterBorrowedHistory.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.totalBooks = action.payload.totalItems;
+        state.totalPages = action.payload.totalPages;
+        state.itemsPerPage = action.payload.itemsPerPage;
+        state.borrowedHistory = action.payload.returnedBooks;
+      })
+      .addCase(filterBorrowedHistory.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      .addCase(getMemberOverdueItems.pending, state => {
+        state.isLoading = true;
+      })
+      .addCase(getMemberOverdueItems.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.overdueItems = action.payload.overdueItems;
+      })
+      .addCase(getMemberOverdueItems.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;

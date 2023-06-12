@@ -22,17 +22,39 @@ const sendRequest = async config => {
 };
 
 // get history of all books member borrowed
-const getBorrowedHistory = async token => {
+const getBorrowedHistory = async (token, filter) => {
   const config = {
     ...setHeader(token),
+    params: filter,
     method: "GET",
     url: API_URL,
   };
   return await sendRequest(config);
 };
 
+const filterBorrowedHistory = async (token, filter) => {
+  const config = {
+    ...setHeader(token),
+    params: filter,
+    method: "GET",
+    url: `${API_URL}/filter`,
+  };
+  return await sendRequest(config);
+};
+
+const getMemberOverdueItems = async token => {
+  const config = {
+    ...setHeader(token),
+    method: "GET",
+    url: `${API_URL}/overdueItems`,
+  };
+  return await sendRequest(config);
+};
+
 const borrowedHistoryService = {
   getBorrowedHistory,
+  filterBorrowedHistory,
+  getMemberOverdueItems,
 };
 
 export default borrowedHistoryService;

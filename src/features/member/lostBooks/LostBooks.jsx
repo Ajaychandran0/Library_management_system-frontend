@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import {
   Box,
   Button,
@@ -8,19 +7,18 @@ import {
   Grid,
   Typography,
 } from "@mui/material";
-import { styles } from "./styles";
+
 import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+
 import { getMemberLostBooks, reset } from "./lostBookSlice";
-import { Link } from "react-router-dom";
+import lostBooksEmpty from "../../../assets/images/empty.jpg";
+import { styles } from "./styles";
 
 const MemberLostBooks = () => {
-  const { lostBooks } = useSelector(state => state.memberLostBooks);
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(getMemberLostBooks());
-    return () => reset();
-  }, []);
+  const navigate = useNavigate();
+  const lostBooks = useLostBooksByMember();
 
   return (
     <Box sx={styles.root}>
@@ -33,6 +31,7 @@ const MemberLostBooks = () => {
             <Grid item xs={12} key={item.book._id}>
               <Card sx={styles.card}>
                 <CardMedia
+                  onClick={() => navigate(`/books/${item.book._id}`)}
                   sx={styles.cardMedia}
                   image={item.book.bookCoverUrl}
                   title={item.book.bookTitle}
@@ -91,7 +90,7 @@ const MemberLostBooks = () => {
           ))
         ) : (
           <Box
-            mt="8rem"
+            mt="2rem"
             sx={{
               display: "flex",
               flexDirection: "column",
@@ -102,6 +101,14 @@ const MemberLostBooks = () => {
             <Typography variant="h6" m={2}>
               You have not lost any books
             </Typography>
+            <Card>
+              <CardMedia
+                component="img"
+                alt="Wishlist Empty Image"
+                height="300"
+                image={lostBooksEmpty}
+              />
+            </Card>
             <Link to="/">
               <Button variant="outlined">Continue to browse books</Button>
             </Link>
@@ -110,6 +117,18 @@ const MemberLostBooks = () => {
       </Grid>
     </Box>
   );
+};
+
+const useLostBooksByMember = () => {
+  const { lostBooks } = useSelector(state => state.memberLostBooks);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getMemberLostBooks());
+    return () => reset();
+  }, []);
+
+  return lostBooks;
 };
 
 export default MemberLostBooks;

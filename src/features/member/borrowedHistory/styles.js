@@ -16,7 +16,7 @@ export const styles = {
   },
   cardMedia: {
     flex: "0 0 auto",
-    width: 105,
-    height: 155,
+    width: "7.5rem",
+    height: "11rem",
   },
 };

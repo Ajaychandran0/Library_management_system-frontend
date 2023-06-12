@@ -1,4 +1,9 @@
-import React, { useEffect, useState } from "react";
+import BasicSnackbar, {
+  basicSnackbar,
+} from "../../../components/common/BasicSnackbar/BasicSnackbar";
+import ConfirmDialog, {
+  confirmDialog,
+} from "../../../components/common/ConfirmDialog/ConfirmDialog";
 import {
   Box,
   Button,
@@ -10,44 +15,23 @@ import {
   IconButton,
   Typography,
 } from "@mui/material";
-import { styles } from "./styles";
-import BasicSnackbar, {
-  basicSnackbar,
-} from "../../../components/common/BasicSnackbar/BasicSnackbar";
-import { getWishlist, removeFromWishlist, reset } from "./wishlistSlice";
-import { useDispatch, useSelector } from "react-redux";
-import ConfirmDialog, {
-  confirmDialog,
-} from "../../../components/common/ConfirmDialog/ConfirmDialog";
 import { Delete } from "@mui/icons-material";
-import { Link } from "react-router-dom";
+
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+
+import { getWishlist, removeFromWishlist, reset } from "./wishlistSlice";
+import { styles } from "./styles";
+import useRequestBook from "../../../hooks/useRequestBook";
+import wishlistEmpty from "../../../assets/images/empty.jpg";
 
 const Wishlist = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
-
-  const dispatch = useDispatch();
-  const { wishlist, isLoading } = useSelector(state => state.wishlist);
-
-  const handleDelete = bookId => {
-    dispatch(removeFromWishlist(bookId));
-    basicSnackbar({
-      message: "Book removed from wishlist successfully",
-      severity: "success",
-    });
-    setSnackbarOpen(true);
-  };
-  const openConfirmDialog = bookId =>
-    confirmDialog({
-      message: "Are you sure you want to remove this book from wishlist ?",
-      title: "Remove",
-      onConfirm: () => handleDelete(bookId),
-    });
-
-  useEffect(() => {
-    dispatch(getWishlist());
-
-    return () => dispatch(reset());
-  }, []);
+  const navigate = useNavigate();
+  const { wishlist, handleDelete, isLoading } =
+    useWishlistItems(setSnackbarOpen);
+  const { handleRequestBook } = useRequestBook({ setSnackbarOpen });
 
   return (
     <Box sx={styles.root}>
@@ -60,12 +44,14 @@ const Wishlist = () => {
           <Typography variant="h5" gutterBottom>
             WISHLIST
           </Typography>
+
           <Grid container spacing={3} sx={{ mt: 3 }}>
             {wishlist.length ? (
               wishlist.map(book => (
                 <Grid item xs={12} sm={6} key={book._id}>
                   <Card sx={styles.card}>
                     <CardMedia
+                      onClick={() => navigate(`/books/${book._id}`)}
                       sx={styles.cardMedia}
                       image={book.imageUrl}
                       title={book.bookTitle}
@@ -79,21 +65,27 @@ const Wishlist = () => {
                           {book.author}
                         </Typography>
                       </CardContent>
+                      <CardActions sx={styles.cardActions}>
+                        <Button
+                          variant="outlined"
+                          onClick={() => handleRequestBook(book?._id)}
+                        >
+                          Request Book
+                        </Button>
+                        <IconButton
+                          aria-label="delete"
+                          onClick={() => handleDelete(book?._id)}
+                        >
+                          <Delete color="danger" />
+                        </IconButton>
+                      </CardActions>
                     </Box>
-                    <CardActions sx={styles.cardActions}>
-                      <IconButton
-                        aria-label="delete"
-                        onClick={() => openConfirmDialog(book?._id)}
-                      >
-                        <Delete color="danger" />
-                      </IconButton>
-                    </CardActions>
                   </Card>
                 </Grid>
               ))
             ) : (
               <Box
-                mt="8rem"
+                mt="2rem"
                 mx="30rem"
                 sx={{
                   display: "flex",
@@ -102,6 +94,14 @@ const Wishlist = () => {
                 }}
               >
                 <Typography variant="h6">Your wishlist is empty</Typography>
+                <Card>
+                  <CardMedia
+                    component="img"
+                    alt="Wishlist Empty Image"
+                    height="300"
+                    image={wishlistEmpty}
+                  />
+                </Card>
                 <Link to="/">
                   <Button variant="outlined">
                     Continue to home page to add books
@@ -114,6 +114,34 @@ const Wishlist = () => {
       )}
     </Box>
   );
+};
+
+const useWishlistItems = setSnackbarOpen => {
+  const dispatch = useDispatch();
+  const { wishlist, isLoading } = useSelector(state => state.wishlist);
+
+  const deleteWishItem = bookId => {
+    dispatch(removeFromWishlist(bookId));
+    basicSnackbar({
+      message: "Book removed from wishlist successfully",
+      severity: "success",
+    });
+    setSnackbarOpen(true);
+  };
+  const handleDelete = bookId =>
+    confirmDialog({
+      message: "Are you sure you want to remove this book from wishlist ?",
+      title: "Remove",
+      onConfirm: () => deleteWishItem(bookId),
+    });
+
+  useEffect(() => {
+    dispatch(getWishlist());
+
+    return () => dispatch(reset());
+  }, []);
+
+  return { wishlist, isLoading, handleDelete };
 };
 
 export default Wishlist;

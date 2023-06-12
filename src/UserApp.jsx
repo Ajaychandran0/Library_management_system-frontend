@@ -14,7 +14,7 @@ import BorrowedHistory from "./features/member/borrowedHistory/ListBorrowedBookH
 import Wishlist from "./features/member/wishlist/Wishlist";
 import BorrowedBooks from "./features/member/borrowedBooks/BorrowedBooks";
 import LostBooks from "./features/member/lostBooks/LostBooks";
-import OverdueItemsLlist from "./features/member/fine/OverdueItemsList";
+import OverdueItemsLlist from "./features/member/borrowedHistory/OverdueItemsList";
 import SingleBookPage from "./features/member/books/SingleBookPage";
 import { getWishlistIds } from "./features/member/wishlist/wishlistSlice";
 
