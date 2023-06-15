@@ -42,9 +42,19 @@ const returnBook = async (token, data) => {
   return await sendRequest(config);
 };
 
+const getAllOverdueItems = async token => {
+  const config = {
+    ...setHeader(token),
+    method: "GET",
+    url: `${API_URL}/overdueItems`,
+  };
+  return await sendRequest(config);
+};
+
 const returnedBookService = {
   getReturnedBooksByMember,
   returnBook,
+  getAllOverdueItems,
 };
 
 export default returnedBookService;

@@ -1,11 +1,13 @@
-import { Button } from "@mui/material";
-
-const TableColumns = (openConfirmDialog, returnedBookIds) => {
+import { MenuItem, Select } from "@mui/material";
+const TableColumns = () => {
+  const handleStatusChange = event => {
+    console.log(event.target.value, " this is the status now bitch");
+  };
   return [
     {
       field: "bookTitle",
       headerName: "Book Title",
-      flex: 7,
+      flex: 10,
       valueGetter: params => params.row.book.bookTitle,
     },
     {
@@ -29,7 +31,7 @@ const TableColumns = (openConfirmDialog, returnedBookIds) => {
     {
       field: "collegeId",
       headerName: "Student ID",
-      flex: 4,
+      flex: 5,
       valueGetter: params => params.row.member.collegeId,
     },
     {
@@ -45,29 +47,31 @@ const TableColumns = (openConfirmDialog, returnedBookIds) => {
       valueGetter: params => new Date(params.value).toDateString(),
     },
     {
-      field: "actions",
-      headerName: "Actions",
+      field: "returnedOn",
+      headerName: "Returned On",
+      flex: 5,
+      valueGetter: params => new Date(params.value).toDateString(),
+    },
+    {
+      field: "fine",
+      headerName: "Fine",
+      flex: 3,
+      valueGetter: params => `${params.value} Rs`,
+    },
+    {
+      field: "status",
+      headerName: "Status",
       flex: 6,
       renderCell: params => {
-        return returnedBookIds.includes(params.row.book._id) ? (
-          <Button
-            key={params.row._id}
-            variant="outlined"
-            disabled
-            sx={{ width: "7.2rem" }}
+        return (
+          <Select
+            value={params.row.isFinePaid ? "paid" : "notPaid"}
+            onChange={handleStatusChange}
+            sx={{ color: () => (params.row.isFinePaid ? "green" : "red") }}
           >
-            Returned
-          </Button>
-        ) : (
-          <Button
-            key={params.row._id}
-            variant="contained"
-            onClick={() => {
-              openConfirmDialog(params.row.book._id, params.row.member._id);
-            }}
-          >
-            Return Book
-          </Button>
+            <MenuItem value="paid">Paid</MenuItem>
+            <MenuItem value="notPaid">Not Paid</MenuItem>
+          </Select>
         );
       },
     },

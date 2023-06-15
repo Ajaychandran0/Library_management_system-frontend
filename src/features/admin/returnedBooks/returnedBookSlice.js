@@ -3,11 +3,13 @@ import returnedBookService from "./returnedBookService";
 
 const initialState = {
   returnedBooks: [],
+  overdueItems: [],
   returnError: false,
   returnLoading: false,
   returnSuccess: false,
   returnMessage: "",
   totalreturnedBooks: 0,
+  totalOverdueItems: 0,
 };
 
 const generateAsyncThunk = (name, serviceCall) => {
@@ -32,6 +34,10 @@ export const getReturnedBooksByMember = generateAsyncThunk(
 export const returnBook = generateAsyncThunk(
   "return",
   returnedBookService.returnBook
+);
+export const getAllOverdueItems = generateAsyncThunk(
+  "getAllOverdueItems",
+  returnedBookService.getAllOverdueItems
 );
 
 export const ReturnedBooksSlice = createSlice({
@@ -66,6 +72,20 @@ export const ReturnedBooksSlice = createSlice({
         state.returnMessage = "Book Returned Successfully";
       })
       .addCase(returnBook.rejected, (state, action) => {
+        state.returnLoading = false;
+        state.returnError = true;
+        state.returnMessage = action.payload;
+      })
+      .addCase(getAllOverdueItems.pending, state => {
+        state.returnLoading = true;
+      })
+      .addCase(getAllOverdueItems.fulfilled, (state, action) => {
+        state.returnLoading = false;
+        state.returnSuccess = true;
+        state.returnMessage = "fetch overdueItems Successfully";
+        state.overdueItems = action.payload.overdueItems;
+      })
+      .addCase(getAllOverdueItems.rejected, (state, action) => {
         state.returnLoading = false;
         state.returnError = true;
         state.returnMessage = action.payload;

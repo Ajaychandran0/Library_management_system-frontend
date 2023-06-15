@@ -14,6 +14,7 @@ import borrowedHistoryReducer from "../features/member/borrowedHistory/borrowedH
 import lostBooksReducer from "../features/admin/lostBooks/lostBookSlice";
 import memberLostBookReducer from "../features/member/lostBooks/lostBookSlice";
 import memberAccountReducer from "../features/member/account/memberAccountSlice";
+import paymentReducer from "../features/member/payment/paymentSlice";
 
 export const store = configureStore({
   reducer: {
@@ -32,5 +33,6 @@ export const store = configureStore({
     lostBooks: lostBooksReducer,
     memberLostBooks: memberLostBookReducer,
     memberAccount: memberAccountReducer,
+    payment: paymentReducer,
   },
 });

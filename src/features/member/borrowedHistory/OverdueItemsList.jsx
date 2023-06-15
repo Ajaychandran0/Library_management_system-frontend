@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -14,14 +14,48 @@ import { Link, useNavigate } from "react-router-dom";
 
 import { getMemberOverdueItems, reset } from "./borrowedHistorySlice";
 import noFine from "../../../assets/images/empty.jpg";
+import { getPaymentUrl, reset as paymentReset } from "../payment/paymentSlice";
 import { styles } from "./styles";
+import BasicSnackbar, {
+  basicSnackbar,
+} from "../../../components/common/BasicSnackbar/BasicSnackbar";
 
 const overdueItemsList = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const overdueItems = useOverdueItems();
+  const handlePayment = overdueItemId => {
+    dispatch(getPaymentUrl(overdueItemId));
+  };
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+
+  const { paymentURL, paymentError, paymentSuccess, paymentMessage } =
+    useSelector(state => state.payment);
+
+  useEffect(() => {
+    if (paymentURL) {
+      window.location.href = paymentURL;
+    }
+  }, [paymentURL]);
+
+  useEffect(() => {
+    if (paymentError) {
+      basicSnackbar({ message: paymentMessage, severity: "error" });
+      setSnackbarOpen(true);
+    }
+    if (paymentSuccess && paymentMessage === "updatedSuccessfully") {
+      basicSnackbar({
+        message: "payment successfully completed",
+        severity: "success",
+      });
+      setSnackbarOpen(true);
+      dispatch(paymentReset());
+    }
+  }, [paymentError, paymentMessage]);
 
   return (
     <Box sx={styles.root}>
+      <BasicSnackbar open={snackbarOpen} onClose={setSnackbarOpen} />
       <Typography variant="h5" gutterBottom>
         OVERDUE ITEMS
       </Typography>
@@ -67,7 +101,12 @@ const overdueItemsList = () => {
                         <Typography variant="subtitle">
                           Fine: {item.fine}
                         </Typography>
-                        <Button variant="outlined">Pay</Button>
+                        <Button
+                          variant="outlined"
+                          onClick={() => handlePayment(item._id)}
+                        >
+                          Pay
+                        </Button>
                       </Box>
                     </Box>
                   </CardContent>

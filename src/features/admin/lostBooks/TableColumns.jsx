@@ -1,6 +1,10 @@
-import { Typography } from "@mui/material";
+import { MenuItem, Select } from "@mui/material";
 
 const TableColumns = () => {
+  const handleStatusChange = event => {
+    console.log(event.target.value);
+  };
+
   return [
     {
       field: "bookTitle",
@@ -47,19 +51,17 @@ const TableColumns = () => {
     {
       field: "status",
       headerName: "Status",
-      flex: 3,
+      flex: 5,
       renderCell: params => {
-        return params.row.isFinePaid ? (
-          <Typography
-            key={params.row._id}
-            sx={{ width: "7.2rem", color: "green" }}
+        return (
+          <Select
+            value={params.row.isFinePaid ? "paid" : "notPaid"}
+            onChange={handleStatusChange}
+            sx={{ color: () => (params.row.isFinePaid ? "green" : "red") }}
           >
-            Paid
-          </Typography>
-        ) : (
-          <Typography key={params.row._id} sx={{ color: "red" }}>
-            Not Paid
-          </Typography>
+            <MenuItem value="paid">Paid</MenuItem>
+            <MenuItem value="notPaid">Not Paid</MenuItem>
+          </Select>
         );
       },
     },

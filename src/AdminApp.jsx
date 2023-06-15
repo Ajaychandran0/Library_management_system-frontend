@@ -1,4 +1,5 @@
 import { Route, Routes, Navigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 import AdminLayout from "./components/admin/AdminLayout";
 import AdminDashboard from "./pages/AdminDashboard";
@@ -14,11 +15,11 @@ import ListBooks from "./features/admin/books/ListBooks";
 import AddBook from "./features/admin/books/AddBooks";
 import EditBook from "./features/admin/books/EditBooks";
 import ListRequestedBooks from "./features/admin/requestedBooks/ListRequestedBooks";
-import { useSelector } from "react-redux";
 import ListIssuedBooks from "./features/admin/issuedBooks/ListIssuedBooks";
 import IssueNewBook from "./features/admin/issuedBooks/IssueNewBook";
 import AddLostBook from "./features/admin/lostBooks/AddLostBook";
 import ListLostBooks from "./features/admin/lostBooks/ListLostBooks";
+import ListAllOverdueItems from "./features/admin/returnedBooks/ListAllOverdueItems";
 
 function AdminApp() {
   const { admin } = useSelector(state => state.admin);
@@ -55,13 +56,12 @@ function AdminApp() {
           <Route path="book-requests" element={<ListRequestedBooks />} />
           <Route path="return-books" element={<ListIssuedBooks />} />
           <Route path="issue-books" element={<IssueNewBook />} />
-          {/* <Route path="fine" element={<IssueNewBook />} /> */}
+          <Route path="fine" element={<ListAllOverdueItems />} />
         </Route>
 
         <Route path="lost_books">
           <Route index element={<ListLostBooks />} />
           <Route path="add" element={<AddLostBook />} />
-          {/* <Route path="fine" element={<IssueNewBook />} /> */}
         </Route>
 
         <Route path="*" element={<PageNotFound />} />

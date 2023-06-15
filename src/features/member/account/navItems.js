@@ -4,5 +4,5 @@ export const navItems = [
   { id: 3, label: "Wish-List", route: "wishlist" },
   { id: 4, label: "Borrowed Books History", route: "borrowed_books" },
   { id: 5, label: "Lost Books", route: "lost_books" },
-  { id: 6, label: "Overdue Items", route: "fine" },
+  { id: 6, label: "Overdue Items", route: "overdue" },
 ];
