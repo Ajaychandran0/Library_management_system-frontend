@@ -9,6 +9,8 @@ import {
   Typography,
 } from "@mui/material";
 
+import { useForm } from "react-hook-form";
+
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
@@ -32,17 +34,20 @@ export default function UserSignin() {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const { isError, isSuccess, message } = useSelector(state => state.auth);
 
+  const form = useForm({
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
+  const { register, handleSubmit, formState } = form;
+  const { errors } = formState;
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const handleSubmit = event => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    const memberData = {
-      email: data.get("email"),
-      password: data.get("password"),
-    };
-    dispatch(login(memberData));
+  const onSubmit = formData => {
+    dispatch(login(formData));
   };
 
   useEffect(() => {
@@ -111,16 +116,25 @@ export default function UserSignin() {
             <Typography component="h1" variant="h5">
               Log in
             </Typography>
-            <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
+            <Box
+              component="form"
+              onSubmit={handleSubmit(onSubmit)}
+              sx={{ mt: 1 }}
+              noValidate
+            >
               <TextField
                 margin="normal"
-                required
                 fullWidth
                 id="email"
                 label="Email Address"
                 name="email"
                 autoComplete="email"
                 autoFocus
+                {...register("email", {
+                  required: "Email is required",
+                })}
+                error={!!errors.email}
+                helperText={errors.email?.message}
               />
               <TextField
                 margin="normal"
@@ -131,6 +145,15 @@ export default function UserSignin() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                {...register("password", {
+                  required: "Password is required",
+                  pattern: {
+                    value: /^(?=.*\d)/,
+                    message: "Password must contain at least one number",
+                  },
+                })}
+                error={!!errors.password}
+                helperText={errors.password?.message}
               />
 
               <Button

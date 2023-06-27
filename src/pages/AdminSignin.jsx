@@ -10,6 +10,8 @@ import {
   CircularProgress,
 } from "@mui/material";
 
+import { useForm } from "react-hook-form";
+
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
@@ -29,12 +31,6 @@ const theme = createTheme();
 
 export default function AdminSignin() {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
-
-  const { email, password } = formData;
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -55,19 +51,16 @@ export default function AdminSignin() {
     dispatch(reset());
   }, [admin, isError, isSuccess, message, navigate, dispatch]);
 
-  const onChange = e => {
-    setFormData(prevState => ({
-      ...prevState,
-      [e.target.name]: e.target.value,
-    }));
-  };
+  const form = useForm({
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
+  const { register, handleSubmit, formState } = form;
+  const { errors } = formState;
 
-  const onSubmit = e => {
-    e.preventDefault();
-    const adminData = {
-      email,
-      password,
-    };
+  const onSubmit = adminData => {
     dispatch(login(adminData));
   };
 
@@ -126,29 +119,44 @@ export default function AdminSignin() {
             <Typography component="h1" variant="h5">
               Admin LogIn
             </Typography>
-            <Box component="form" onSubmit={onSubmit} sx={{ mt: 1 }}>
+            <Box
+              component="form"
+              onSubmit={handleSubmit(onSubmit)}
+              noValidate
+              sx={{ mt: 1 }}
+            >
               <TextField
                 margin="normal"
-                required
                 fullWidth
                 id="email"
                 label="Email Address"
                 name="email"
                 autoComplete="email"
                 autoFocus
-                onChange={onChange}
                 type="email"
+                {...register("email", {
+                  required: "Email is required",
+                })}
+                error={!!errors.email}
+                helperText={errors.email?.message}
               />
               <TextField
                 margin="normal"
-                required
                 fullWidth
                 name="password"
                 label="Password"
                 type="password"
                 id="password"
                 autoComplete="current-password"
-                onChange={onChange}
+                {...register("password", {
+                  required: "Password is required",
+                  pattern: {
+                    value: /^(?=.*\d)/,
+                    message: "Password must contain at least one number",
+                  },
+                })}
+                error={!!errors.password}
+                helperText={errors.password?.message}
               />
 
               {isLoading ? (

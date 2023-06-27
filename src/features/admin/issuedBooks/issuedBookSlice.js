@@ -11,18 +11,15 @@ const initialState = {
 };
 
 const generateAsyncThunk = (name, serviceCall) => {
-  return createAsyncThunk(
-    `issuedBooks/${name}`,
-    async (arg = "_", thunkAPI) => {
-      try {
-        const token = thunkAPI.getState().admin.admin.token;
-        return await serviceCall(token, arg);
-      } catch (error) {
-        const message = error.message || error.toString();
-        return thunkAPI.rejectWithValue(message);
-      }
+  return createAsyncThunk(`issuedBooks/${name}`, async (arg = "", thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().admin.admin.token;
+      return await serviceCall(token, arg);
+    } catch (error) {
+      const message = error.message || error.toString();
+      return thunkAPI.rejectWithValue(message);
     }
-  );
+  });
 };
 
 export const getAllIssuedBooks = generateAsyncThunk(

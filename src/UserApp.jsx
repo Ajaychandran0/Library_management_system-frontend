@@ -1,10 +1,12 @@
 import { Route, Routes, Navigate } from "react-router-dom";
 import { store } from "./app/store";
+import { lazy, Suspense } from "react";
 import Layout from "./components/member/Layout";
 import UserHome from "./pages/UserHome";
 import PageNotFound from "./pages/PageNotFound";
 import UserSignin from "./pages/UserSignin";
-import About from "./pages/About";
+// import About from "./pages/About";
+const About = lazy(() => import("./pages/About"));
 // import StudentRegistrationForm from "./features/admin/members/test";
 import ListAllCategories from "./features/member/category/ListAllCategories";
 import ListBooksByCategory from "./features/member/books/ListBooksByCategory";
@@ -33,7 +35,14 @@ function UserApp() {
       />
       <Route path="/" element={<Layout />}>
         <Route index element={<UserHome />} />
-        <Route path="/about" element={<About />} />
+        <Route
+          path="/about"
+          element={
+            <Suspense fallback="Loading...">
+              <About />
+            </Suspense>
+          }
+        />
         <Route path="/books/:bookId" element={<SingleBookPage />} />
         <Route path="categories" element={<ListAllCategories />} />
         <Route path="categories/:category" element={<ListBooksByCategory />} />
