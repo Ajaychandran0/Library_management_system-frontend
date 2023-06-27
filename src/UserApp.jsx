@@ -4,6 +4,7 @@ import { lazy, Suspense } from "react";
 import { getWishlistIds } from "./features/member/wishlist/wishlistSlice";
 import { useSelector } from "react-redux";
 
+import LoadingPage from "./components/common/Loading/LoadingPage";
 const Layout = lazy(() => import("./components/member/Layout"));
 const UserHome = lazy(() => import("./pages/UserHome"));
 const PageNotFound = lazy(() => import("./pages/PageNotFound"));
@@ -51,7 +52,7 @@ function UserApp() {
           member ? (
             <Navigate to="/" />
           ) : (
-            <Suspense fallback="Loading...">
+            <Suspense fallback={<LoadingPage />}>
               <UserSignin />
             </Suspense>
           )
@@ -60,7 +61,7 @@ function UserApp() {
       <Route
         path="/"
         element={
-          <Suspense fallback="Loading...">
+          <Suspense fallback={<LoadingPage />}>
             <Layout />
           </Suspense>
         }
@@ -76,7 +77,7 @@ function UserApp() {
         <Route
           path="/about"
           element={
-            <Suspense fallback="Loading...">
+            <Suspense fallback={<LoadingPage />}>
               <About />
             </Suspense>
           }
@@ -84,7 +85,7 @@ function UserApp() {
         <Route
           path="/books/:bookId"
           element={
-            <Suspense fallback="Loading...">
+            <Suspense fallback={<LoadingPage />}>
               <SingleBookPage />
             </Suspense>
           }
@@ -92,7 +93,7 @@ function UserApp() {
         <Route
           path="categories"
           element={
-            <Suspense fallback="Loading...">
+            <Suspense fallback={<LoadingPage />}>
               <ListAllCategories />
             </Suspense>
           }
@@ -100,7 +101,7 @@ function UserApp() {
         <Route
           path="categories/:category"
           element={
-            <Suspense fallback="Loading...">
+            <Suspense fallback={<LoadingPage />}>
               <ListBooksByCategory />
             </Suspense>
           }
@@ -108,7 +109,7 @@ function UserApp() {
         <Route
           path="account"
           element={
-            <Suspense fallback="Loading...">
+            <Suspense fallback={<LoadingPage />}>
               <MemberAccountPage />
             </Suspense>
           }
@@ -116,7 +117,7 @@ function UserApp() {
         <Route
           path="account/requested_books"
           element={
-            <Suspense fallback="Loading...">
+            <Suspense fallback={<LoadingPage />}>
               <RequestedBooksPage />
             </Suspense>
           }
@@ -124,7 +125,7 @@ function UserApp() {
         <Route
           path="account/wishlist"
           element={
-            <Suspense fallback="Loading...">
+            <Suspense fallback={<LoadingPage />}>
               <Wishlist />
             </Suspense>
           }
@@ -132,7 +133,7 @@ function UserApp() {
         <Route
           path="account/borrowed_books"
           element={
-            <Suspense fallback="Loading...">
+            <Suspense fallback={<LoadingPage />}>
               <BorrowedHistory />
             </Suspense>
           }
@@ -140,7 +141,7 @@ function UserApp() {
         <Route
           path="account/books_in_possession"
           element={
-            <Suspense fallback="Loading...">
+            <Suspense fallback={<LoadingPage />}>
               <BorrowedBooks />
             </Suspense>
           }
@@ -148,7 +149,7 @@ function UserApp() {
         <Route
           path="account/lost_books"
           element={
-            <Suspense fallback="Loading...">
+            <Suspense fallback={<LoadingPage />}>
               <LostBooks />
             </Suspense>
           }
@@ -156,7 +157,7 @@ function UserApp() {
         <Route
           path="/account/overdue"
           element={
-            <Suspense fallback="Loading...">
+            <Suspense fallback={<LoadingPage />}>
               <OverdueItemsLlist />
             </Suspense>
           }
@@ -164,7 +165,7 @@ function UserApp() {
         <Route
           path="/payment"
           element={
-            <Suspense fallback="Loading...">
+            <Suspense fallback={<LoadingPage />}>
               <PaymentHandler />
             </Suspense>
           }
@@ -172,7 +173,7 @@ function UserApp() {
         <Route
           path="*"
           element={
-            <Suspense fallback="Loading...">
+            <Suspense fallback={<LoadingPage />}>
               <PageNotFound />
             </Suspense>
           }
